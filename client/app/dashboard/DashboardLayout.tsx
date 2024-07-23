@@ -2,7 +2,7 @@
 
 import Sidebar from '@/components/dashboard/Sidebar';
 import { SidebarItem } from '@/components/dashboard/SidebarItem';
-import { Home, Settings, TestTubeDiagonal } from 'lucide-react';
+import { Home, Settings, Star, TestTubeDiagonal } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 import { HiUser } from 'react-icons/hi';
 import { useRouter } from 'next/navigation';
@@ -60,6 +60,13 @@ const DashboardLayout = ({ children }) => {
             href="/dashboard/labtests"
             active={activeItem === 'Labtests'}
             onClick={() => handleItemClick('labtests')}
+          />
+          <SidebarItem
+            icon={<Star />}
+            text="Favorites"
+            href="/dashboard/favorites"
+            active={activeItem === 'Favorities'}
+            onClick={() => handleItemClick('Favorites')}
           />
         </Sidebar>
       </div>
