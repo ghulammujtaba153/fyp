@@ -2,7 +2,7 @@
 
 import Sidebar from '@/components/dashboard/Sidebar';
 import { SidebarItem } from '@/components/dashboard/SidebarItem';
-import { Home, Settings } from 'lucide-react';
+import { Home, Settings, TestTubeDiagonal } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 import { HiUser } from 'react-icons/hi';
 import { useRouter } from 'next/navigation';
@@ -17,6 +17,7 @@ const DashboardLayout = ({ children }) => {
     const pathSegments = pathname.split('/');
     const lastSegment = pathSegments.pop() || 'dashboard';
     setActiveItem(lastSegment.charAt(0).toUpperCase() + lastSegment.slice(1));
+    
   }, [pathname]);
 
   const handleItemClick = (item: String) => {
@@ -48,10 +49,17 @@ const DashboardLayout = ({ children }) => {
           />
           <SidebarItem
             icon={<Settings />}
-            text="Settings"
-            href="/dashboard/settings"
-            active={activeItem === 'Settings'}
-            onClick={() => handleItemClick('Settings')}
+            text="Appointments"
+            href="/dashboard/appointments"
+            active={activeItem === 'Appointments'}
+            onClick={() => handleItemClick('Appointments')}
+          />
+          <SidebarItem
+            icon={<TestTubeDiagonal />}
+            text="Lab Tests"
+            href="/dashboard/labtests"
+            active={activeItem === 'Labtests'}
+            onClick={() => handleItemClick('labtests')}
           />
         </Sidebar>
       </div>
