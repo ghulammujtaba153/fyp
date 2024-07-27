@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import {
   motion,
   AnimatePresence,
@@ -8,6 +8,7 @@ import {
 } from "framer-motion";
 import Link from "next/link";
 import { cn } from "@/utils/cn";
+import { UserContext } from "@/context/UserContext";
 
 export const FloatingNav = ({
   navItems,
@@ -22,7 +23,8 @@ export const FloatingNav = ({
 }) => {
   const { scrollYProgress } = useScroll();
   const [dropdownVisible, setDropdownVisible] = useState(false);
-
+  const { user, logout } = useContext(UserContext);
+  
   // set true for the initial state so that nav bar is visible in the hero section
   const [visible, setVisible] = useState(true);
 
@@ -46,6 +48,11 @@ export const FloatingNav = ({
 
   const toggleDropdown = () => {
     setDropdownVisible((prev) => !prev);
+  };
+
+  const handleLogout = () => {
+    logout(); // Clear user data
+    setDropdownVisible(false); // Hide the dropdown
   };
 
   const dropdownVariants = {
@@ -120,11 +127,14 @@ export const FloatingNav = ({
             onClick={toggleDropdown}
           >
             {/* Add the avatar image here */}
-            <img
-              className="w-10 h-10 p-1 rounded-full ring-2 ring-gray-300 dark:ring-gray-500"
-              src="/Laboratory.png"
-              alt="Bordered avatar"
-            />
+            {user &&
+              <img
+                className="w-10 h-10 p-1 rounded-full ring-2 ring-gray-300 dark:ring-gray-500"
+                src="/Laboratory.png"
+                alt="Bordered avatar"
+              />
+            }
+            
           </div>
           <AnimatePresence>
             {dropdownVisible && (
@@ -138,7 +148,7 @@ export const FloatingNav = ({
                 <motion.div variants={linkVariants}>
                   <Link
                     href="/dashboard"
-                    onClick={()=>{setDropdownVisible(false)}}
+                    onClick={() => setDropdownVisible(false)}
                     className="block px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700"
                   >
                     Dashboard
@@ -147,6 +157,7 @@ export const FloatingNav = ({
                 <motion.div variants={linkVariants}>
                   <Link
                     href="/profile"
+                    onClick={() => setDropdownVisible(false)}
                     className="block px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700"
                   >
                     Profile
@@ -155,6 +166,7 @@ export const FloatingNav = ({
                 <motion.div variants={linkVariants}>
                   <Link
                     href="/settings"
+                    onClick={() => setDropdownVisible(false)}
                     className="block px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700"
                   >
                     Settings
@@ -162,7 +174,8 @@ export const FloatingNav = ({
                 </motion.div>
                 <motion.div variants={linkVariants}>
                   <Link
-                    href="/logout"
+                    href="/"
+                    onClick={handleLogout}
                     className="block px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700"
                   >
                     Logout

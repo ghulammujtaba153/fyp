@@ -3,6 +3,8 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { FloatingNav } from "@/components/ui/FloatingNav";
 import { navItems } from "@/data";
+import { UserProvider } from '../context/UserContext';
+import { Toaster } from "react-hot-toast";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -17,10 +19,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
+    <UserProvider>
     <html lang="en">
       <body className={inter.className}>
+      <Toaster />
       <FloatingNav navItems={navItems}/>
         {children}</body>
     </html>
+    </UserProvider>
   );
 }
