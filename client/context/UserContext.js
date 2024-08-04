@@ -12,7 +12,8 @@ const UserProvider = ({ children }) => {
       const token = localStorage.getItem('token');
       if (token) {
         try {
-          const decodedToken = JSON.parse(atob(token.split('.')[1])); // decode JWT token
+          const decodedToken = JSON.parse(atob(token.split('.')[1])); 
+          console.log(decodedToken)
           const res = await axios.get(`http://localhost:5000/api/user/${decodedToken.userId}`);
           setUser(res.data.user);
           

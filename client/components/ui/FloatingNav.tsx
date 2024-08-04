@@ -24,6 +24,8 @@ export const FloatingNav = ({
   const { scrollYProgress } = useScroll();
   const [dropdownVisible, setDropdownVisible] = useState(false);
   const { user, logout } = useContext(UserContext);
+
+  
   
   // set true for the initial state so that nav bar is visible in the hero section
   const [visible, setVisible] = useState(true);
@@ -109,18 +111,62 @@ export const FloatingNav = ({
           border: "1px solid rgba(255, 255, 255, 0.125)",
         }}
       >
-        {navItems.map((navItem: any, idx: number) => (
-          <Link
-            key={`link=${idx}`}
-            href={navItem.link}
+
+        <Link
+            
+            href={"/"}
             className={cn(
-              "relative dark:text-neutral-50 items-center flex space-x-1 text-neutral-600 dark:hover:text-neutral-300 hover:text-neutral-500"
+                "relative dark:text-neutral-50 items-center flex space-x-1 text-neutral-600 dark:hover:text-neutral-300 hover:text-neutral-500"
             )}
-          >
-            <span className="block sm:hidden">{navItem.icon}</span>
-            <span className="text-sm !cursor-pointer">{navItem.name}</span>
-          </Link>
-        ))}
+            >
+            <span className="block sm:hidden"></span>
+            <span className="text-sm !cursor-pointer">Home</span>
+        </Link>
+
+        <Link
+            
+            href={"/doctor"}
+            className={cn(
+                "relative dark:text-neutral-50 items-center flex space-x-1 text-neutral-600 dark:hover:text-neutral-300 hover:text-neutral-500"
+            )}
+            >
+            <span className="block sm:hidden"></span>
+            <span className="text-sm !cursor-pointer">Find Doctor</span>
+        </Link>
+
+        <Link
+            
+            href={"/tests"}
+            className={cn(
+                "relative dark:text-neutral-50 items-center flex space-x-1 text-neutral-600 dark:hover:text-neutral-300 hover:text-neutral-500"
+            )}
+            >
+            <span className="block sm:hidden"></span>
+            <span className="text-sm !cursor-pointer">Tests</span>
+        </Link>
+
+        <Link
+            
+            href={"/contact"}
+            className={cn(
+                "relative dark:text-neutral-50 items-center flex space-x-1 text-neutral-600 dark:hover:text-neutral-300 hover:text-neutral-500"
+            )}
+            >
+            <span className="block sm:hidden"></span>
+            <span className="text-sm !cursor-pointer">Contact</span>
+        </Link>
+
+        {!user && <Link
+            
+            href={"/login"}
+            className={cn(
+                "relative dark:text-neutral-50 items-center flex space-x-1 text-neutral-600 dark:hover:text-neutral-300 hover:text-neutral-500"
+            )}
+            >
+            <span className="block sm:hidden"></span>
+            <span className="text-sm !cursor-pointer">login</span>
+        </Link>}
+
         <div className="relative">
           <div
             className="flex items-center space-x-4 cursor-pointer"
@@ -130,7 +176,7 @@ export const FloatingNav = ({
             {user &&
               <img
                 className="w-10 h-10 p-1 rounded-full ring-2 ring-gray-300 dark:ring-gray-500"
-                src="/Laboratory.png"
+                src={user.profile}
                 alt="Bordered avatar"
               />
             }

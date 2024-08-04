@@ -4,6 +4,9 @@ const { Schema } = mongoose;
 
 // Define the User Schema
 const userSchema = new Schema({
+    profile: {
+        type: String,
+    },
     firstName: {
         type: String,
         required: true,

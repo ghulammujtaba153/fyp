@@ -23,7 +23,7 @@ export function DoctorCard({cardData}) {
          {cardData.disc}
         </CardItem>
         <CardItem translateZ="100" className="w-full mt-4">
-          <Image
+          <img
             src={cardData.image}
             height={400}
             width={400}

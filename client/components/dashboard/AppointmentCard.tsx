@@ -11,7 +11,7 @@ export function AppointmentCard({cardData}) {
         <div className='flex items-center justify-between'>
           <div className='flex items-center gap-3'>
             <div className="w-15 h-15">
-              <Image
+              <img
                 src={cardData.image}
                 height={60}
                 width={60}

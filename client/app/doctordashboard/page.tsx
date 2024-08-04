@@ -4,15 +4,21 @@ import React from 'react';
 import UpcomingAppointment from '@/components/dashboard/UpcomingAppointment';
 import Medicine from '@/components/dashboard/Medicine';
 import DashboardLayout from './DashboardLayout';
-import Card from '@/components/dashboard/Card';
+import Card from '@/components/dashboard/card';
+
+
+interface CardData {
+  title: string;
+  num: number;
+}
 
 const Dashboard = () => {
-  const cardData = [
-    { title: 'Appointments', num: 12 },
-    { title: 'Patients', num: 34 },
-    { title: 'Earnings', num: 56 },
-    { title: 'Messages', num: 78 },
-    { title: 'Notifications', num: 90 }
+  const cardData: CardData[] = [
+    { title: "Today's Appointments", num: 1 },
+    { title: "Total Appointments", num: 50 },
+    { title: "Total Earnings", num: 10 },
+    { title: "Monthly Earnings", num: 10 },
+    { title: "Monthly Appointments", num: 10 }
   ];
 
   return (
