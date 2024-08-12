@@ -5,7 +5,7 @@ import User from '../../models/userSchema.js';
 const JWT_SECRET = process.env.JWT_SECRET || "ddd";
 
 export const registerUser = async (req, res) => {
-    const {profile, firstName, lastName, email, password } = req.body;
+    const {profile, firstName, lastName, email, password, role } = req.body;
 
     if (!firstName || !lastName || !email || !password) {
         return res.status(400).json({ message: 'First name, last name, email, and password are required.' });
@@ -20,7 +20,7 @@ export const registerUser = async (req, res) => {
         // Hash the password
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        const newUser = new User({profile, firstName, lastName, email, password: hashedPassword });
+        const newUser = new User({profile, firstName, lastName, email, password: hashedPassword, role });
         await newUser.save();
 
         const token = jwt.sign(

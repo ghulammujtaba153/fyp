@@ -13,9 +13,9 @@ export default function Sidebar({ children }) {
       <nav className="h-full flex flex-col bg-white border-r shadow-sm">
         <div className="p-4 pb-2 flex justify-between items-center">
           <img
-            src="https://img.logoipsum.com/243.svg"
+            src="Laboratory.png"
             className={`overflow-hidden transition-all ${
-              expanded ? "w-32" : "w-0"
+              expanded ? "w-20" : "w-0"
             }`}
             alt=""
           />
@@ -31,7 +31,7 @@ export default function Sidebar({ children }) {
           <ul className="flex-1 px-3">{children}</ul>
         </SidebarContext.Provider>
 
-        <div className="border-t flex p-3">
+        {/* <div className="border-t flex p-3">
           <img
             src="https://ui-avatars.com/api/?background=c7d2fe&color=3730a3&bold=true"
             alt=""
@@ -49,7 +49,7 @@ export default function Sidebar({ children }) {
             </div>
             <MoreVertical size={20} />
           </div>
-        </div>
+        </div> */}
       </nav>
     </aside>
   );

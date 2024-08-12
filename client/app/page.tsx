@@ -20,7 +20,7 @@ export default function Home() {
         {/* <Grid/> */}
         <GlobeDemo/>
         <WobbleCards/>
-        <HeroScrollDemo/>
+        {/* <HeroScrollDemo/> */}
         <InfiniteMovingCardsDemo/>
         <Footer/>
         

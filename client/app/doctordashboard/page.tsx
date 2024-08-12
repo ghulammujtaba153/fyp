@@ -29,7 +29,8 @@ const Dashboard = () => {
         ))}
       </div>
       <UpcomingAppointment />
-      <Medicine />
+      {/* <Medicine /> */}
+      <p className="text-white">Notes</p>
     </DashboardLayout>
   );
 };

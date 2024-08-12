@@ -16,7 +16,8 @@ export default function SignupFormDemo() {
     firstName: "",
     lastName: "",
     email: "",
-    password: ""
+    password: "",
+    role: "patient",
   });
   const [profilePic, setProfilePic] = useState(null);
   const [profilePicPreview, setProfilePicPreview] = useState("");

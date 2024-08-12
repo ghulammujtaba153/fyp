@@ -1,12 +1,8 @@
 "use client";
-import React, { useContext, useState } from "react";
-import {
-  motion,
-  AnimatePresence,
-  useScroll,
-  useMotionValueEvent,
-} from "framer-motion";
+import React, { useContext, useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
+import { useRouter, usePathname } from "next/navigation"; // Import usePathname
 import { cn } from "@/utils/cn";
 import { UserContext } from "@/context/UserContext";
 
@@ -21,40 +17,40 @@ export const FloatingNav = ({
   }[];
   className?: string;
 }) => {
-  const { scrollYProgress } = useScroll();
   const [dropdownVisible, setDropdownVisible] = useState(false);
   const { user, logout } = useContext(UserContext);
-
-  
-  
-  // set true for the initial state so that nav bar is visible in the hero section
   const [visible, setVisible] = useState(true);
+  const router = useRouter();
+  const pathname = usePathname(); // Get the current route
 
-  useMotionValueEvent(scrollYProgress, "change", (current) => {
-    // Check if current is not undefined and is a number
-    if (typeof current === "number") {
-      let direction = current - scrollYProgress.getPrevious()!;
-
-      if (scrollYProgress.get() < 0.05) {
-        // also set true for the initial state
-        setVisible(true);
-      } else {
-        if (direction < 0) {
-          setVisible(true);
-        } else {
-          setVisible(false);
-        }
-      }
+  useEffect(() => {
+    // Hide the navbar on specific routes
+    if (["/doctordashboard", "/dashboard", "/admin"].includes(pathname)) {
+      setVisible(false);
+    } else {
+      setVisible(true);
     }
-  });
+  }, [pathname]); // Re-run the effect when the route changes
 
   const toggleDropdown = () => {
     setDropdownVisible((prev) => !prev);
   };
 
   const handleLogout = () => {
-    logout(); // Clear user data
-    setDropdownVisible(false); // Hide the dropdown
+    logout();
+    setDropdownVisible(false);
+  };
+
+  const handleDashboardClick = () => {
+    setDropdownVisible(false);
+    // setVisible(false);
+
+    // Navigate based on the user's role
+    if (user.role === "doctor") {
+      router.push("/doctordashboard");
+    } else {
+      router.push("/dashboard");
+    }
   };
 
   const dropdownVariants = {
@@ -86,12 +82,16 @@ export const FloatingNav = ({
     },
   };
 
+  if (!visible) {
+    return null; // Don't render the navbar if it's not visible
+  }
+
   return (
     <AnimatePresence mode="wait">
       <motion.div
         initial={{
           opacity: 1,
-          y: -100,
+          y: 0,
         }}
         animate={{
           y: visible ? 0 : -100,
@@ -101,135 +101,126 @@ export const FloatingNav = ({
           duration: 0.2,
         }}
         className={cn(
-          "flex max-w-fit md:min-w-[70vw] lg:min-w-fit fixed z-[5000] top-10 inset-x-0 mx-auto px-10 py-5 rounded-lg border border-black/.1 shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),0px_1px_0px_0px_rgba(25,28,33,0.02),0px_0px_0px_1px_rgba(25,28,33,0.08)] items-center justify-center space-x-4",
+          "flex w-full fixed z-[5000] inset-x-0 mx-auto px-10 py-5 shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),0px_1px_0px_0px_rgba(25,28,33,0.02),0px_0px_0px_1px_rgba(25,28,33,0.08)] items-center justify-between space-x-4",
           className
         )}
         style={{
           backdropFilter: "blur(16px) saturate(180%)",
           backgroundColor: "rgba(17, 25, 40, 0.75)",
-          borderRadius: "12px",
+          borderRadius: "0px", // Removed rounded corners
           border: "1px solid rgba(255, 255, 255, 0.125)",
         }}
       >
+        <div>
+          <Link href="/">
+            <img src="Laboratory.png" alt="Laboratory Image" className="w-[40px] h-[40px]" />
+          </Link>
+        </div>
 
-        <Link
-            
-            href={"/"}
+        <div className="flex items-center justify-center space-x-4">
+          <Link
+            href="/doctor"
             className={cn(
-                "relative dark:text-neutral-50 items-center flex space-x-1 text-neutral-600 dark:hover:text-neutral-300 hover:text-neutral-500"
+              "relative dark:text-neutral-50 items-center flex space-x-1 text-neutral-600 dark:hover:text-neutral-300 hover:text-neutral-500"
             )}
-            >
-            <span className="block sm:hidden"></span>
-            <span className="text-sm !cursor-pointer">Home</span>
-        </Link>
-
-        <Link
-            
-            href={"/doctor"}
-            className={cn(
-                "relative dark:text-neutral-50 items-center flex space-x-1 text-neutral-600 dark:hover:text-neutral-300 hover:text-neutral-500"
-            )}
-            >
+          >
             <span className="block sm:hidden"></span>
             <span className="text-sm !cursor-pointer">Find Doctor</span>
-        </Link>
+          </Link>
 
-        <Link
-            
-            href={"/tests"}
+          <Link
+            href="/tests"
             className={cn(
-                "relative dark:text-neutral-50 items-center flex space-x-1 text-neutral-600 dark:hover:text-neutral-300 hover:text-neutral-500"
+              "relative dark:text-neutral-50 items-center flex space-x-1 text-neutral-600 dark:hover:text-neutral-300 hover:text-neutral-500"
             )}
-            >
+          >
             <span className="block sm:hidden"></span>
             <span className="text-sm !cursor-pointer">Tests</span>
-        </Link>
+          </Link>
 
-        <Link
-            
-            href={"/contact"}
+          <Link
+            href="/contact"
             className={cn(
-                "relative dark:text-neutral-50 items-center flex space-x-1 text-neutral-600 dark:hover:text-neutral-300 hover:text-neutral-500"
+              "relative dark:text-neutral-50 items-center flex space-x-1 text-neutral-600 dark:hover:text-neutral-300 hover:text-neutral-500"
             )}
-            >
+          >
             <span className="block sm:hidden"></span>
             <span className="text-sm !cursor-pointer">Contact</span>
-        </Link>
+          </Link>
 
-        {!user && <Link
-            
-            href={"/login"}
-            className={cn(
+          {!user && (
+            <Link
+              href="/login"
+              className={cn(
                 "relative dark:text-neutral-50 items-center flex space-x-1 text-neutral-600 dark:hover:text-neutral-300 hover:text-neutral-500"
-            )}
+              )}
             >
-            <span className="block sm:hidden"></span>
-            <span className="text-sm !cursor-pointer">login</span>
-        </Link>}
+              <span className="block sm:hidden"></span>
+              <span className="text-sm !cursor-pointer">Login</span>
+            </Link>
+          )}
 
-        <div className="relative">
-          <div
-            className="flex items-center space-x-4 cursor-pointer"
-            onClick={toggleDropdown}
-          >
-            {/* Add the avatar image here */}
-            {user &&
-              <img
-                className="w-10 h-10 p-1 rounded-full ring-2 ring-gray-300 dark:ring-gray-500"
-                src={user.profile}
-                alt="Bordered avatar"
-              />
-            }
-            
+          <div className="relative">
+            <div
+              className="flex items-center space-x-4 cursor-pointer"
+              onClick={toggleDropdown}
+            >
+              {user && (
+                <img
+                  className="w-10 h-10 p-1 rounded-full ring-2 ring-gray-300 dark:ring-gray-500"
+                  src={user.profile}
+                  alt="Bordered avatar"
+                />
+              )}
+            </div>
+            <AnimatePresence>
+              {dropdownVisible && (
+                <motion.div
+                  initial="hidden"
+                  animate="visible"
+                  exit="hidden"
+                  variants={dropdownVariants}
+                  className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 text-black dark:text-white rounded-md shadow-lg py-2"
+                >
+                  <motion.div variants={linkVariants}>
+                    <div
+                      onClick={handleDashboardClick}
+                      className="block px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer"
+                    >
+                      Dashboard
+                    </div>
+                  </motion.div>
+                  <motion.div variants={linkVariants}>
+                    <Link
+                      href="/profile"
+                      onClick={() => setDropdownVisible(false)}
+                      className="block px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700"
+                    >
+                      Profile
+                    </Link>
+                  </motion.div>
+                  <motion.div variants={linkVariants}>
+                    <Link
+                      href="/settings"
+                      onClick={() => setDropdownVisible(false)}
+                      className="block px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700"
+                    >
+                      Settings
+                    </Link>
+                  </motion.div>
+                  <motion.div variants={linkVariants}>
+                    <Link
+                      href="/"
+                      onClick={handleLogout}
+                      className="block px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700"
+                    >
+                      Logout
+                    </Link>
+                  </motion.div>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
-          <AnimatePresence>
-            {dropdownVisible && (
-              <motion.div
-                initial="hidden"
-                animate="visible"
-                exit="hidden"
-                variants={dropdownVariants}
-                className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 text-black dark:text-white rounded-md shadow-lg py-2"
-              >
-                <motion.div variants={linkVariants}>
-                  <Link
-                    href="/dashboard"
-                    onClick={() => setDropdownVisible(false)}
-                    className="block px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700"
-                  >
-                    Dashboard
-                  </Link>
-                </motion.div>
-                <motion.div variants={linkVariants}>
-                  <Link
-                    href="/profile"
-                    onClick={() => setDropdownVisible(false)}
-                    className="block px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700"
-                  >
-                    Profile
-                  </Link>
-                </motion.div>
-                <motion.div variants={linkVariants}>
-                  <Link
-                    href="/settings"
-                    onClick={() => setDropdownVisible(false)}
-                    className="block px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700"
-                  >
-                    Settings
-                  </Link>
-                </motion.div>
-                <motion.div variants={linkVariants}>
-                  <Link
-                    href="/"
-                    onClick={handleLogout}
-                    className="block px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700"
-                  >
-                    Logout
-                  </Link>
-                </motion.div>
-              </motion.div>
-            )}
-          </AnimatePresence>
         </div>
       </motion.div>
     </AnimatePresence>
