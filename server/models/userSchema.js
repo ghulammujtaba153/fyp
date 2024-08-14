@@ -33,6 +33,21 @@ const userSchema = new Schema({
         enum: ['admin', 'doctor', 'patient'],
         default: 'patient'
     },
+    dateOfBirth: {
+        type: Date,
+    },
+    contactNumber: {
+        type: String,
+        trim: true
+    },
+    postalAddress: {
+        type: String,
+        trim: true
+    },
+    permanentAddress: {
+        type: String,
+        trim: true
+    },
     createdAt: {
         type: Date,
         default: Date.now

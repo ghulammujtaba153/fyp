@@ -25,12 +25,15 @@ export const FloatingNav = ({
 
   useEffect(() => {
     // Hide the navbar on specific routes
-    if (["/doctordashboard", "/dashboard", "/admin"].includes(pathname)) {
+    if (pathname.startsWith("/doctordashboard") || 
+        pathname.startsWith("/dashboard") || 
+        pathname.startsWith("/admin")) {
       setVisible(false);
     } else {
       setVisible(true);
     }
-  }, [pathname]); // Re-run the effect when the route changes
+}, [pathname]);
+ // Re-run the effect when the rou
 
   const toggleDropdown = () => {
     setDropdownVisible((prev) => !prev);
