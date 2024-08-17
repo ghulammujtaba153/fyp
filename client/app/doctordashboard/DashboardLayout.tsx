@@ -69,7 +69,11 @@ const DashboardLayout = ({ children }) => {
       <div className='w-full flex flex-end'>
       <div className='text-white w-full flex gap-5 items-center justify-end mr-0'>
         <BellIcon/>
-        <img src={user.profile} className="w-[40px] h-[40px] rounded-full" alt="/"/>
+        {
+          user &&
+          <img src={user.profile} className="w-[40px] h-[40px] rounded-full" alt="/"/>
+        }
+        
       </div>
       </div>
         {children}

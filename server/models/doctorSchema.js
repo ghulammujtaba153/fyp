@@ -6,28 +6,17 @@ const doctorSchema = new Schema({
   userId: {
     type: Schema.Types.ObjectId,
     ref: 'User',
-    required: true
+    required: true,
+    unique: true 
   },
   specialization: {
     type: String,
     required: true
   },
-  doctor_qualificationId: [{
-    type: Schema.Types.ObjectId,
-    ref: 'Qualification'
-  }],
-  scheduleId: {
-    type: Schema.Types.ObjectId,
-    ref: 'AvailabilitySchedule'
-  },
-  createdAt: {
-    type: Date,
-    default: Date.now
-  },
-  updatedAt: {
-    type: Date,
-    default: Date.now
-  }
+  doctor_qualification: [],
+
+}, {
+  timestamps: true 
 });
 
 // Create the Doctor Model

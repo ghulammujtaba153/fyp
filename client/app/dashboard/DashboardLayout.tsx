@@ -54,6 +54,13 @@ const DashboardLayout = ({ children }) => {
             onClick={() => handleItemClick('Profile')}
           />
           <SidebarItem
+            icon={<HiUser />}
+            text="Doctors"
+            href="/dashboard/soctors"
+            active={activeItem === 'Doctors'}
+            onClick={() => handleItemClick('Doctors')}
+          />
+          <SidebarItem
             icon={<Settings />}
             text="Appointments"
             href="/dashboard/appointments"

@@ -27,6 +27,7 @@ export const FloatingNav = ({
     // Hide the navbar on specific routes
     if (pathname.startsWith("/doctordashboard") || 
         pathname.startsWith("/dashboard") || 
+        pathname.startsWith("/conversation") ||
         pathname.startsWith("/admin")) {
       setVisible(false);
     } else {

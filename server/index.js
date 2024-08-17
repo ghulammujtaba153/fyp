@@ -3,6 +3,8 @@ import cors from 'cors';
 import { connection } from './database/db.js';
 import dotenv from 'dotenv';
 import router from './routes/patientRoutes/index.js';
+import doctorRouter from './routes/doctorRoutes/index.js';
+import conversationRouter from './routes/conversationRoutes.js';
 
 
 
@@ -17,6 +19,8 @@ app.use(json());
 
 connection();
 app.use("/api/", router)
+app.use('/api/doctors', doctorRouter);
+app.use('/api/conversations', conversationRouter);
 
 app.listen(port, () => {
   console.log(`Server is running on port: ${port}`);

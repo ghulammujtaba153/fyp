@@ -1,60 +1,30 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { DoctorCard } from './DoctorCard';
-
-const data = [
-  {
-    id: 1,
-    name: "Ali Akbar",
-    disc: "BSC ,de",
-    image: "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?q=80&w=2560&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    price: 6000,
-  },
-  {
-    id: 2,
-    name: "Ali Akbar",
-    disc: "BSC ,de",
-    image: "https://images.unsplash.com/photo-1517322048670-4fba75cbbb62?q=80&w=3000&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    price: 6000,
-  },
-  {
-    id: 3,
-    name: "Ali Akbar",
-    disc: "BSC ,de",
-    image: "https://images.unsplash.com/photo-1573790387438-4da905039392?q=80&w=3425&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    price: 6000,
-  },
-  {
-    id: 4,
-    name: "Ali Akbar",
-    disc: "BSC ,de",
-    image: "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?q=80&w=2560&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    price: 6000,
-  },
-  {
-    id: 5,
-    name: "Ali Akbar",
-    disc: "BSC ,de",
-    image: "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?q=80&w=2560&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    price: 6000,
-  },
-  {
-    id: 6,
-    name: "Ali Akbar",
-    disc: "BSC ,de",
-    image: "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?q=80&w=2560&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    price: 6000,
-  },
-  // Add other doctors here
-];
+import axios from "axios";
+import API_BASE_URL from "@/utils/apiConfig";
 
 const ITEMS_PER_PAGE = 4;
 
-export function ThreeDCardDemo() {
+export function DoctorList() {
   const [currentPage, setCurrentPage] = useState(1);
+  const [doctors, setDoctors] = useState([]);
+  const [totalPages, setTotalPages] = useState(1);
 
-  const totalPages = Math.ceil(data.length / ITEMS_PER_PAGE);
+  useEffect(() => {
+    const fetchDoctors = async () => {
+      try {
+        const res = await axios.get(`${API_BASE_URL}/doctors`);
+        setDoctors(res.data);
+        setTotalPages(Math.ceil(res.data.length / ITEMS_PER_PAGE));
+      } catch (error) {
+        console.log(error.message);
+      }
+    };
+
+    fetchDoctors();
+  }, []);
 
   const handleNextPage = () => {
     if (currentPage < totalPages) {
@@ -68,12 +38,12 @@ export function ThreeDCardDemo() {
     }
   };
 
-  const currentDoctors = data.slice((currentPage - 1) * ITEMS_PER_PAGE, currentPage * ITEMS_PER_PAGE);
+  const currentDoctors = doctors.slice((currentPage - 1) * ITEMS_PER_PAGE, currentPage * ITEMS_PER_PAGE);
 
   return (
     <div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {currentDoctors.map((card) => <DoctorCard key={card.id} cardData={card} />)}
+        {currentDoctors.map((doctor) => <DoctorCard key={doctor._id} cardData={doctor} />)}
       </div>
       <div className="flex items-center justify-center gap-4 mt-4">
         <button

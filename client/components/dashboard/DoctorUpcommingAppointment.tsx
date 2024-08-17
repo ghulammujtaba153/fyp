@@ -5,7 +5,7 @@ import axios from 'axios';
 import API_BASE_URL from '@/utils/apiConfig';
 import { UserContext } from '@/context/UserContext'; // Adjust path as needed
 
-const UpcomingAppointment = () => {
+const DoctorUpcomingAppointment = () => {
   const [appointment, setAppointment] = useState(null);
   const [doctor, setDoctor] = useState(null); // State to store doctor details
   const [loading, setLoading] = useState(true);
@@ -16,14 +16,15 @@ const UpcomingAppointment = () => {
       if (!user) return; // Early return if user is not defined
 
       try {
+        console.log(user._id)
+        const userRes = await axios.get(`${API_BASE_URL}/doctors/${user._id}`);
+        console.log(userRes.data)
         // Fetch upcoming appointment
-        const res = await axios.get(`${API_BASE_URL}/appointments/upcoming/${user._id}`);
+        const res = await axios.get(`${API_BASE_URL}/appointments/doctor/${userRes.data._id}`);
+        console.log(res.data)
         if (res.data.length > 0) {
           setAppointment(res.data[0]);
-
-          // Fetch doctor details
-          const doctorRes = await axios.get(`${API_BASE_URL}/user/${res.data[0].doctorId.userId}`);
-          setDoctor(doctorRes.data.user);
+          setDoctor(res.data[0].patientId);
         }
       } catch (error) {
         console.error('Error fetching upcoming appointment:', error);
@@ -71,4 +72,4 @@ const UpcomingAppointment = () => {
   );
 };
 
-export default UpcomingAppointment;
+export default DoctorUpcomingAppointment;

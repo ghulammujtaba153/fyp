@@ -4,7 +4,9 @@ import React from 'react';
 import UpcomingAppointment from '@/components/dashboard/UpcomingAppointment';
 import Medicine from '@/components/dashboard/Medicine';
 import DashboardLayout from './DashboardLayout';
-import Card from '@/components/dashboard/card';
+
+import DoctorUpcomingAppointment from '@/components/dashboard/DoctorUpcommingAppointment';
+import Card from '@/components/dashboard/Card';
 
 
 interface CardData {
@@ -28,7 +30,7 @@ const Dashboard = () => {
           <Card key={index} data={data} />
         ))}
       </div>
-      <UpcomingAppointment />
+      <DoctorUpcomingAppointment/>
       {/* <Medicine /> */}
       <p className="text-white">Notes</p>
     </DashboardLayout>

@@ -17,7 +17,7 @@ export const registerUser = async (req, res) => {
         postalAddress,
         permanentAddress
     } = req.body;
-
+    console.log(req.body)
     // Validate required fields
     if (!firstName || !lastName || !email || !password || !dateOfBirth || !contactNumber || !postalAddress || !permanentAddress) {
         return res.status(400).json({ message: 'All fields are required.' });
@@ -26,6 +26,7 @@ export const registerUser = async (req, res) => {
     try {
         // Check if user already exists
         const existingUser = await User.findOne({ email });
+        console.log(existingUser)
         if (existingUser) {
             return res.status(400).json({ message: 'User already exists.' });
         }

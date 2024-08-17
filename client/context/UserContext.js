@@ -43,20 +43,32 @@ const UserProvider = ({ children }) => {
       console.error('No token found');
       return;
     }
-
+  
     try {
-      // Decode JWT token
       const decodedToken = JSON.parse(atob(token.split('.')[1]));
       const userId = decodedToken.userId;
-
-      // Update user data
-      const res = await axios.put(`${API_BASE_URL}/user/${userId}`, updatedData, {
+  
+      const userRes = await axios.get(`${API_BASE_URL}/user/${userId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
-
-      // Update user state with the new data
+      // console.log(userRes.data.user)
+  
+      const currentUser = userRes.data.user;
+  
+      let updateUrl;
+      if (currentUser.role === 'doctor') {
+        updateUrl = `${API_BASE_URL}/doctors/profiles/${userId}`;
+      } else {
+        updateUrl = `${API_BASE_URL}/user/${userId}`;
+      }
+      
+      // console.log(updatedData);
+  
+      const res = await axios.put(updateUrl, updatedData);
+      // console.log(res.data)
+  
       setUser(res.data.user);
       
       return res.data.user;

@@ -9,6 +9,7 @@ import axios from "axios";
 import upload from "@/utils/upload"; // Adjust the import path as necessary
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
+import API_BASE_URL from "@/utils/apiConfig";
 
 export default function SignupFormDemo() {
   const [formData, setFormData] = useState({
@@ -73,7 +74,7 @@ export default function SignupFormDemo() {
       profile: profilePicUrl
     };
 
-    const registerPromise = axios.post("http://localhost:5000/api/register", data);
+    const registerPromise = axios.post(`${API_BASE_URL}/register`, data);
     
     toast.promise(registerPromise, {
       loading: 'Registering user...',

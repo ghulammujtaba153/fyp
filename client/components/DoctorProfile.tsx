@@ -1,161 +1,246 @@
 "use client";
+import React, { useState } from "react";
+import { IconCamera } from "@tabler/icons-react";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { motion } from "framer-motion";
+import axios from "axios";
+import upload from "@/utils/upload"; // Adjust the import path as necessary
+import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
+import API_BASE_URL from "@/utils/apiConfig";
 
-import React, { useState, useEffect } from 'react';
-
-const DoctorProfile = () => {
+export default function DoctorProfile() {
   const [formData, setFormData] = useState({
-    firstName: '',
-    lastName: '',
-    email: '',
-    dateOfBirth: '',
-    contactNumber: '',
-    landlineNumber: '',
-    postalAddress: '',
-    permanentAddress: '',
-    specialization: '',
+    firstName: "",
+    lastName: "",
+    email: "",
+    password: "",
+    role: "doctor",
+    dateOfBirth: "",
+    contactNumber: "",
+    postalAddress: "",
+    permanentAddress: "",
+    specialization: "",
+    doctor_qualification: [
+      { qualificationName: "", startYear: "", endYear: "" },
+      { qualificationName: "", startYear: "", endYear: "" }
+    ],
   });
+  const [profilePic, setProfilePic] = useState(null);
+  const [profilePicPreview, setProfilePicPreview] = useState("");
+  const [errors, setErrors] = useState({});
+  const router = useRouter();
 
-  
+  const validateForm = () => {
+    const newErrors = {};
+    if (!formData.firstName) newErrors.firstName = "First name is required";
+    if (!formData.lastName) newErrors.lastName = "Last name is required";
+    if (!formData.email) newErrors.email = "Email is required";
+    if (!formData.password) newErrors.password = "Password is required";
+    if (!formData.dateOfBirth) newErrors.dateOfBirth = "Date of Birth is required";
+    if (!formData.contactNumber) newErrors.contactNumber = "Contact Number is required";
+    if (!formData.postalAddress) newErrors.postalAddress = "Postal Address is required";
+    if (!formData.permanentAddress) newErrors.permanentAddress = "Permanent Address is required";
+    if (!formData.specialization) newErrors.specialization = "Specialization is required";
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
+    formData.doctor_qualification.forEach((qual, index) => {
+      if (!qual.qualificationName) newErrors[`qualificationName${index}`] = "Qualification Name is required";
+      if (!qual.startYear) newErrors[`startYear${index}`] = "Start Year is required";
+      if (!qual.endYear) newErrors[`endYear${index}`] = "End Year is required";
     });
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e) => {
+  const handleChange = (e) => {
+    const { id, value } = e.target;
+    setFormData(prevState => ({
+      ...prevState,
+      [id]: value
+    }));
+  };
+
+  const handleQualificationChange = (index, e) => {
+    const { id, value } = e.target;
+    const newQualifications = [...formData.doctor_qualification];
+    newQualifications[index][id] = value;
+    setFormData(prevState => ({
+      ...prevState,
+      doctor_qualification: newQualifications
+    }));
+  };
+
+  const handleProfilePicChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setProfilePic(file);
+      setProfilePicPreview(URL.createObjectURL(file));
+    }
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Handle form submission here
-    console.log('Form data submitted:', formData);
+
+    if (!validateForm()) return;
+
+    const uploadPromise = profilePic ? upload(profilePic) : Promise.resolve(null);
+
+    try {
+      const profilePicUrl = await toast.promise(uploadPromise, {
+        loading: 'Uploading image...',
+        success: 'Image uploaded successfully',
+        error: 'Error uploading image'
+      });
+
+      const data = {
+        ...formData,
+        profile: profilePicUrl
+      };
+
+      await toast.promise(
+        axios.post(`${API_BASE_URL}/doctors/register`, data),
+        {
+          loading: 'Registering doctor...',
+          success: 'Doctor registered successfully',
+          error: 'Error registering doctor'
+        }
+      );
+
+      router.push("/admin");
+    } catch (error) {
+      console.error('Error:', error);
+      toast.error('Registration failed');
+    }
   };
 
   return (
-    <div className='flex flex-col gap-4'>
-      <h2 className='text-xl font-bold'>Doctor Profile</h2>
-      <form onSubmit={handleSubmit} className='space-y-4'>
-        <div className='flex flex-wrap gap-4'>
-          {/* Left Column */}
-          <div className='flex-1 min-w-[300px]'>
-            <div className='mb-4'>
-              <label htmlFor="firstName" className='block font-semibold'>First Name:</label>
-              <input
-                type="text"
-                id="firstName"
-                name="firstName"
-                value={formData.firstName}
-                onChange={handleChange}
-                className='border p-2 rounded w-full'
-                placeholder="Enter first name"
-              />
-            </div>
-            <div className='mb-4'>
-              <label htmlFor="email" className='block font-semibold'>Email:</label>
-              <input
-                type="email"
-                id="email"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-                className='border p-2 rounded w-full'
-                placeholder="Enter email"
-              />
-            </div>
-            <div className='mb-4'>
-              <label htmlFor="contactNumber" className='block font-semibold'>Contact Number:</label>
-              <input
-                type="text"
-                id="contactNumber"
-                name="contactNumber"
-                value={formData.contactNumber}
-                onChange={handleChange}
-                className='border p-2 rounded w-full'
-                placeholder="Enter contact number"
-              />
-            </div>
-            <div className='mb-4'>
-              <label htmlFor="postalAddress" className='block font-semibold'>Postal Address:</label>
-              <input
-                type="text"
-                id="postalAddress"
-                name="postalAddress"
-                value={formData.postalAddress}
-                onChange={handleChange}
-                className='border p-2 rounded w-full'
-                placeholder="Enter postal address"
-              />
-            </div>
+    <div className="flex bg-black-100 py-[140px]">
+      <motion.div 
+        initial={{ x: "-100vw" }} 
+        animate={{ x: 0 }} 
+        transition={{ type: "spring", stiffness: 50 }} 
+        className="max-w-md w-full mx-auto rounded-none md:rounded-2xl p-4 md:p-8 shadow-input rounded-lg border border-black/.1 shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),0px_1px_0px_0px_rgba(25,28,33,0.02),0px_0px_0px_1px_rgba(25,28,33,0.08)]"
+      >
+        <h2 className="font-bold text-xl text-neutral-800 dark:text-neutral-200">
+          Register Doctor
+        </h2>
+        <form className="my-8" onSubmit={handleSubmit}>
+          <div className="flex items-center justify-center mb-4 bg-black-default border rounded-full w-[100px] h-[100px] align-middle relative">
+            {profilePicPreview ? (
+              <img src={profilePicPreview} alt="Profile" className="w-full h-full object-cover rounded-full" />
+            ) : (
+              <IconCamera className="w-10 h-10 text-gray-500 absolute" />
+            )}
+            <input
+              type="file"
+              id="profilePic"
+              name="profilePic"
+              accept="image/*"
+              onChange={handleProfilePicChange}
+              className="cursor-pointer opacity-0 absolute inset-0 z-10"
+            />
           </div>
-          {/* Right Column */}
-          <div className='flex-1 min-w-[300px]'>
-            <div className='mb-4'>
-              <label htmlFor="lastName" className='block font-semibold'>Last Name:</label>
-              <input
-                type="text"
-                id="lastName"
-                name="lastName"
-                value={formData.lastName}
-                onChange={handleChange}
-                className='border p-2 rounded w-full'
-                placeholder="Enter last name"
-              />
-            </div>
-            <div className='mb-4'>
-              <label htmlFor="dateOfBirth" className='block font-semibold'>Date of Birth:</label>
-              <input
-                type="date"
-                id="dateOfBirth"
-                name="dateOfBirth"
-                value={formData.dateOfBirth}
-                onChange={handleChange}
-                className='border p-2 rounded w-full'
-              />
-            </div>
-            <div className='mb-4'>
-              <label htmlFor="landlineNumber" className='block font-semibold'>Landline Number:</label>
-              <input
-                type="text"
-                id="landlineNumber"
-                name="landlineNumber"
-                value={formData.landlineNumber}
-                onChange={handleChange}
-                className='border p-2 rounded w-full'
-                placeholder="Enter landline number"
-              />
-            </div>
-            <div className='mb-4'>
-              <label htmlFor="permanentAddress" className='block font-semibold'>Permanent Address:</label>
-              <input
-                type="text"
-                id="permanentAddress"
-                name="permanentAddress"
-                value={formData.permanentAddress}
-                onChange={handleChange}
-                className='border p-2 rounded w-full'
-                placeholder="Enter permanent address"
-              />
-            </div>
-            <div className='mb-4'>
-              <label htmlFor="specialization" className='block font-semibold'>Specialization:</label>
-              <input
-                type="text"
-                id="specialization"
-                name="specialization"
-                value={formData.specialization}
-                onChange={handleChange}
-                className='border p-2 rounded w-full'
-                placeholder="Enter specialization"
-              />
-            </div>
+
+          <div className="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-2 mb-4">
+            <LabelInputContainer>
+              <Label htmlFor="firstName">First name</Label>
+              <Input id="firstName" placeholder="Tyler" type="text" value={formData.firstName} onChange={handleChange} />
+              {errors.firstName && <p className="text-red-500 text-sm">{errors.firstName}</p>}
+            </LabelInputContainer>
+            <LabelInputContainer>
+              <Label htmlFor="lastName">Last name</Label>
+              <Input id="lastName" placeholder="Durden" type="text" value={formData.lastName} onChange={handleChange} />
+              {errors.lastName && <p className="text-red-500 text-sm">{errors.lastName}</p>}
+            </LabelInputContainer>
           </div>
-        </div>
-        <button type="submit" className='bg-blue-600 text-white py-2 px-4 rounded'>
-          Save Changes
-        </button>
-      </form>
+          <LabelInputContainer className="mb-4">
+            <Label htmlFor="email">Email Address</Label>
+            <Input id="email" placeholder="projectmayhem@fc.com" type="email" value={formData.email} onChange={handleChange} />
+            {errors.email && <p className="text-red-500 text-sm">{errors.email}</p>}
+          </LabelInputContainer>
+          <LabelInputContainer className="mb-4">
+            <Label htmlFor="password">Password</Label>
+            <Input id="password" placeholder="••••••••" type="password" value={formData.password} onChange={handleChange} />
+            {errors.password && <p className="text-red-500 text-sm">{errors.password}</p>}
+          </LabelInputContainer>
+          <LabelInputContainer className="mb-4">
+            <Label htmlFor="dateOfBirth">Date of Birth</Label>
+            <Input id="dateOfBirth" placeholder="YYYY-MM-DD" type="date" value={formData.dateOfBirth} onChange={handleChange} />
+            {errors.dateOfBirth && <p className="text-red-500 text-sm">{errors.dateOfBirth}</p>}
+          </LabelInputContainer>
+          <LabelInputContainer className="mb-4">
+            <Label htmlFor="contactNumber">Contact Number</Label>
+            <Input id="contactNumber" placeholder="123-456-7890" type="tel" value={formData.contactNumber} onChange={handleChange} />
+            {errors.contactNumber && <p className="text-red-500 text-sm">{errors.contactNumber}</p>}
+          </LabelInputContainer>
+          <LabelInputContainer className="mb-4">
+            <Label htmlFor="postalAddress">Postal Address</Label>
+            <Input id="postalAddress" placeholder="123 Project Mayhem St." type="text" value={formData.postalAddress} onChange={handleChange} />
+            {errors.postalAddress && <p className="text-red-500 text-sm">{errors.postalAddress}</p>}
+          </LabelInputContainer>
+          <LabelInputContainer className="mb-4">
+            <Label htmlFor="permanentAddress">Permanent Address</Label>
+            <Input id="permanentAddress" placeholder="123 Permanent Mayhem St." type="text" value={formData.permanentAddress} onChange={handleChange} />
+            {errors.permanentAddress && <p className="text-red-500 text-sm">{errors.permanentAddress}</p>}
+          </LabelInputContainer>
+          <LabelInputContainer className="mb-4">
+            <Label htmlFor="specialization">Specialization</Label>
+            <Input id="specialization" placeholder="Cardiology" type="text" value={formData.specialization} onChange={handleChange} />
+            {errors.specialization && <p className="text-red-500 text-sm">{errors.specialization}</p>}
+          </LabelInputContainer>
+          <div className="space-y-4">
+            {formData.doctor_qualification.map((qual, index) => (
+              <div key={index} className="mb-4">
+                <LabelInputContainer>
+                  <Label htmlFor={`qualificationName${index}`}>Qualification Name {index + 1}</Label>
+                  <Input
+                    id="qualificationName"
+                    value={qual.qualificationName}
+                    onChange={(e) => handleQualificationChange(index, e)}
+                    placeholder="MD"
+                  />
+                  {errors[`qualificationName${index}`] && <p className="text-red-500 text-sm">{errors[`qualificationName${index}`]}</p>}
+                </LabelInputContainer>
+                <div className="flex space-x-4">
+                  <LabelInputContainer>
+                    <Label htmlFor={`startYear${index}`}>Start Year</Label>
+                    <Input
+                      id="startYear"
+                      type="number"
+                      value={qual.startYear}
+                      onChange={(e) => handleQualificationChange(index, e)}
+                      placeholder="2020"
+                    />
+                    {errors[`startYear${index}`] && <p className="text-red-500 text-sm">{errors[`startYear${index}`]}</p>}
+                  </LabelInputContainer>
+                  <LabelInputContainer>
+                    <Label htmlFor={`endYear${index}`}>End Year</Label>
+                    <Input
+                      id="endYear"
+                      type="number"
+                      value={qual.endYear}
+                      onChange={(e) => handleQualificationChange(index, e)}
+                      placeholder="2024"
+                    />
+                    {errors[`endYear${index}`] && <p className="text-red-500 text-sm">{errors[`endYear${index}`]}</p>}
+                  </LabelInputContainer>
+                </div>
+              </div>
+            ))}
+          </div>
+          <button type="submit" className="w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600">
+            Register Doctor
+          </button>
+        </form>
+      </motion.div>
     </div>
   );
-};
+}
 
-export default DoctorProfile;
+const LabelInputContainer = ({ children, className }) => (
+  <div className={`flex flex-col mb-4 ${className}`}>
+    {children}
+  </div>
+);
