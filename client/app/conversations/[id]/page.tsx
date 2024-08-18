@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
 import API_BASE_URL from '@/utils/apiConfig';
@@ -10,9 +10,12 @@ import { UserContext } from '@/context/UserContext';
 
 const ConversationPage = ({ params }: { params: { id: string } }) => {
   const [conversation, setConversation] = useState(null);
-  const [newMessage, setNewMessage] = useState(''); // State to track input message
+  const [newMessage, setNewMessage] = useState('');
   const router = useRouter();
   const { user } = useContext(UserContext);
+
+  // Ref to the messages container
+  const messagesEndRef = useRef(null);
 
   // Function to fetch messages
   const fetchMessages = async () => {
@@ -24,25 +27,45 @@ const ConversationPage = ({ params }: { params: { id: string } }) => {
     }
   };
 
-  // Polling mechanism to fetch messages every 2 seconds
+  // Polling mechanism to fetch messages every 1.5 seconds
   useEffect(() => {
-    const intervalId = setInterval(fetchMessages, 1500); // Fetch messages every 2 seconds
+    const intervalId = setInterval(fetchMessages, 1500);
 
-    return () => clearInterval(intervalId); // Clean up the interval on unmount
+    return () => clearInterval(intervalId);
   }, [params.id]);
+
+  // Scroll to the bottom of the messages
+  const scrollToBottom = () => {
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
+  // Scroll to the bottom whenever the conversation updates
+  useEffect(() => {
+    scrollToBottom();
+  }, [conversation]);
 
   const handleSendMessage = async () => {
     if (newMessage.trim()) {
       try {
+        setConversation((prev) => ({
+          ...prev,
+          messages: [...prev.messages, {
+            sender: user._id,
+            content: newMessage,
+            createdAt:new Date(),
+          }],
+        }));
         const res = await axios.post(`${API_BASE_URL}/conversations/${params.id}/messages`, {
           sender: user._id,
           content: newMessage,
         });
-        setConversation((prev) => ({
-          ...prev,
-          messages: [...prev.messages, res.data], // Add new message to conversation
-        }));
-        setNewMessage(''); // Clear the input field
+        // setConversation((prev) => ({
+        //   ...prev,
+        //   messages: [...prev.messages, res.data],
+        // }));
+        setNewMessage('');
       } catch (error) {
         console.error('Error sending message:', error);
       }
@@ -63,16 +86,18 @@ const ConversationPage = ({ params }: { params: { id: string } }) => {
 
       <div className="flex-grow w-full bg-red-200 overflow-auto">
         {conversation && conversation.messages.map((message, index) => (
-          <Message key={index} message={message}/>
+          <Message key={index} message={message} />
         ))}
+        {/* Scroll target element */}
+        <div ref={messagesEndRef} />
       </div>
-      
+
       <div className="flex items-center w-full p-4 bg-red-300">
         <input 
           type="text" 
-          placeholder='write your message...' 
+          placeholder='write your message...'
           value={newMessage}
-          onChange={(e) => setNewMessage(e.target.value)} // Update input state
+          onChange={(e) => setNewMessage(e.target.value)} 
           className="w-full p-2 border border-gray-300 rounded-md"
         />
         <div className="p-6 bg-green-300 cursor-pointer ml-2" onClick={handleSendMessage}>
