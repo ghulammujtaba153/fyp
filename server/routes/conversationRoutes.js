@@ -1,6 +1,6 @@
 // routes/conversationRoutes.js
 import express from 'express';
-import { createConversation, getConversationById, getUserConversations } from '../controllers/conversationController/conversationController.js';
+import { createConversation, getConversationById, getUserConversations, sendMessage } from '../controllers/conversationController/conversationController.js';
 import Conversation from '../models/conversationSchema.js';
 
 
@@ -28,5 +28,7 @@ conversationRouter.get('/user/:userId', getUserConversations);
 
 // Get conversation by ID
 conversationRouter.get('/:id', getConversationById);
+
+conversationRouter.post('/:conversationId/messages', sendMessage);
 
 export default conversationRouter;

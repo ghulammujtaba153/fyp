@@ -7,6 +7,11 @@ const conversationSchema = new Schema({
     ref: 'User',
     required: true
   }],
+  messages: [{
+    sender: { type: Schema.Types.ObjectId, ref: 'User' },
+    content: String,
+    createdAt: { type: Date, default: Date.now },
+  }],
   createdAt: {
     type: Date,
     default: Date.now

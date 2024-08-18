@@ -37,8 +37,9 @@ export function AppointmentCard({ cardData }) {
       // Fetch conversation room
       const userRes = await axios.get(`${API_BASE_URL}/doctors/${user._id}`);
       console.log(userRes.data)
+      const doctorId=userRes.data.userId._id;
 
-      const conversationRes = await axios.get(`${API_BASE_URL}/conversations/doctor/${userRes.data.userId._id}/patient/${patientId}`);
+      const conversationRes = await axios.get(`${API_BASE_URL}/conversations/doctor/${doctorId}/patient/${patientId}`);
       const conversationData = conversationRes.data;
       console.log(conversationRes.data)
 

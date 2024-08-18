@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { loginUser, registerUser, updateUser, user } from "../../controllers/patientControllers/auth.js";
-import { bookAppointment, getDoctorUpcomingAppointments, getUpcomingAppointments, updateAppointmentStatus } from "../../controllers/patientControllers/appointment.js";
+import { bookAppointment, getAllAppointmentforPatients, getDoctorUpcomingAppointments, getUpcomingAppointments, updateAppointmentStatus } from "../../controllers/patientControllers/appointment.js";
 
 const router = Router();
 
@@ -11,8 +11,9 @@ router.put('/user/:userId', updateUser);
 //appointment
 
 router.post('/appointments', bookAppointment);
-router.patch('/appointments/:id/status', updateAppointmentStatus);
+router.put('/appointments/:id/status', updateAppointmentStatus);
 router.get('/appointments/upcoming/:patientId', getUpcomingAppointments);
+router.get('/appointments/all/:patientId', getAllAppointmentforPatients);
 router.get('/appointments/doctor/:doctorId', getDoctorUpcomingAppointments);
 
 export default router;

@@ -2,7 +2,7 @@
 
 import Sidebar from '@/components/dashboard/Sidebar';
 import { SidebarItem } from '@/components/dashboard/SidebarItem';
-import { BellIcon, Home, Settings, Star, TestTubeDiagonal } from 'lucide-react';
+import { BellIcon, Home, LogOut, Settings, Star, TestTubeDiagonal } from 'lucide-react';
 import React, { useEffect, useState, useContext } from 'react';
 import { HiUser } from 'react-icons/hi';
 import { useRouter } from 'next/navigation';
@@ -34,6 +34,11 @@ const DashboardLayout = ({ children }) => {
     }else{
         router.push(`/doctordashboard/${item.toLowerCase()}`);
     }
+  };
+
+  const handleLogout = () => {
+    logout();
+    router.push("/");
   };
 
   return (
@@ -68,13 +73,16 @@ const DashboardLayout = ({ children }) => {
       <div className='flex flex-col  w-full gap-6 items-center m-5'>
       <div className='w-full flex flex-end'>
       <div className='text-white w-full flex gap-5 items-center justify-end mr-0'>
-        <BellIcon/>
-        {
-          user &&
-          <img src={user.profile} className="w-[40px] h-[40px] rounded-full" alt="/"/>
-        }
-        
-      </div>
+            <BellIcon />
+            {user && user.profile ? (
+              <img src={user.profile} className="w-[40px] h-[40px] rounded-full" alt="Profile" />
+            ) : (
+              <div className="w-[40px] h-[40px] rounded-full bg-gray-500" />
+            )}
+            <p className="flex items-center gap-2 cursor-pointer" onClick={handleLogout}>
+              logout <LogOut />
+            </p>
+          </div>
       </div>
         {children}
       </div>
