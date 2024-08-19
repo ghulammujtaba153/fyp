@@ -2,12 +2,13 @@
 
 import Sidebar from '@/components/dashboard/Sidebar';
 import { SidebarItem } from '@/components/dashboard/SidebarItem';
-import { BellIcon, Home, LogOut, Settings, Star, TestTubeDiagonal } from 'lucide-react';
+import { BellIcon, Home, LogOut, MessageCircleMore, Settings, Star, TestTubeDiagonal } from 'lucide-react';
 import React, { useContext, useEffect, useState } from 'react';
 import { HiUser } from 'react-icons/hi';
 import { useRouter } from 'next/navigation';
 import { usePathname } from 'next/navigation'
 import { UserContext } from '@/context/UserContext';
+import DashNavBar from '@/components/dashboard/DashNavBar';
 
 const DashboardLayout = ({ children }) => {
   const [activeItem, setActiveItem] = useState('Dashboard');
@@ -67,6 +68,14 @@ const DashboardLayout = ({ children }) => {
             active={activeItem === 'Appointments'}
             onClick={() => handleItemClick('Appointments')}
           />
+          
+          <SidebarItem
+            icon={<MessageCircleMore />}
+            text="Chats"
+            href="/dashboard/chats"
+            active={activeItem === 'Chats'}
+            onClick={() => handleItemClick('Chats')}
+          />
           <SidebarItem
             icon={<TestTubeDiagonal />}
             text="Lab Tests"
@@ -85,17 +94,7 @@ const DashboardLayout = ({ children }) => {
       </div>
       <div className='flex flex-col w-full gap-6 items-center m-5'>
         <div className='w-full flex flex-end'>
-          <div className='text-white w-full flex gap-5 items-center justify-end mr-0'>
-            <BellIcon />
-            {user && user.profile ? (
-              <img src={user.profile} className="w-[40px] h-[40px] rounded-full" alt="Profile" />
-            ) : (
-              <div className="w-[40px] h-[40px] rounded-full bg-gray-500" />
-            )}
-            <p className="flex items-center gap-2 cursor-pointer" onClick={handleLogout}>
-              logout <LogOut />
-            </p>
-          </div>
+        <DashNavBar/>
         </div>
         {children}
       </div>

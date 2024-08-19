@@ -5,7 +5,7 @@ import axios from 'axios';
 
 const Message = ({ message, sender }) => {
 
-  console.log(sender)
+  // console.log(sender)
   
 
   const formattedDate = new Date(message.createdAt).toLocaleString('en-US', {
@@ -18,14 +18,21 @@ const Message = ({ message, sender }) => {
   });
 
   return (
-    <div
-      className={`flex flex-col max-w-max p-2 rounded-lg m-5 ${
-         'mr-auto bg-gray-200 text-left'
-      }`}
-    >
+    <div className="flex items-center ml-2">
+      <img src={message.sender.profile} alt="profile" className="w-10 h-10 rounded-full"/>
+
+      <div
+          className={`flex flex-col max-w-max p-2 rounded-lg m-5 ${
+            'mr-auto bg-gray-200 text-left'
+          }`}
+        >
+      
       <div>{message.content}</div>
       <p className="text-xs text-gray-500">{formattedDate}</p>
     </div>
+
+    </div>
+    
   );
 };
 

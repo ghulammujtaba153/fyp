@@ -1,6 +1,7 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import User from '../../models/userSchema.js';
+import { io } from '../../index.js';
 
 const JWT_SECRET = process.env.JWT_SECRET || "ddd";
 
@@ -117,7 +118,30 @@ export const loginUser = async (req, res) => {
 };
 
 
-export const user = async (req, res) => {
+// export const user = async (req, res) => {
+//     const { id } = req.params;
+//     console.log(id);
+
+//     try {
+//         const user = await User.findById(id);
+//         if (!user) {
+//             return res.status(404).json({ message: 'User not found.' });
+//         }
+//         // console.log(user)
+
+//         res.status(200).json({
+//             message: 'User data retrieved successfully.',
+//             user
+//         });
+//     } catch (error) {
+//         console.error(error);
+//         res.status(500).json({ message: 'Server error' });
+//     }
+// };
+
+
+////////socke 
+export const user = async (req, res) => {  // Function renamed to avoid confusion with variable name
     const { id } = req.params;
     console.log(id);
 
@@ -126,7 +150,9 @@ export const user = async (req, res) => {
         if (!user) {
             return res.status(404).json({ message: 'User not found.' });
         }
-        console.log(user)
+
+        // Emit an event to notify that this user is online
+        io.emit('update_user_status', { userId: id, status: 'online' });
 
         res.status(200).json({
             message: 'User data retrieved successfully.',
@@ -137,7 +163,6 @@ export const user = async (req, res) => {
         res.status(500).json({ message: 'Server error' });
     }
 };
-
 
 
 export const updateUser = async (req, res) => {

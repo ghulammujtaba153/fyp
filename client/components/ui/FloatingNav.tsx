@@ -28,6 +28,8 @@ export const FloatingNav = ({
     if (pathname.startsWith("/doctordashboard") || 
         pathname.startsWith("/dashboard") || 
         pathname.startsWith("/conversation") ||
+        pathname.startsWith("/conference") ||
+        pathname.startsWith("/room") ||
         pathname.startsWith("/admin")) {
       setVisible(false);
     } else {

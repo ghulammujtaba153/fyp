@@ -123,8 +123,7 @@ export const getUpcomingAppointments = async (req, res) => {
       const now = new Date();
   
       const appointments = await Appointment.find({
-        patientId,
-        timing: { $gte: now },
+        patientId
       })
         .populate({
           path: 'doctorId',
@@ -132,6 +131,31 @@ export const getUpcomingAppointments = async (req, res) => {
             path: 'userId', // Populating the userId within doctorId
             select: 'firstName lastName email profile', // Select the fields you want from the user
           },
+        });
+  
+      if (!appointments.length) {
+        return res.status(404).json({ message: 'No upcoming appointments found' });
+      }
+  
+      res.status(200).json(appointments);
+    } catch (error) {
+      console.error('Error retrieving upcoming appointments:', error);
+      res.status(500).json({ message: 'Internal server error' });
+    }
+  };
+
+
+  export const getAllAppointmentforDoctor = async (req, res) => {
+    const { DoctorId } = req.params;
+  
+    try {
+      const now = new Date();
+  
+      const appointments = await Appointment.find({
+        DoctorId
+      })
+        .populate({
+          path: 'patientId'
         });
   
       if (!appointments.length) {

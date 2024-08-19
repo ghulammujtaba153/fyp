@@ -48,29 +48,30 @@ export const getUserConversations = async (req, res) => {
 
 
 export const getConversationById = async (req, res) => {
-    const { id } = req.params;
-    // console.log(id);
-    
-    try {
-      const conversation = await Conversation.findById(id)
-        .populate('participants', 'name')
-        .populate({
-          path: 'messages.sender',
-          select: 'name',
-          options: { strictPopulate: false } // Disable strict populate for this query
-        });
+  const { id } = req.params;
   
-      if (!conversation) {
-        return res.status(404).json({ message: 'Conversation not found' });
-      }
-    //   console.log(conversation)
-  
-      res.status(200).json(conversation);
-    } catch (error) {
-      console.error('Error retrieving conversation:', error);
-      res.status(500).json({ message: 'Internal server error' });
+  try {
+    const conversation = await Conversation.findById(id)
+      .populate('participants', 'firstName lastName profile')  // Assuming 'name' is a derived value from firstName and lastName
+      .populate({
+        path: 'messages.sender',
+        select: 'firstName lastName email profile', // Adjust the fields according to your User schema
+      });
+
+    if (!conversation) {
+      return res.status(404).json({ message: 'Conversation not found' });
     }
-  };
+
+    // console.log(JSON.stringify(conversation, null, 2));  // Log to inspect the populated data
+
+    res.status(200).json(conversation);
+  } catch (error) {
+    console.error('Error retrieving conversation:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+};
+
+
 
 
 
@@ -111,7 +112,7 @@ export const getConversationById = async (req, res) => {
   // };
 
 
-  import { io } from '../../index.js';  // Import the io instance
+  // import { io } from '../../index.js';  // Import the io instance
 
 export const sendMessage = async (req, res) => {
   const { conversationId } = req.params;
@@ -134,7 +135,7 @@ export const sendMessage = async (req, res) => {
     await conversation.save();
 
     // Emit the new message to the conversation room
-    io.to(conversationId).emit('new_message', newMessage);
+    // io.to(conversationId).emit('new_message', newMessage);
 
     res.status(200).json({
       message: 'Message sent successfully',

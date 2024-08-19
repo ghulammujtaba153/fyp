@@ -24,7 +24,7 @@ function Assignments() {
 
       try {
         const userRes = await axios.get(`${API_BASE_URL}/doctors/${user._id}`);
-        const res = await axios.get(`${API_BASE_URL}/appointments/doctor/${userRes.data._id}`);
+        const res = await axios.get(`${API_BASE_URL}/appointments/all/doctor/${userRes.data._id}`);
         setAppointments(res.data);
         // console.log(res.data);
       } catch (error) {
