@@ -3,10 +3,7 @@
 import axios from 'axios';
 import React, { createContext, useState, useEffect } from 'react';
 import API_BASE_URL from '@/utils/apiConfig'; 
-import io from 'socket.io-client';
 
-// Initialize socket connection once
-const socket = io('http://localhost:5000');
 
 const UserContext = createContext(null);
 
@@ -23,19 +20,8 @@ const UserProvider = ({ children }) => {
           const decodedToken = JSON.parse(atob(token.split('.')[1]));
           const userId = decodedToken.userId;
 
-          // Emit 'user_online' event once the socket connection is established
-          // socket.on('connect', () => {
-            
-          //   if (userId) {
-          //     socket.emit('user_online', userId);
-          //     console.log(`Socket connected user context: ${socket.id}`);
-          //   }
-          // });
-
-          // Fetch user data from API
           const res = await axios.get(`${API_BASE_URL}/user/${userId}`);
           setUser(res.data.user);
-          socket.emit('user_online', res.data.user._id);
           
         } catch (error) {
           console.error('Error fetching user:', error);
@@ -46,9 +32,6 @@ const UserProvider = ({ children }) => {
 
     fetchUser();
 
-    // return () => {
-    //   socket.disconnect();
-    // };
   }, []);
 
   const setParticipants = (participants) => {
@@ -58,7 +41,6 @@ const UserProvider = ({ children }) => {
   const logout = () => {
     localStorage.removeItem('token');
     setUser(null);
-    socket.disconnect(); // Ensure socket is disconnected on logout
   };
 
   const updateUser = async (updatedData) => {

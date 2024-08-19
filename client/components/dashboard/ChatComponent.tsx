@@ -5,10 +5,8 @@ import React, { useContext, useEffect, useState } from 'react';
 import API_BASE_URL from '@/utils/apiConfig';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
-import io from 'socket.io-client';
 
-// Initialize socket connection
-const socket = io('http://localhost:5000');
+
 
 const ChatComponent = () => {
     const { user } = useContext(UserContext);
@@ -21,8 +19,6 @@ const ChatComponent = () => {
 
     useEffect(() => {
         if (user) {
-            // Emit user's online status to the server
-            socket.emit('user_online', user._id);
 
             console.log('user', user);
 
@@ -37,18 +33,9 @@ const ChatComponent = () => {
             };
             fetchChats();
 
-            // Listen for online users updates
-            socket.on('onlineUsers', (users) => {
-                console.log('onlineUsers', users);
-                setOnlineUsers(users);
-            });
 
             // Clean up on unmount
-            return () => {
-                socket.off('onlineUsers'); // Clean up event listener
-                // socket.emit('user_offline', user._id); // Optionally, emit a user_offline event
-                socket.disconnect();
-            };
+            
         }
     }, [user]);
 

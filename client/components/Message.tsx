@@ -1,38 +1,29 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { UserContext } from '@/context/UserContext';
-import API_BASE_URL from '@/utils/apiConfig';
-import axios from 'axios';
+import React from 'react';
 
-const Message = ({ message, sender }) => {
-
-  // console.log(sender)
-  
-
+const Message = ({ message, own }) => {
+  console.log(own);
   const formattedDate = new Date(message.createdAt).toLocaleString('en-US', {
     year: 'numeric',
     month: 'short',
     day: 'numeric',
     hour: 'numeric',
     minute: 'numeric',
-    hour12: true
+    hour12: true,
   });
 
   return (
-    <div className="flex items-center ml-2">
-      <img src={message.sender.profile} alt="profile" className="w-10 h-10 rounded-full"/>
-
-      <div
-          className={`flex flex-col max-w-max p-2 rounded-lg m-5 ${
-            'mr-auto bg-gray-200 text-left'
+    message?.sender && (
+      <div className={`flex items-center ${own ? 'justify-end' : 'justify-start'} my-4`}>
+        <div
+          className={`flex flex-col max-w-xs p-2  ${
+            own ? 'bg-blue-200 text-right rounded-l-lg rounded-br-lg' : 'bg-gray-200 text-left rounded-r-lg rounded-bl-lg'
           }`}
         >
-      
-      <div>{message.content}</div>
-      <p className="text-xs text-gray-500">{formattedDate}</p>
-    </div>
-
-    </div>
-    
+          <div>{message.content}</div>
+          <p className="text-xs text-gray-500">{formattedDate}</p>
+        </div>
+      </div>
+    )
   );
 };
 

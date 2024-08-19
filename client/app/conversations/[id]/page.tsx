@@ -9,6 +9,7 @@ import Message from '@/components/Message';
 import { UserContext } from '@/context/UserContext';
 import { v4 as uuid } from 'uuid';
 import VideoCall from '@/components/dashboard/videoCall';
+import { io } from 'socket.io-client';
 
 const Loader = () => (
   <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center z-50">
@@ -27,6 +28,7 @@ const ErrorMessage = ({ message, onClose }) => (
 
 const ConversationPage = ({ params }: { params: { id: string } }) => {
   const [conversation, setConversation] = useState(null);
+  const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
   const [participant, setParticipant] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -34,8 +36,36 @@ const ConversationPage = ({ params }: { params: { id: string } }) => {
   const router = useRouter();
   const { user, setParticipants } = useContext(UserContext);
   const [videoCalls, setVideoCalls] = useState([]);
-
+  const [arrivalMessage, setArrivalMessage] = useState({});
+  
   const messagesEndRef = useRef(null);
+  const socket = useRef();
+
+  useEffect(() => {
+    socket.current = io("ws://localhost:8900");
+    socket.current.on("getMessage", (data: any) => {
+      setArrivalMessage({
+        sender: data.senderId,
+        content: data.content,
+        createdAt: Date.now(),
+      });
+    });
+  }, []);  
+
+  useEffect(() => {
+    if (arrivalMessage && conversation?.participants.find(participant => participant._id !== arrivalMessage.senderId)) {
+      setMessages((prev) => [...prev, arrivalMessage]);
+    }
+  }, [arrivalMessage, conversation]);
+
+  useEffect(() => {
+    if (user) {
+      socket.current.emit("addUser", user._id);
+      socket.current.on("getUsers", (users) => {
+        console.log(users);
+      });
+    }
+  }, [user]);
 
   useEffect(() => {
     const fetchCalls = async () => {
@@ -54,7 +84,6 @@ const ConversationPage = ({ params }: { params: { id: string } }) => {
     fetchCalls();
   }, [user]);
 
-  // Function to fetch conversation details
   const fetchConversation = async () => {
     if (!user) {
       console.error('User is not available');
@@ -63,16 +92,18 @@ const ConversationPage = ({ params }: { params: { id: string } }) => {
 
     try {
       const res = await axios.get(`${API_BASE_URL}/conversations/${params.id}`);
+      setMessages(res.data.messages);
       setConversation(res.data);
 
-      const otherParticipant = res.data.participants.find(p => p._id !== user._id);
+      const otherParticipant = res.data.participants.find(
+        (p) => p._id !== user._id
+      );
       setParticipant(otherParticipant?._id);
     } catch (error) {
       console.error('Error fetching conversation:', error);
     }
   };
 
-  // Fetch conversation on component mount
   useEffect(() => {
     fetchConversation();
   }, [params.id, user]);
@@ -84,8 +115,8 @@ const ConversationPage = ({ params }: { params: { id: string } }) => {
   };
 
   useEffect(() => {
-    scrollToBottom();
-  }, [conversation]);
+    scrollToBottom(); // Scroll down when conversation or messages update
+  }, [messages]);
 
   const handleJoin = async () => {
     setIsLoading(true);
@@ -115,54 +146,72 @@ const ConversationPage = ({ params }: { params: { id: string } }) => {
   const handleSendMessage = async () => {
     if (newMessage.trim()) {
       try {
-        setConversation(prev => ({
-          ...prev,
-          messages: [
-            ...(prev?.messages || []),
-            {
-              sender: user._id,
-              content: newMessage,
-              createdAt: new Date(),
-            },
-          ],
-        }));
-        await axios.post(`${API_BASE_URL}/conversations/${params.id}/messages`, {
-          sender: user._id,
+        setMessages((prevMessages) => [
+          ...prevMessages,
+          {
+            sender: user._id,
+            content: newMessage,
+            createdAt: new Date(),
+          },
+        ]);
+
+        const receiverId = conversation.participants.find(
+          (member) => member._id !== user._id
+        );
+    
+        socket.current.emit("sendMessage", {
+          senderId: user._id,
+          receiverId: receiverId._id,
           content: newMessage,
         });
+            
+        await axios.post(
+          `${API_BASE_URL}/conversations/${params.id}/messages`,
+          {
+            sender: user._id,
+            content: newMessage,
+          }
+        );
         setNewMessage('');
+        scrollToBottom(); // Scroll down when a new message is sent
       } catch (error) {
         console.error('Error sending message:', error);
       }
     }
   };
 
-  if (!user) return <p>Loading user information...</p>; // Optionally handle loading state for user
+  if (!user) return <p>Loading user information...</p>;
 
   return (
-    <div className='relative flex flex-col max-w-[1000px] h-screen bg-red-100 mx-auto'>
+    <div className="relative flex flex-col max-w-[1000px] h-screen bg-red-100 mx-auto">
       {isLoading && <Loader />}
       {error && <ErrorMessage message={error} onClose={() => setError('')} />}
 
-      <div className='flex items-center justify-between p-4 bg-red-300'>
+      <div className="flex items-center justify-between p-4 bg-red-300">
         <div className="flex items-center">
           {conversation?.participants?.map((participant, index) => (
             user._id !== participant._id && (
               <div key={index} className="flex items-center">
-                <img src={participant.profile} alt="profile" className='w-[40px] h-[40px] rounded-full' />
-                <p className="ml-2">{participant.firstName + " " + participant.lastName}</p>
+                <img
+                  src={participant.profile}
+                  alt="profile"
+                  className="w-[40px] h-[40px] rounded-full"
+                />
+                <p className="ml-2">
+                  {participant.firstName + " " + participant.lastName}
+                </p>
               </div>
             )
           ))}
         </div>
-        <div onClick={handleJoin} className='p-3 cursor-pointer bg-red-500 rounded-md'>
+        <div onClick={handleJoin} className="p-3 cursor-pointer bg-red-500 rounded-md">
           <Video />
         </div>
       </div>
 
       <div className="flex-grow w-full bg-red-200 overflow-auto p-4">
-        {conversation?.messages?.map((message, index) => (
-          <Message key={index} message={message} />
+        {messages?.map((message, index) => (
+          <Message key={index} message={message} own={user._id === message.sender} />
         ))}
         <div ref={messagesEndRef} />
       </div>
@@ -170,7 +219,7 @@ const ConversationPage = ({ params }: { params: { id: string } }) => {
       <div className="flex items-center w-full p-4 bg-red-300">
         <input
           type="text"
-          placeholder='write your message...'
+          placeholder="write your message..."
           value={newMessage}
           onChange={(e) => setNewMessage(e.target.value)}
           className="w-full p-2 border border-gray-300 rounded-md"
@@ -181,7 +230,7 @@ const ConversationPage = ({ params }: { params: { id: string } }) => {
       </div>
 
       {videoCalls.length > 0 && (
-        <div className='absolute top-[70px] right-[20px] w-[250px]'>
+        <div className="absolute top-[70px] right-[20px] w-[250px]">
           <VideoCall videoCalls={videoCalls} />
         </div>
       )}
