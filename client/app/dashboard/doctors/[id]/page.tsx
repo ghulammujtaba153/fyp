@@ -1,11 +1,12 @@
 "use client";
 
-import React, { useEffect, useState } from 'react';
-import { usePathname } from 'next/navigation';
+import React, { useContext, useEffect, useState } from 'react';
+import { useParams, usePathname, useRouter } from 'next/navigation';
 import axios from 'axios';
 import DashboardLayout from '../../DashboardLayout';
 import API_BASE_URL from '@/utils/apiConfig';
 import AppointmentModal from '@/components/AppointmentModal';
+import { UserContext } from '@/context/UserContext';
 
 
 const DoctorDetail = () => {
@@ -13,6 +14,9 @@ const DoctorDetail = () => {
   const [showModal, setShowModal] = useState(false); // State to control modal visibility
   const pathname = usePathname();
   const userId = pathname?.split("=").pop();
+  const { user } = useContext(UserContext);
+  const router = useRouter();
+  
 
   useEffect(() => {
     if (userId) {
@@ -28,6 +32,8 @@ const DoctorDetail = () => {
       fetchDoctor();
     }
   }, [userId]);
+
+  
 
   if (!doctor) {
     return (
@@ -59,7 +65,8 @@ const DoctorDetail = () => {
 
             <div className="flex justify-center">
               <button
-                onClick={() => setShowModal(true)}
+                 onClick={() => setShowModal(true)}
+                
                 className="px-4 py-2 bg-blue-500 rounded text-white"
               >
                 Book Appointment

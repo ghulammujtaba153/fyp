@@ -4,11 +4,13 @@ import React, { useContext, useState } from 'react';
 import axios from 'axios';
 import API_BASE_URL from '@/utils/apiConfig';
 import { UserContext } from '@/context/UserContext';
+import { useRouter } from 'next/navigation';
 
 const AppointmentModal = ({ doctorId, onClose }) => {
   const [appointmentDate, setAppointmentDate] = useState('');
   const [status, setStatus] = useState('new');
   const {user} =useContext(UserContext);
+  const router = useRouter();
   
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -20,11 +22,25 @@ const AppointmentModal = ({ doctorId, onClose }) => {
         timing: new Date(appointmentDate).toISOString(),
         status
       });
+      handleBookAppointment()
       onClose();
       alert('Appointment booked successfully!');
     } catch (error) {
       console.error('Error booking appointment:', error);
       alert('Failed to book appointment.');
+    }
+  };
+  const handleBookAppointment = async() => {
+    const patientId = user._id;
+    try {
+      const newConversationRes = await axios.post(`${API_BASE_URL}/conversations/create`, {
+        participants: [doctorId, patientId],
+      });
+      const newConversationData = newConversationRes.data;
+      router.push(`/conversations/${newConversationData._id}`);
+      
+    } catch (error) {
+      
     }
   };
 
