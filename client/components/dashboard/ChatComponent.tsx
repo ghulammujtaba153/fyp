@@ -1,10 +1,11 @@
 "use client";
 
 import { UserContext } from '@/context/UserContext';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import API_BASE_URL from '@/utils/apiConfig';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
+import { io } from 'socket.io-client';
 
 
 
@@ -14,6 +15,23 @@ const ChatComponent = () => {
     const [onlineUsers, setOnlineUsers] = useState([]);
 
     const router = useRouter();
+
+    const socket = useRef();
+
+  useEffect(() => {
+    socket.current = io("ws://localhost:8900");
+  }, []); 
+
+  useEffect(() => {
+    if (!user){
+        return;
+    }
+    socket.current.emit("addUser", user._id);
+    socket.current.on("getUsers", (users) => {
+        console.log(users)
+        setOnlineUsers(users.map(user => user.userId));
+    });
+},[conversations, user]);
 
     
 
@@ -39,6 +57,8 @@ const ChatComponent = () => {
         }
     }, [user]);
 
+    
+
     const handleConversationClick = (id) => {
         router.push(`/conversations/${id}`);
     };
@@ -59,7 +79,13 @@ const ChatComponent = () => {
                                     <div className='flex flex-col gap-2 p-2'>
                                         <p className='text-lg font-bold'>{participant.firstName} {participant.lastName}</p>
                                     </div>
-                                    <p>{isOnline(participant._id) ? 'Online' : 'Offline'}</p>
+                                    <p
+                                    className={`text-sm px-2 py-1 rounded-full text-white ${
+                                        onlineUsers.includes(participant._id) ? 'bg-green-300' : 'bg-red-300'
+                                    }`}
+                                    >
+                                    {onlineUsers.includes(participant._id) ? 'Online' : 'Offline'}
+                                    </p>
                                 </div>
                             )
                         ))}

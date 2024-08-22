@@ -4,12 +4,13 @@ import React, { useContext, useEffect, useState, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
 import API_BASE_URL from '@/utils/apiConfig';
-import { Phone, Send, Video } from 'lucide-react';
+import { Phone, Send, ShieldPlus, Video } from 'lucide-react';
 import Message from '@/components/Message';
 import { UserContext } from '@/context/UserContext';
 import { v4 as uuid } from 'uuid';
 import VideoCall from '@/components/dashboard/videoCall';
 import { io } from 'socket.io-client';
+import Prescription from '@/components/dashboard/Prescription';
 
 const Loader = () => (
   <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center z-50">
@@ -37,6 +38,7 @@ const ConversationPage = ({ params }: { params: { id: string } }) => {
   const { user, setParticipants } = useContext(UserContext);
   const [videoCalls, setVideoCalls] = useState([]);
   const [arrivalMessage, setArrivalMessage] = useState({});
+  const [prescription, setPrescription] = useState(false);
   
   const messagesEndRef = useRef(null);
   const socket = useRef();
@@ -60,7 +62,6 @@ const ConversationPage = ({ params }: { params: { id: string } }) => {
 
   useEffect(() => {
     if (user) {
-      socket.current.emit("addUser", user._id);
       socket.current.on("getUsers", (users) => {
         console.log(users);
       });
@@ -132,6 +133,11 @@ const ConversationPage = ({ params }: { params: { id: string } }) => {
       if (participant) {
         const roomId = uuid();
         setParticipants([user._id, participant]);
+        console.log(participant);
+        const room = await axios.put(`${API_BASE_URL}/videoCalls/${roomId}/status`, {
+          status: 'completed',
+        });
+        console.log(room);
         router.push(`/room/${roomId}`);
       } else {
         setError('Participant not found');
@@ -204,8 +210,16 @@ const ConversationPage = ({ params }: { params: { id: string } }) => {
             )
           ))}
         </div>
-        <div onClick={handleJoin} className="p-3 cursor-pointer bg-red-500 rounded-md">
-          <Video />
+        <div className="flex items-center gap-4">
+          <div className="p-3 cursor-pointer bg-red-500 rounded-md" onClick={()=>setPrescription(!prescription)}><ShieldPlus /></div>
+          {prescription && (
+            <div className="absolute inset-0 flex items-center justify-center z-50 bg-opacity-75 bg-black">
+              <Prescription users={"prescription"} setPrescription={setPrescription} />
+            </div>
+          )}
+          <div onClick={handleJoin} className="p-3 cursor-pointer bg-red-500 rounded-md">
+            <Video />
+          </div>
         </div>
       </div>
 
