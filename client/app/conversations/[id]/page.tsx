@@ -11,6 +11,7 @@ import { v4 as uuid } from 'uuid';
 import VideoCall from '@/components/dashboard/videoCall';
 import { io } from 'socket.io-client';
 import Prescription from '@/components/dashboard/Prescription';
+import '../../scroll.css'
 
 const Loader = () => (
   <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center z-50">
@@ -189,7 +190,7 @@ const ConversationPage = ({ params }: { params: { id: string } }) => {
   if (!user) return <p>Loading user information...</p>;
 
   return (
-    <div className="relative flex flex-col max-w-[1000px] h-screen bg-red-100 mx-auto">
+    <div className=" relative flex flex-col max-w-[1000px] h-screen bg-red-100 mx-auto">
       {isLoading && <Loader />}
       {error && <ErrorMessage message={error} onClose={() => setError('')} />}
 
@@ -223,22 +224,22 @@ const ConversationPage = ({ params }: { params: { id: string } }) => {
         </div>
       </div>
 
-      <div className="flex-grow w-full bg-red-200 overflow-auto p-4">
+      <div className="prescription-container flex-grow w-full overflow-auto p-4">
         {messages?.map((message, index) => (
           <Message key={index} message={message} own={user._id === message.sender} />
         ))}
         <div ref={messagesEndRef} />
       </div>
 
-      <div className="flex items-center w-full p-4 bg-red-300">
+      <div className="flex items-center w-full ">
         <input
           type="text"
           placeholder="write your message..."
           value={newMessage}
           onChange={(e) => setNewMessage(e.target.value)}
-          className="w-full p-2 border border-gray-300 rounded-md"
+          className="w-full h-full p-2 text-md border outline-none border-gray-300 rounded-md"
         />
-        <div className="p-6 bg-green-300 cursor-pointer ml-2" onClick={handleSendMessage}>
+        <div className="p-6 bg-green-300 cursor-pointer" onClick={handleSendMessage}>
           <Send />
         </div>
       </div>

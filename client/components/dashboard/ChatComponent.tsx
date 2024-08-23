@@ -6,7 +6,7 @@ import API_BASE_URL from '@/utils/apiConfig';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import { io } from 'socket.io-client';
-
+import '../../app/scroll.css';
 
 
 const ChatComponent = () => {
@@ -66,7 +66,7 @@ const ChatComponent = () => {
     const isOnline = (participantId) => onlineUsers.includes(participantId);
 
     return (
-            <div className='flex flex-col h-[80%] w-full m-4 overflow-y-scroll'>
+            <div className='prescription-container flex flex-col h-[80%] w-full m-4 overflow-y-scroll'>
                 {conversations && conversations.map((conversation) => (
                     <div key={conversation._id}>
                         {conversation.participants.map((participant) => (

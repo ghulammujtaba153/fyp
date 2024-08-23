@@ -2,7 +2,7 @@
 
 import React, { useContext, useEffect, useState } from "react";
 import { useRouter } from 'next/navigation'; // For navigation
-import DashboardLayout from "../DashboardLayout";
+
 import { AppointmentCard } from "@/components/dashboard/AppointmentCard";
 import { UserContext } from "@/context/UserContext";
 import axios from "axios";
@@ -76,7 +76,7 @@ function Assignments() {
   const currentAppointments = appointments.slice((currentPage - 1) * ITEMS_PER_PAGE, currentPage * ITEMS_PER_PAGE);
 
   return (
-    <DashboardLayout>
+    <>
       <div className="grid grid-cols-1 gap-4 w-full">
         {currentAppointments.map((appointment) => (
           <PatientAppointmentCard 
@@ -126,7 +126,7 @@ function Assignments() {
           </svg>
         </button>
       </div>
-    </DashboardLayout>
+    </>
   );
 }
 

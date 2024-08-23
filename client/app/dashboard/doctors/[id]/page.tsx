@@ -3,7 +3,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useParams, usePathname, useRouter } from 'next/navigation';
 import axios from 'axios';
-import DashboardLayout from '../../DashboardLayout';
 import API_BASE_URL from '@/utils/apiConfig';
 import AppointmentModal from '@/components/AppointmentModal';
 import { UserContext } from '@/context/UserContext';
@@ -44,7 +43,7 @@ const DoctorDetail = () => {
   }
 
   return (
-    <DashboardLayout>
+    <>
       <div className="bg-black-100 py-[40px] text-white flex items-center flex-col">
         <div className="flex justify-around p-20 gap-5 md:flex-row flex-col">
           <div>
@@ -85,7 +84,7 @@ const DoctorDetail = () => {
           />
         )}
       </div>
-    </DashboardLayout>
+    </>
   );
 };
 

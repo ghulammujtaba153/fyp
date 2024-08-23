@@ -10,7 +10,7 @@ import { usePathname } from 'next/navigation';
 import { UserContext } from "@/context/UserContext";
 import DashNavBar from '@/components/dashboard/DashNavBar';
 
-const DashboardLayout = ({ children }) => {
+const layout = ({ children }) => {
   const [activeItem, setActiveItem] = useState('Dashboard');
   const router = useRouter();
   const pathname = usePathname();
@@ -88,4 +88,4 @@ const DashboardLayout = ({ children }) => {
   );
 };
 
-export default DashboardLayout;
+export default layout;

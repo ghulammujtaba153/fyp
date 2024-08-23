@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import DashboardLayout from "../DashboardLayout";
+
 import { TestsCard } from "@/components/dashboard/TestsCard";
 
 
@@ -73,7 +73,7 @@ function Assignments() {
   const currentDoctors = data.slice((currentPage - 1) * ITEMS_PER_PAGE, currentPage * ITEMS_PER_PAGE);
 
   return (
-    <DashboardLayout>
+    <>
       <div className="grid grid-cols-1 gap-4 w-full">
         {currentDoctors.map((card) => <TestsCard key={card.id} cardData={card} />)}
       </div>
@@ -117,7 +117,7 @@ function Assignments() {
           </svg>
         </button>
       </div>
-    </DashboardLayout>
+    </>
   );
 }
 

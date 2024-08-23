@@ -3,7 +3,7 @@
 import React from 'react';
 import UpcomingAppointment from '@/components/dashboard/UpcomingAppointment';
 import Medicine from '@/components/dashboard/Medicine';
-import DashboardLayout from './DashboardLayout';
+import "../globals.css"
 import Card from '@/components/dashboard/Card';
 
 const Dashboard = () => {
@@ -16,15 +16,15 @@ const Dashboard = () => {
   ];
 
   return (
-    <DashboardLayout>
-      <div className='flex justify-between items-center gap-4 flex-wrap'>
+    < div className='h-screen flex flex-col jutify-center items-center gap-5 overflow-hidden'>
+      <div className='flex justify-between  items-center gap-4 flex-wrap'>
         {cardData.map((data, index) => (
           <Card key={index} data={data} />
         ))}
       </div>
       <UpcomingAppointment />
       <Medicine />
-    </DashboardLayout>
+    </div>
   );
 };
 

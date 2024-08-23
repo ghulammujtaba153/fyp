@@ -1,6 +1,5 @@
 "use client"
 import React, { useContext, useState, useEffect } from 'react';
-import DashboardLayout from '../DashboardLayout';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label'; 
 import { UserContext } from '@/context/UserContext';
@@ -82,7 +81,7 @@ const Profile = () => {
   };
 
   return (
-    <DashboardLayout>
+    <>
       <div className='flex flex-col items-center justify-center gap-6'>
         <div className='flex flex-col items-center justify-center gap-6'>
           <div className='flex items-center justify-center mb-4 bg-black-default border rounded-full w-[100px] h-[100px] relative'>
@@ -192,7 +191,7 @@ const Profile = () => {
           </form>
         </div>
       </div>
-    </DashboardLayout>
+    </>
   );
 };
 

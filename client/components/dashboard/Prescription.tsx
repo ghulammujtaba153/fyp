@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import '../../app/scroll.css'; // Import the custom scrollbar styles
 
 const Prescription = ({ users, setPrescription }) => {
   const [medicines, setMedicines] = useState([{ name: '', dosage: '', duration: '' }]);
@@ -27,12 +28,11 @@ const Prescription = ({ users, setPrescription }) => {
       note,
     };
     console.log(prescriptionData);
-    // You can send prescriptionData to the backend or handle it as needed
     setPrescription(false); // Close the form after submitting
   };
 
   return (
-    <div className="prescription-container">
+    <div className="prescription-container w-[300px] h-[70%] bg-white shadow-lg rounded-lg overflow-y-scroll p-4">
       <h3 className="text-lg font-semibold mb-4">Prescription</h3>
 
       {medicines.map((medicine, index) => (
@@ -109,45 +109,6 @@ const Prescription = ({ users, setPrescription }) => {
       >
         Submit Prescription
       </button>
-
-      <style jsx>{`
-        .prescription-container {
-          padding: 16px;
-          display: flex;
-          flex-direction: column;
-          width: 300px;
-          height: 80%;
-          background-color: white;
-          box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-          border-radius: 8px;
-          overflow-y: scroll;
-        }
-
-        .prescription-container::-webkit-scrollbar {
-          width: 8px;
-        }
-
-        .prescription-container::-webkit-scrollbar-track {
-          background: #f1f1f1;
-          border-radius: 10px;
-        }
-
-        .prescription-container::-webkit-scrollbar-thumb {
-          background-color: #888;
-          border-radius: 10px;
-          border: 2px solid #f1f1f1;
-        }
-
-        .prescription-container::-webkit-scrollbar-thumb:hover {
-          background-color: #555;
-        }
-
-        /* Firefox scrollbar styles */
-        .prescription-container {
-          scrollbar-width: thin;
-          scrollbar-color: #888 #f1f1f1;
-        }
-      `}</style>
     </div>
   );
 };

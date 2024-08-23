@@ -2,7 +2,7 @@
 
 import { UserContext } from '@/context/UserContext';
 import React, { useContext, useEffect, useState } from 'react';
-import DashboardLayout from '../DashboardLayout';
+
 import ChatComponent from '@/components/dashboard/ChatComponent';
 
 
@@ -11,10 +11,9 @@ const ChatPage = () => {
     
 
     return (
-        <DashboardLayout>
-            <div>Chat Page</div>
+        <div className="pl-[100px] pr-[100px] w-full h-screen">
             <ChatComponent/>
-        </DashboardLayout>
+        </div>
     );
 };
 

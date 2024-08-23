@@ -8,7 +8,6 @@ import upload from "@/utils/upload"; // Adjust the import path as necessary
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import API_BASE_URL from "@/utils/apiConfig";
-import DashboardLayout from "../DashboardLayout";
 import { UserContext } from "@/context/UserContext"; // Import UserContext
 
 export default function Profile() {
@@ -119,7 +118,7 @@ export default function Profile() {
   };
 
   return (
-    <DashboardLayout>
+    <>
       <div className="flex bg-black-100 py-[140px]">
         <motion.div 
           initial={{ x: "-100vw" }} 
@@ -294,7 +293,7 @@ export default function Profile() {
           </form>
         </motion.div>
       </div>
-    </DashboardLayout>
+    </>
   );
 }
 

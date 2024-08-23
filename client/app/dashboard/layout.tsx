@@ -2,24 +2,39 @@
 
 import Sidebar from '@/components/dashboard/Sidebar';
 import { SidebarItem } from '@/components/dashboard/SidebarItem';
-import { BellIcon, Home, LogOut, MessageCircleMore, Settings, Star, TestTubeDiagonal } from 'lucide-react';
+import { BellIcon, Home, LogOut, MessageCircleMore, NotebookText, Settings, Star, TestTubeDiagonal } from 'lucide-react';
 import React, { useContext, useEffect, useState } from 'react';
 import { HiUser } from 'react-icons/hi';
-import { useRouter } from 'next/navigation';
-import { usePathname } from 'next/navigation'
+import { useRouter, usePathname } from 'next/navigation';
 import { UserContext } from '@/context/UserContext';
 import DashNavBar from '@/components/dashboard/DashNavBar';
 
-const DashboardLayout = ({ children }) => {
+// FontAwesome imports
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faUserMd } from '@fortawesome/free-solid-svg-icons';
+
+const Layout = ({ children }) => {
   const [activeItem, setActiveItem] = useState('Dashboard');
   const router = useRouter();
   const pathname = usePathname();
   const { user, logout } = useContext(UserContext);
 
+
+
   useEffect(() => {
     const pathSegments = pathname.split('/');
-    const lastSegment = pathSegments.pop() || 'dashboard';
-    setActiveItem(lastSegment.charAt(0).toUpperCase() + lastSegment.slice(1));
+    console.log(pathSegments)
+    if (pathSegments.length > 3) {
+      console.log(pathSegments[2])
+      const lastSegment = pathSegments[2] || 'dashboard';
+      console.log(lastSegment)
+      setActiveItem(lastSegment.charAt(0).toUpperCase() + lastSegment.slice(1));
+    }else{
+      const lastSegment = pathSegments.pop() || 'dashboard';
+      setActiveItem(lastSegment.charAt(0).toUpperCase() + lastSegment.slice(1));
+
+    }
+    
   }, [pathname]);
 
   const handleItemClick = (item) => {
@@ -55,14 +70,14 @@ const DashboardLayout = ({ children }) => {
             onClick={() => handleItemClick('Profile')}
           />
           <SidebarItem
-            icon={<HiUser />}
+            icon={<FontAwesomeIcon icon={faUserMd} />}
             text="Doctors"
-            href="/dashboard/soctors"
+            href="/dashboard/doctors"
             active={activeItem === 'Doctors'}
             onClick={() => handleItemClick('Doctors')}
           />
           <SidebarItem
-            icon={<Settings />}
+            icon={<NotebookText />}
             text="Appointments"
             href="/dashboard/appointments"
             active={activeItem === 'Appointments'}
@@ -102,4 +117,4 @@ const DashboardLayout = ({ children }) => {
   );
 };
 
-export default DashboardLayout;
+export default Layout;
