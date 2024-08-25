@@ -6,45 +6,27 @@ import { useRouter } from "next/navigation";
 import API_BASE_URL from "@/utils/apiConfig";
 import axios from "axios";
 import { UserContext } from "@/context/UserContext";
+import moment from "moment";
 
 export function PatientAppointmentCard({ cardData }) {
-  // Function to format date and time
-  console.log(cardData)
-  const formatDateTime = (dateTimeString) => {
-    const dateTime = new Date(dateTimeString);
-    const date = dateTime.toLocaleDateString(); // e.g., "8/17/2024"
-    const time = dateTime.toLocaleTimeString(); // e.g., "10:00:00 AM"
-    return `${date} ${time}`;
-  };
-
   const { user } = useContext(UserContext);
-
   const router = useRouter();
-  console.log(cardData)
 
   const handleCardClick = () => {
-    
     const patientId = cardData.patientId;
     const doctorId = cardData.doctorId.userId._id;
 
-    // Fetch conversation or create a new one
     fetchConversationOrCreate(patientId, doctorId);
   };
 
   const fetchConversationOrCreate = async (patientId, doctorId) => {
     try {
-      // Fetch conversation room
-      
-
       const conversationRes = await axios.get(`${API_BASE_URL}/conversations/doctor/${doctorId}/patient/${patientId}`);
       const conversationData = conversationRes.data;
-      console.log(conversationRes.data)
 
       if (conversationData) {
-        // If conversation exists, navigate to it
         router.push(`/conversations/${conversationData._id}`);
       } else {
-        console.log("nulll")
         const newConversationRes = await axios.post(`${API_BASE_URL}/conversations/create`, {
           participants: [doctorId, patientId],
         });
@@ -56,6 +38,18 @@ export function PatientAppointmentCard({ cardData }) {
     }
   };
 
+  // Log the timing data
+  console.log("Raw Timing Data:", cardData.timing);
+
+  // Check if timing is a valid date
+  let formattedTiming;
+  if (moment(cardData.timing, moment.ISO_8601, true).isValid()) {
+    formattedTiming = moment(cardData.timing).format("YYYY-MM-DD hh:mm A");
+  } else {
+    console.warn("Invalid date format detected. Attempting manual parsing.");
+    formattedTiming = moment(cardData.timing, "YYYY-MM-DDThh:mm A").format("YYYY-MM-DD hh:mm A");
+  }
+
   return (
     <div onClick={handleCardClick}>
       <CardContainer className="inter-var w-[90%]">
@@ -64,7 +58,7 @@ export function PatientAppointmentCard({ cardData }) {
             <div className='flex items-center gap-3'>
               <div className="w-15 h-15">
                 <img
-                  src={cardData.doctorId.userId.profile}
+                  src={cardData.doctorId.profile}
                   height={60}
                   width={60}
                   className="object-cover rounded-full group-hover/card:shadow-xl"
@@ -75,7 +69,7 @@ export function PatientAppointmentCard({ cardData }) {
                 translateZ="50"
                 className="text-xl font-bold text-neutral-600 dark:text-white"
               >
-                {cardData.doctorId.userId.firstName + " " + cardData.doctorId.userId.lastName}
+                {cardData.doctorId.firstName + " " + cardData.doctorId.lastName}
               </CardItem>
             </div>
             <div className="font-bold">
@@ -90,7 +84,7 @@ export function PatientAppointmentCard({ cardData }) {
             </div>
             <div>
               <p className="font-bold">Timing</p>
-              <p className="text-white-200">{formatDateTime(cardData.timing)}</p>
+              <p className="text-white-200">{formattedTiming || "Invalid Date"}</p>
             </div>
           </div>    
         </CardBody>

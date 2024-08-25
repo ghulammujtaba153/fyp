@@ -7,9 +7,9 @@ const perscriptionRouter = Router();
 // POST /api/prescriptions
 perscriptionRouter.post('/', createPrescription);
 
-perscriptionRouter.get('/prescriptions/patient/:patientId', getPrescriptionsByPatientId);
+perscriptionRouter.get('/patient/:patientId', getPrescriptionsByPatientId);
 
 // GET /api/prescriptions/doctor/:doctorId
-perscriptionRouter.get('/prescriptions/doctor/:doctorId', getPrescriptionsByDoctorId);
+perscriptionRouter.get('/doctor/:doctorId', getPrescriptionsByDoctorId);
 
 export default perscriptionRouter;

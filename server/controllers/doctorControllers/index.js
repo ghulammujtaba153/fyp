@@ -4,7 +4,7 @@ import bcrypt from 'bcrypt';
 
 
 export const registerDoctor = async (req, res) => {
-  const { firstName, lastName, email, password, role, dateOfBirth, contactNumber, postalAddress, permanentAddress, profile, specialization, doctor_qualification } = req.body;
+  const { firstName, lastName, email, password, role, dateOfBirth, contactNumber, postalAddress, permanentAddress, profile, specialization, doctor_qualification, availability } = req.body;
   console.log(req.body);
 
   try {
@@ -20,6 +20,7 @@ export const registerDoctor = async (req, res) => {
       userId: newUser._id,
       specialization,
       doctor_qualification,
+      availability
     });
 
     // Save the doctor record
@@ -72,7 +73,8 @@ export const getDoctorInfo = async (req, res) => {
       profile,
       doctorId,
       specialization,
-      doctor_qualification
+      doctor_qualification,
+      availability
     } = req.body;
   
     try {
@@ -94,7 +96,7 @@ export const getDoctorInfo = async (req, res) => {
       }
   
       const updatedUser = await User.findByIdAndUpdate(
-        _id,
+        userId,
         updateFields,
         { new: true, runValidators: true } 
       );
@@ -103,11 +105,12 @@ export const getDoctorInfo = async (req, res) => {
         return res.status(404).json({ message: 'User not found' });
       }
   
-      let doctor = await Doctor.findById(doctorId);
+      let doctor = await Doctor.findById(_id);
   
 
       doctor.specialization = specialization;
       doctor.doctor_qualification = doctor_qualification;
+      doctor.availability = availability;
       await doctor.save();
   
       res.status(200).json({ user: updatedUser, doctor });

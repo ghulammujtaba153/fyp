@@ -26,7 +26,9 @@ export default function DoctorProfile() {
       { qualificationName: "", startYear: "", endYear: "" },
       { qualificationName: "", startYear: "", endYear: "" }
     ],
+    availability: { startTime: "", endTime: "" }
   });
+
   const [profilePic, setProfilePic] = useState(null);
   const [profilePicPreview, setProfilePicPreview] = useState("");
   const [errors, setErrors] = useState({});
@@ -34,6 +36,7 @@ export default function DoctorProfile() {
 
   const validateForm = () => {
     const newErrors = {};
+    // Validate all fields including availability
     if (!formData.firstName) newErrors.firstName = "First name is required";
     if (!formData.lastName) newErrors.lastName = "Last name is required";
     if (!formData.email) newErrors.email = "Email is required";
@@ -43,6 +46,8 @@ export default function DoctorProfile() {
     if (!formData.postalAddress) newErrors.postalAddress = "Postal Address is required";
     if (!formData.permanentAddress) newErrors.permanentAddress = "Permanent Address is required";
     if (!formData.specialization) newErrors.specialization = "Specialization is required";
+    if (!formData.availability.startTime) newErrors.startTime = "Start Time is required";
+    if (!formData.availability.endTime) newErrors.endTime = "End Time is required";
 
     formData.doctor_qualification.forEach((qual, index) => {
       if (!qual.qualificationName) newErrors[`qualificationName${index}`] = "Qualification Name is required";
@@ -59,6 +64,17 @@ export default function DoctorProfile() {
     setFormData(prevState => ({
       ...prevState,
       [id]: value
+    }));
+  };
+
+  const handleAvailabilityChange = (e) => {
+    const { id, value } = e.target;
+    setFormData(prevState => ({
+      ...prevState,
+      availability: {
+        ...prevState.availability,
+        [id]: value
+      }
     }));
   };
 
@@ -143,6 +159,7 @@ export default function DoctorProfile() {
             />
           </div>
 
+          {/* Personal Information Fields */}
           <div className="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-2 mb-4">
             <LabelInputContainer>
               <Label htmlFor="firstName">First name</Label>
@@ -155,6 +172,8 @@ export default function DoctorProfile() {
               {errors.lastName && <p className="text-red-500 text-sm">{errors.lastName}</p>}
             </LabelInputContainer>
           </div>
+
+          {/* Email, Password, and Date of Birth Fields */}
           <LabelInputContainer className="mb-4">
             <Label htmlFor="email">Email Address</Label>
             <Input id="email" placeholder="projectmayhem@fc.com" type="email" value={formData.email} onChange={handleChange} />
@@ -170,6 +189,8 @@ export default function DoctorProfile() {
             <Input id="dateOfBirth" placeholder="YYYY-MM-DD" type="date" value={formData.dateOfBirth} onChange={handleChange} />
             {errors.dateOfBirth && <p className="text-red-500 text-sm">{errors.dateOfBirth}</p>}
           </LabelInputContainer>
+
+          {/* Contact Information Fields */}
           <LabelInputContainer className="mb-4">
             <Label htmlFor="contactNumber">Contact Number</Label>
             <Input id="contactNumber" placeholder="123-456-7890" type="tel" value={formData.contactNumber} onChange={handleChange} />
@@ -177,59 +198,57 @@ export default function DoctorProfile() {
           </LabelInputContainer>
           <LabelInputContainer className="mb-4">
             <Label htmlFor="postalAddress">Postal Address</Label>
-            <Input id="postalAddress" placeholder="123 Project Mayhem St." type="text" value={formData.postalAddress} onChange={handleChange} />
+            <Input id="postalAddress" placeholder="1234 Paper St." type="text" value={formData.postalAddress} onChange={handleChange} />
             {errors.postalAddress && <p className="text-red-500 text-sm">{errors.postalAddress}</p>}
           </LabelInputContainer>
           <LabelInputContainer className="mb-4">
             <Label htmlFor="permanentAddress">Permanent Address</Label>
-            <Input id="permanentAddress" placeholder="123 Permanent Mayhem St." type="text" value={formData.permanentAddress} onChange={handleChange} />
+            <Input id="permanentAddress" placeholder="5678 Solid Ln." type="text" value={formData.permanentAddress} onChange={handleChange} />
             {errors.permanentAddress && <p className="text-red-500 text-sm">{errors.permanentAddress}</p>}
           </LabelInputContainer>
+
+          {/* Specialization and Qualification Fields */}
           <LabelInputContainer className="mb-4">
             <Label htmlFor="specialization">Specialization</Label>
             <Input id="specialization" placeholder="Cardiology" type="text" value={formData.specialization} onChange={handleChange} />
             {errors.specialization && <p className="text-red-500 text-sm">{errors.specialization}</p>}
           </LabelInputContainer>
-          <div className="space-y-4">
-            {formData.doctor_qualification.map((qual, index) => (
-              <div key={index} className="mb-4">
-                <LabelInputContainer>
-                  <Label htmlFor={`qualificationName${index}`}>Qualification Name {index + 1}</Label>
-                  <Input
-                    id="qualificationName"
-                    value={qual.qualificationName}
-                    onChange={(e) => handleQualificationChange(index, e)}
-                    placeholder="MD"
-                  />
-                  {errors[`qualificationName${index}`] && <p className="text-red-500 text-sm">{errors[`qualificationName${index}`]}</p>}
-                </LabelInputContainer>
-                <div className="flex space-x-4">
-                  <LabelInputContainer>
-                    <Label htmlFor={`startYear${index}`}>Start Year</Label>
-                    <Input
-                      id="startYear"
-                      type="number"
-                      value={qual.startYear}
-                      onChange={(e) => handleQualificationChange(index, e)}
-                      placeholder="2020"
-                    />
-                    {errors[`startYear${index}`] && <p className="text-red-500 text-sm">{errors[`startYear${index}`]}</p>}
-                  </LabelInputContainer>
-                  <LabelInputContainer>
-                    <Label htmlFor={`endYear${index}`}>End Year</Label>
-                    <Input
-                      id="endYear"
-                      type="number"
-                      value={qual.endYear}
-                      onChange={(e) => handleQualificationChange(index, e)}
-                      placeholder="2024"
-                    />
-                    {errors[`endYear${index}`] && <p className="text-red-500 text-sm">{errors[`endYear${index}`]}</p>}
-                  </LabelInputContainer>
-                </div>
-              </div>
-            ))}
+          <h3 className="font-bold text-lg mb-2 text-white">Qualifications</h3>
+          {formData.doctor_qualification.map((qual, index) => (
+            <div key={index} className="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-2 mb-4">
+              <LabelInputContainer>
+                <Label htmlFor={`qualificationName${index}`}>Qualification Name</Label>
+                <Input id="qualificationName" placeholder="MD" type="text" value={qual.qualificationName} onChange={(e) => handleQualificationChange(index, e)} />
+                {errors[`qualificationName${index}`] && <p className="text-red-500 text-sm">{errors[`qualificationName${index}`]}</p>}
+              </LabelInputContainer>
+              <LabelInputContainer>
+                <Label htmlFor={`startYear${index}`}>Start Year</Label>
+                <Input id="startYear" placeholder="2010" type="text" value={qual.startYear} onChange={(e) => handleQualificationChange(index, e)} />
+                {errors[`startYear${index}`] && <p className="text-red-500 text-sm">{errors[`startYear${index}`]}</p>}
+              </LabelInputContainer>
+              <LabelInputContainer>
+                <Label htmlFor={`endYear${index}`}>End Year</Label>
+                <Input id="endYear" placeholder="2014" type="text" value={qual.endYear} onChange={(e) => handleQualificationChange(index, e)} />
+                {errors[`endYear${index}`] && <p className="text-red-500 text-sm">{errors[`endYear${index}`]}</p>}
+              </LabelInputContainer>
+            </div>
+          ))}
+
+          {/* Availability Fields */}
+          <h3 className="font-bold text-lg mb-2 text-white">Availability</h3>
+          <div className="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-2 mb-4">
+            <LabelInputContainer>
+              <Label htmlFor="startTime">Start Time</Label>
+              <Input id="startTime" placeholder="09:00 AM" type="time" value={formData.availability.startTime} onChange={handleAvailabilityChange} />
+              {errors.startTime && <p className="text-red-500 text-sm">{errors.startTime}</p>}
+            </LabelInputContainer>
+            <LabelInputContainer>
+              <Label htmlFor="endTime">End Time</Label>
+              <Input id="endTime" placeholder="05:00 PM" type="time" value={formData.availability.endTime} onChange={handleAvailabilityChange} />
+              {errors.endTime && <p className="text-red-500 text-sm">{errors.endTime}</p>}
+            </LabelInputContainer>
           </div>
+
           <button type="submit" className="w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600">
             Register Doctor
           </button>
@@ -239,8 +258,8 @@ export default function DoctorProfile() {
   );
 }
 
-const LabelInputContainer = ({ children, className }) => (
-  <div className={`flex flex-col mb-4 ${className}`}>
+const LabelInputContainer = ({ children }) => (
+  <div className="w-full">
     {children}
   </div>
 );

@@ -13,7 +13,7 @@ import { UserContext } from "@/context/UserContext"; // Import UserContext
 export default function Profile() {
   const { user, updateUser } = useContext(UserContext); // Retrieve user and updateUser
   const [formData, setFormData] = useState({
-    _id:"",
+    _id: "",
     firstName: "",
     lastName: "",
     email: "",
@@ -23,12 +23,13 @@ export default function Profile() {
     contactNumber: "",
     postalAddress: "",
     permanentAddress: "",
-    doctorId:"",
+    doctorId: "",
     specialization: "",
     doctor_qualification: [
       { qualificationName: "", startYear: "", endYear: "" },
       { qualificationName: "", startYear: "", endYear: "" }
     ],
+    availability: {}
   });
   const [profilePic, setProfilePic] = useState(null);
   const [profilePicPreview, setProfilePicPreview] = useState("");
@@ -40,9 +41,9 @@ export default function Profile() {
         try {
           const response = await axios.get(`${API_BASE_URL}/doctors/${user._id}`);
           const userData = response.data;
-          console.log(response.data)
+          console.log(response.data);
           setFormData({
-            _id:response.data._id,
+            _id: response.data._id,
             firstName: userData.userId.firstName,
             lastName: userData.userId.lastName,
             email: userData.userId.email,
@@ -52,9 +53,10 @@ export default function Profile() {
             contactNumber: userData.userId.contactNumber,
             postalAddress: userData.userId.postalAddress,
             permanentAddress: userData.userId.permanentAddress,
-            doctorId:userData._id,
+            doctorId: userData._id,
             specialization: userData.specialization,
             doctor_qualification: userData.doctor_qualification,
+            availability: userData.availability,
           });
           if (userData.userId.profile) {
             setProfilePicPreview(userData.userId.profile);
@@ -71,11 +73,22 @@ export default function Profile() {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value
-    });
+    if (["startTime", "endTime"].includes(name)) {
+      setFormData({
+        ...formData,
+        availability: {
+          ...formData.availability,
+          [name]: value,
+        },
+      });
+    } else {
+      setFormData({
+        ...formData,
+        [name]: value,
+      });
+    }
   };
+  
 
   const handleQualificationChange = (index, e) => {
     const { name, value } = e.target;
@@ -110,7 +123,7 @@ export default function Profile() {
       const updatedData = { ...formData, profile: profilePicUrl };
       await updateUser(updatedData);
       toast.success('Profile updated successfully');
-      router.push('/profile'); // Redirect after successful update
+      router.push('/'); // Redirect after successful update
     } catch (error) {
       console.error('Error updating profile:', error);
       toast.error('Error updating profile');
@@ -227,9 +240,9 @@ export default function Profile() {
               <Input 
                 id="permanentAddress" 
                 name="permanentAddress" 
-                placeholder="123 Permanent Mayhem St." 
+                placeholder="123 Project Mayhem St." 
                 type="text" 
-                value={formData.permanentAddress} 
+                value={formData.permanentAddress}  
                 onChange={handleChange} 
               />
             </LabelInputContainer>
@@ -240,55 +253,76 @@ export default function Profile() {
                 name="specialization" 
                 placeholder="Cardiology" 
                 type="text" 
-                value={formData.specialization} 
+                value={formData.specialization}  
                 onChange={handleChange} 
               />
             </LabelInputContainer>
-            <div className="space-y-4">
-              {formData.doctor_qualification.map((qual, index) => (
-                <div key={index} className="mb-4">
-                  <LabelInputContainer>
-                    <Label htmlFor={`qualificationName${index}`}>Qualification Name {index + 1}</Label>
-                    <Input
-                      id={`qualificationName${index}`}
-                      name="qualificationName"
-                      value={qual.qualificationName}
-                      placeholder="MD"
-                      onChange={(e) => handleQualificationChange(index, e)}
-                    />
-                  </LabelInputContainer>
-                  <div className="flex space-x-4">
-                    <LabelInputContainer>
-                      <Label htmlFor={`startYear${index}`}>Start Year</Label>
-                      <Input
-                        id={`startYear${index}`}
-                        name="startYear"
-                        type="number"
-                        value={qual.startYear}
-                        placeholder="2020"
-                        onChange={(e) => handleQualificationChange(index, e)}
-                      />
-                    </LabelInputContainer>
-                    <LabelInputContainer>
-                      <Label htmlFor={`endYear${index}`}>End Year</Label>
-                      <Input
-                        id={`endYear${index}`}
-                        name="endYear"
-                        type="number"
-                        value={qual.endYear}
-                        placeholder="2024"
-                        onChange={(e) => handleQualificationChange(index, e)}
-                      />
-                    </LabelInputContainer>
-                  </div>
-                </div>
-              ))}
+            {formData.doctor_qualification.map((qualification, index) => (
+              <div key={index} className="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-2 mb-4">
+                <LabelInputContainer>
+                  <Label htmlFor={`qualificationName_${index}`}>Qualification</Label>
+                  <Input 
+                    id={`qualificationName_${index}`} 
+                    name="qualificationName" 
+                    placeholder="MD" 
+                    type="text" 
+                    value={qualification.qualificationName} 
+                    onChange={(e) => handleQualificationChange(index, e)} 
+                  />
+                </LabelInputContainer>
+                <LabelInputContainer>
+                  <Label htmlFor={`startYear_${index}`}>Start Year</Label>
+                  <Input 
+                    id={`startYear_${index}`} 
+                    name="startYear" 
+                    placeholder="2015" 
+                    type="text" 
+                    value={qualification.startYear} 
+                    onChange={(e) => handleQualificationChange(index, e)} 
+                  />
+                </LabelInputContainer>
+                <LabelInputContainer>
+                  <Label htmlFor={`endYear_${index}`}>End Year</Label>
+                  <Input 
+                    id={`endYear_${index}`} 
+                    name="endYear" 
+                    placeholder="2020" 
+                    type="text" 
+                    value={qualification.endYear} 
+                    onChange={(e) => handleQualificationChange(index, e)} 
+                  />
+                </LabelInputContainer>
+              </div>
+            ))}
+            <div className="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-2 mb-4">
+              <LabelInputContainer>
+                <Label htmlFor="startTime">Start Time</Label>
+                <Input 
+                  id="startTime" 
+                  name="startTime" 
+                  placeholder="09:00" 
+                  type="time" 
+                  value={formData.availability.startTime}  
+                  onChange={handleChange} 
+                />
+              </LabelInputContainer>
+              <LabelInputContainer>
+                <Label htmlFor="endTime">End Time</Label>
+                <Input 
+                  id="endTime" 
+                  name="endTime" 
+                  placeholder="17:00" 
+                  type="time" 
+                  value={formData.availability.endTime}  
+                  onChange={handleChange} 
+                />
+              </LabelInputContainer>
             </div>
-            <button 
-              type="submit" 
-              className="w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600"
+            <button
+              type="submit"
+              className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-700"
             >
-              Update
+              Update Profile
             </button>
           </form>
         </motion.div>
@@ -297,8 +331,6 @@ export default function Profile() {
   );
 }
 
-const LabelInputContainer = ({ children, className }) => (
-  <div className={`flex flex-col mb-4 ${className}`}>
-    {children}
-  </div>
+const LabelInputContainer = ({ children }) => (
+  <div className="w-full flex flex-col mb-2">{children}</div>
 );

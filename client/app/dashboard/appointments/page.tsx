@@ -28,7 +28,7 @@ function Assignments() {
         const res = await axios.get(`${API_BASE_URL}/appointments/all/${user._id}`);
         setAppointments(res.data);
         console.log(res.data);
-        const id=res.data.doctorId.userId;
+        const id=res.data.doctorId._id;
         // const userRes = await axios.get(`${API_BASE_URL}/user/${id}`);
         // console.log(userRes.data)
       } catch (error) {
@@ -77,7 +77,7 @@ function Assignments() {
 
   return (
     <>
-      <div className="grid grid-cols-1 gap-4 w-full">
+      <div className="grid grid-cols-1 gap-4 w-full h-screen">
         {currentAppointments.map((appointment) => (
           <PatientAppointmentCard 
             key={appointment._id} 

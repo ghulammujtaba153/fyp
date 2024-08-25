@@ -96,6 +96,7 @@ const ConversationPage = ({ params }: { params: { id: string } }) => {
       const res = await axios.get(`${API_BASE_URL}/conversations/${params.id}`);
       setMessages(res.data.messages);
       setConversation(res.data);
+      console.log(res.data);
 
       const otherParticipant = res.data.participants.find(
         (p) => p._id !== user._id
@@ -212,10 +213,13 @@ const ConversationPage = ({ params }: { params: { id: string } }) => {
           ))}
         </div>
         <div className="flex items-center gap-4">
-          <div className="p-3 cursor-pointer bg-red-500 rounded-md" onClick={()=>setPrescription(!prescription)}><ShieldPlus /></div>
+          {conversation?.appointmentId.doctorId !== user._id && (
+            <div className="p-3 cursor-pointer bg-red-500 rounded-md" onClick={()=>setPrescription(!prescription)}><ShieldPlus /></div>
+          )}
+          {/* <div className="p-3 cursor-pointer bg-red-500 rounded-md" onClick={()=>setPrescription(!prescription)}><ShieldPlus /></div> */}
           {prescription && (
             <div className="absolute inset-0 flex items-center justify-center z-50 bg-opacity-75 bg-black">
-              <Prescription users={"prescription"} setPrescription={setPrescription} />
+              <Prescription users={conversation.participants} appointmentId={conversation.appointmentId._id} setPrescription={setPrescription} />
             </div>
           )}
           <div onClick={handleJoin} className="p-3 cursor-pointer bg-red-500 rounded-md">

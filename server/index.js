@@ -25,7 +25,7 @@ app.use("/api/", router);
 app.use('/api/doctors', doctorRouter);
 app.use('/api/conversations', conversationRouter);
 app.use('/api/videoCalls', videoCallRouter);
-app.use('/api/perscriptions', perscriptionRouter);
+app.use('/api/prescriptions', perscriptionRouter);
 
 app.listen(port, () => {
   console.log(`Server is running on port: ${port}`);

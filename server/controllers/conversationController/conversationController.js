@@ -7,10 +7,16 @@ import User from "../../models/userSchema.js";
 // Create a new conversation
 export const createConversation = async (req, res) => {
   try {
-    const { participants } = req.body;
+    const { participants, appointmentId } = req.body; // Include appointmentId in destructuring
     console.log(req.body);
+
+    if (!participants || participants.length < 2) {
+      return res.status(400).json({ message: 'At least two participants are required' });
+    }
+
     const conversation = new Conversation({
-      participants
+      participants,
+      appointmentId
     });
 
     await conversation.save();
@@ -20,6 +26,7 @@ export const createConversation = async (req, res) => {
     res.status(500).json({ message: 'Internal server error' });
   }
 };
+
 
 // Get all conversations for a user
 export const getUserConversations = async (req, res) => {
@@ -44,7 +51,8 @@ export const getConversationById = async (req, res) => {
   
   try {
     const conversation = await Conversation.findById(id)
-      .populate('participants', 'firstName lastName profile')  // Assuming 'name' is a derived value from firstName and lastName
+      .populate('participants', 'firstName lastName profile')
+      .populate('appointmentId');
 
     if (!conversation) {
       return res.status(404).json({ message: 'Conversation not found' });

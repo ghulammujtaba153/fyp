@@ -1,12 +1,11 @@
 "use client";
 
 import React, { useContext, useEffect, useState } from 'react';
-import { useParams, usePathname, useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import axios from 'axios';
 import API_BASE_URL from '@/utils/apiConfig';
 import AppointmentModal from '@/components/AppointmentModal';
 import { UserContext } from '@/context/UserContext';
-
 
 const DoctorDetail = () => {
   const [doctor, setDoctor] = useState(null);
@@ -14,14 +13,13 @@ const DoctorDetail = () => {
   const pathname = usePathname();
   const userId = pathname?.split("=").pop();
   const { user } = useContext(UserContext);
-  const router = useRouter();
-  
 
   useEffect(() => {
     if (userId) {
       const fetchDoctor = async () => {
         try {
           const res = await axios.get(`${API_BASE_URL}/doctors/${userId}`);
+          console.log(res.data);
           setDoctor(res.data);
         } catch (error) {
           console.error('Error fetching doctor:', error);
@@ -32,11 +30,17 @@ const DoctorDetail = () => {
     }
   }, [userId]);
 
-  
+  const formatTime = (time24) => {
+    const [hour, minute] = time24.split(':');
+    const hourNum = parseInt(hour, 10);
+    const period = hourNum >= 12 ? 'PM' : 'AM';
+    const hour12 = hourNum % 12 || 12;
+    return `${hour12}:${minute} ${period}`;
+  };
 
   if (!doctor) {
     return (
-      <div className="flex justify-center items-center h-screen">
+      <div className="flex justify-between items-center h-screen">
         <div className="w-16 h-16 border-4 border-dashed rounded-full animate-spin border-blue-500"></div>
       </div>
     );
@@ -44,9 +48,9 @@ const DoctorDetail = () => {
 
   return (
     <>
-      <div className="bg-black-100 py-[40px] text-white flex items-center flex-col">
-        <div className="flex justify-around p-20 gap-5 md:flex-row flex-col">
-          <div>
+      <div className="text-white w-full flex items-center flex-col">
+        <div className="flex justify-between p-2 gap-5 md:flex-row flex-col ">
+          <div className="mr-[50px]">
             <p className='flex-1 text-4xl font-bold'>{doctor.userId.firstName} {doctor.userId.lastName}</p>
             <p className="mt-4">Contact:</p>
             <p className="text-gray-300 text-sm">{doctor.userId.email}</p>
@@ -59,28 +63,29 @@ const DoctorDetail = () => {
                 {qualification.qualificationName} ({qualification.startYear} - {qualification.endYear})
               </p>
             ))}
-            <p className="mt-2">Description</p>
-            <p className="text-gray-300 text-sm">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Accusamus recusandae tempore alias, iste reiciendis optio. Alias voluptatibus libero voluptatum, quidem ex odio maiores, repellendus neque aspernatur animi quod, temporibus dicta?</p>
-
+            <p className="mt-2">Availability</p>
+            <p className="text-gray-300 text-sm">
+              {formatTime(doctor.availability.startTime)} - {formatTime(doctor.availability.endTime)}
+            </p>
             <div className="flex justify-center">
               <button
-                 onClick={() => setShowModal(true)}
-                
-                className="px-4 py-2 bg-blue-500 rounded text-white"
+                onClick={() => setShowModal(true)}
+                className="px-4 py-2 mt-4 bg-blue-500 rounded text-white"
               >
                 Book Appointment
               </button>
             </div>
           </div>
-          <div className=''>
-            <img src={doctor.userId.profile} alt="Doctor Profile" className='md:h-[500px] md:w-[500px] rounded-lg h-[150px] w-full md:object-cover object-contain' />
-          </div>
+          
+          <img src={doctor.userId.profile} alt="Doctor Profile" className='md:h-[500px] md:w-[500px] rounded-lg h-[150px] w-full md:object-cover object-contain' />
+          
         </div>
 
         {showModal && (
           <AppointmentModal
-            doctorId={doctor._id}
+            doctorId={doctor.userId._id}
             onClose={() => setShowModal(false)}
+            doctorAvailability={doctor.availability}
           />
         )}
       </div>

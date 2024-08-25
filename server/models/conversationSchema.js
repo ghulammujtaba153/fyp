@@ -1,4 +1,3 @@
-// models/Conversation.js
 import { Schema, model } from 'mongoose';
 
 const conversationSchema = new Schema({
@@ -12,6 +11,7 @@ const conversationSchema = new Schema({
     content: String,
     createdAt: { type: Date, default: Date.now },
   }],
+  appointmentId: { type: Schema.Types.ObjectId, ref: 'Appointment' },
   createdAt: {
     type: Date,
     default: Date.now

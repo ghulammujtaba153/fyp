@@ -1,9 +1,11 @@
-const Prescription = require('../models/Prescription');
+import Prescription from "../models/persciptionSchema.js";
+
 
 // Create a new prescription
 export const createPrescription = async (req, res) => {
   try {
     const { patientId, doctorId, appointmentId, medications, notes, nextReviewDate } = req.body;
+    console.log(req.body)
 
     // Create a new prescription document
     const newPrescription = new Prescription({

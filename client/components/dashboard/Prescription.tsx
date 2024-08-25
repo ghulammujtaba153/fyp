@@ -1,32 +1,58 @@
-import React, { useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import '../../app/scroll.css'; // Import the custom scrollbar styles
+import { UserContext } from '@/context/UserContext';
+import API_BASE_URL from '@/utils/apiConfig';
+import axios from 'axios';
 
-const Prescription = ({ users, setPrescription }) => {
-  const [medicines, setMedicines] = useState([{ name: '', dosage: '', duration: '' }]);
-  const [diseaseDiagnosed, setDiseaseDiagnosed] = useState('');
-  const [diet, setDiet] = useState('');
-  const [precautions, setPrecautions] = useState('');
-  const [note, setNote] = useState('');
+const Prescription = ({ users, appointmentId, setPrescription }) => {
+  const [medications, setMedications] = useState([{ name: '', dosage: '', frequency: '', duration: '', instructions: '' }]);
+  const [doctorId, setDoctorId] = useState('');
+  const [patientId, setPatientId] = useState('');
+  const [notes, setNotes] = useState('');
+  const [status, setStatus] = useState('Active');
+  const [nextReviewDate, setNextReviewDate] = useState('');
+  const { user } = useContext(UserContext);
+
+  useEffect(() => {
+    if (users[0]._id === user._id) {
+      setDoctorId(users[0]._id);
+      setPatientId(users[1]._id);
+    } else {
+      setDoctorId(users[1]._id);
+      setPatientId(users[0]._id);
+    }
+  }, [users, user]);
 
   const handleMedicineChange = (index, e) => {
     const { name, value } = e.target;
-    const newMedicines = [...medicines];
-    newMedicines[index][name] = value;
-    setMedicines(newMedicines);
+    const newMedications = [...medications];
+    newMedications[index][name] = value;
+    setMedications(newMedications);
   };
 
   const handleAddMedicine = () => {
-    setMedicines([...medicines, { name: '', dosage: '', duration: '' }]);
+    setMedications([...medications, { name: '', dosage: '', frequency: '', duration: '', instructions: '' }]);
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async() => {
     const prescriptionData = {
-      medicines,
-      diseaseDiagnosed,
-      diet,
-      precautions,
-      note,
+      patientId,
+      doctorId,
+      appointmentId,
+      medications,
+      notes,
+      nextReviewDate: nextReviewDate || null,
     };
+    try {
+      const res=await axios.post(`${API_BASE_URL}/prescriptions/`, prescriptionData);
+      console.log(res.data);
+      
+    } catch (error) {
+      console.log(error);
+    }
+
+    
+
     console.log(prescriptionData);
     setPrescription(false); // Close the form after submitting
   };
@@ -35,7 +61,7 @@ const Prescription = ({ users, setPrescription }) => {
     <div className="prescription-container w-[300px] h-[70%] bg-white shadow-lg rounded-lg overflow-y-scroll p-4">
       <h3 className="text-lg font-semibold mb-4">Prescription</h3>
 
-      {medicines.map((medicine, index) => (
+      {medications.map((medicine, index) => (
         <div key={index} className="mb-2">
           <input
             type="text"
@@ -55,10 +81,26 @@ const Prescription = ({ users, setPrescription }) => {
           />
           <input
             type="text"
+            name="frequency"
+            value={medicine.frequency}
+            onChange={(e) => handleMedicineChange(index, e)}
+            placeholder="Frequency (e.g., Once a day)"
+            className="w-full p-2 mb-1 border rounded"
+          />
+          <input
+            type="text"
             name="duration"
             value={medicine.duration}
             onChange={(e) => handleMedicineChange(index, e)}
-            placeholder="Duration"
+            placeholder="Duration (e.g., 7 days)"
+            className="w-full p-2 mb-1 border rounded"
+          />
+          <input
+            type="text"
+            name="instructions"
+            value={medicine.instructions}
+            onChange={(e) => handleMedicineChange(index, e)}
+            placeholder="Additional Instructions"
             className="w-full p-2 mb-1 border rounded"
           />
         </div>
@@ -71,36 +113,23 @@ const Prescription = ({ users, setPrescription }) => {
         Add Medicine
       </button>
 
-      <input
-        type="text"
-        value={diseaseDiagnosed}
-        onChange={(e) => setDiseaseDiagnosed(e.target.value)}
-        placeholder="Disease Diagnosed"
-        className="w-full p-2 mb-2 border rounded"
-      />
-
-      <input
-        type="text"
-        value={diet}
-        onChange={(e) => setDiet(e.target.value)}
-        placeholder="Diet"
-        className="w-full p-2 mb-2 border rounded"
-      />
-
-      <input
-        type="text"
-        value={precautions}
-        onChange={(e) => setPrecautions(e.target.value)}
-        placeholder="Precautions"
-        className="w-full p-2 mb-2 border rounded"
-      />
-
       <textarea
-        value={note}
-        onChange={(e) => setNote(e.target.value)}
-        placeholder="Note"
+        value={notes}
+        onChange={(e) => setNotes(e.target.value)}
+        placeholder="Notes"
         className="w-full p-2 mb-2 border rounded"
         rows="3"
+      />
+
+      <p>Re-visit Date</p>
+
+
+      <input
+        type="date"
+        value={nextReviewDate}
+        onChange={(e) => setNextReviewDate(e.target.value)}
+        placeholder="Next Review Date"
+        className="w-full p-2 mb-2 border rounded"
       />
 
       <button

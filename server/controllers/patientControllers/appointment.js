@@ -8,7 +8,7 @@ export const bookAppointment = async (req, res) => {
 
   try {
     // Validate that the doctor and patient exist
-    const doctor = await Doctor.findById(doctorId);
+    const doctor = await User.findById(doctorId);
     const patient = await User.findById(patientId);
 
     if (!doctor) {
@@ -122,21 +122,12 @@ export const getUpcomingAppointments = async (req, res) => {
     try {
       const now = new Date();
   
-      const appointments = await Appointment.find({
-        patientId
-      })
-        .populate({
-          path: 'doctorId',
-          populate: {
-            path: 'userId', // Populating the userId within doctorId
-            select: 'firstName lastName email profile', // Select the fields you want from the user
-          },
-        });
+      // Find appointments and populate the doctor details
+      const appointments = await Appointment.find({ patientId })
+      .populate('doctorId')
+      .exec();
   
-      if (!appointments.length) {
-        return res.status(404).json({ message: 'No upcoming appointments found' });
-      }
-  
+        console.log(appointments);
       res.status(200).json(appointments);
     } catch (error) {
       console.error('Error retrieving upcoming appointments:', error);

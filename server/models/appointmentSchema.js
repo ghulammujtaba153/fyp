@@ -4,7 +4,7 @@ const { Schema } = mongoose;
 const appointmentSchema = new Schema({
   doctorId: { 
     type: Schema.Types.ObjectId, 
-    ref: 'Doctor', 
+    ref: 'User', 
     required: true 
   },
   patientId: { 
@@ -13,7 +13,7 @@ const appointmentSchema = new Schema({
     required: true 
   },
   timing: { 
-    type: Date, 
+    type: String, 
     required: true 
   },
   reviews: [{

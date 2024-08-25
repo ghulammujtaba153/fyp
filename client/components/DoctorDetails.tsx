@@ -9,7 +9,7 @@ const DoctorDetails = ({ doctor }) => {
     return <div>Loading doctor details...</div>;
   }
 
-  const { userId, specialization, doctor_qualification } = doctor;
+  const { userId, specialization, doctor_qualification, availability } = doctor;
 
   return (
     <div className="flex justify-around p-20 gap-5 md:flex-row flex-col">
@@ -26,9 +26,8 @@ const DoctorDetails = ({ doctor }) => {
             {qualification.qualificationName} ({qualification.startYear} - {qualification.endYear})
           </p>
         ))}
-        <p className="mt-2">Description</p>
-        <p className="text-gray-300 text-sm">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Accusamus recusandae tempore alias, iste reiciendis optio. Alias voluptatibus libero voluptatum, quidem ex odio maiores, repellendus neque aspernatur animi quod, temporibus dicta?</p>
-
+        <p className="mt-2">Availability</p>
+        <p className="text-gray-300 text-sm">{availability.startTime}</p>
         <div className="flex justify-center">
           <AppoitmentModal />
         </div>
