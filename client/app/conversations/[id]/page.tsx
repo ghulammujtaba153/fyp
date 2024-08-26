@@ -4,7 +4,7 @@ import React, { useContext, useEffect, useState, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
 import API_BASE_URL from '@/utils/apiConfig';
-import { Phone, Send, ShieldPlus, Video } from 'lucide-react';
+import { Phone, Send, ShieldPlus, Star, Video } from 'lucide-react';
 import Message from '@/components/Message';
 import { UserContext } from '@/context/UserContext';
 import { v4 as uuid } from 'uuid';
@@ -12,6 +12,7 @@ import VideoCall from '@/components/dashboard/videoCall';
 import { io } from 'socket.io-client';
 import Prescription from '@/components/dashboard/Prescription';
 import '../../scroll.css'
+import PatientReviewModal from '@/components/dashboard/PatientReview';
 
 const Loader = () => (
   <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center z-50">
@@ -40,6 +41,8 @@ const ConversationPage = ({ params }: { params: { id: string } }) => {
   const [videoCalls, setVideoCalls] = useState([]);
   const [arrivalMessage, setArrivalMessage] = useState({});
   const [prescription, setPrescription] = useState(false);
+  const [review, setReview]=useState(true);
+  const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
   
   const messagesEndRef = useRef(null);
   const socket = useRef();
@@ -213,15 +216,19 @@ const ConversationPage = ({ params }: { params: { id: string } }) => {
           ))}
         </div>
         <div className="flex items-center gap-4">
-          {conversation?.appointmentId.doctorId !== user._id && (
+          {conversation?.appointmentId.doctorId === user._id ? (
             <div className="p-3 cursor-pointer bg-red-500 rounded-md" onClick={()=>setPrescription(!prescription)}><ShieldPlus /></div>
+          ):(
+            <div className="p-3 cursor-pointer bg-red-500 rounded-md" onClick={()=>setIsReviewModalOpen(true)}><Star /></div>
           )}
           {/* <div className="p-3 cursor-pointer bg-red-500 rounded-md" onClick={()=>setPrescription(!prescription)}><ShieldPlus /></div> */}
           {prescription && (
             <div className="absolute inset-0 flex items-center justify-center z-50 bg-opacity-75 bg-black">
-              <Prescription users={conversation.participants} appointmentId={conversation.appointmentId._id} setPrescription={setPrescription} />
+              <Prescription users={conversation?.participants} appointmentId={conversation?.appointmentId._id} setPrescription={setPrescription} />
             </div>
           )}
+
+          
           <div onClick={handleJoin} className="p-3 cursor-pointer bg-red-500 rounded-md">
             <Video />
           </div>
@@ -253,6 +260,15 @@ const ConversationPage = ({ params }: { params: { id: string } }) => {
           <VideoCall videoCalls={videoCalls} />
         </div>
       )}
+
+      {isReviewModalOpen && (
+              <PatientReviewModal
+                open={isReviewModalOpen}
+                onClose={() => setIsReviewModalOpen(false)}
+                appointmentId={conversation?.appointmentId?._id}
+                users={conversation?.participants}
+              />
+            )}
     </div>
   );
 };

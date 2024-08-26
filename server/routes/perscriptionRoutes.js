@@ -1,11 +1,13 @@
 import { Router } from 'express';
-import { createPrescription, getPrescriptionsByDoctorId, getPrescriptionsByPatientId } from '../controllers/perscriptionControllers.js';
+import { createPrescription, getPrescriptionsByAppointmentId, getPrescriptionsByDoctorId, getPrescriptionsByPatientId } from '../controllers/perscriptionControllers.js';
 
 
 const perscriptionRouter = Router();
 
 // POST /api/prescriptions
 perscriptionRouter.post('/', createPrescription);
+
+perscriptionRouter.get('/:appointmentId', getPrescriptionsByAppointmentId);
 
 perscriptionRouter.get('/patient/:patientId', getPrescriptionsByPatientId);
 

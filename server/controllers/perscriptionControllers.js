@@ -85,3 +85,32 @@ export const getPrescriptionsByPatientId = async (req, res) => {
       });
     }
   };
+
+
+
+  // Get all prescriptions by appointmentId
+  export const getPrescriptionsByAppointmentId = async (req, res) => {
+    try {
+      const { appointmentId } = req.params;
+      console.log(req.params);
+      const prescriptions = await Prescription.find({ appointmentId }).populate('patientId').populate('doctorId').populate('appointmentId');
+  
+      if (!prescriptions) {
+        return res.status(404).json({
+          success: false,
+          message: 'No prescriptions found for this appointment'
+        });
+      }
+  
+      res.status(200).json({
+        success: true,
+        prescriptions
+      });
+    } catch (error) {
+      res.status(500).json({
+        success: false,
+        message: 'Failed to fetch prescriptions',
+        error: error.message
+      });
+    }
+  };

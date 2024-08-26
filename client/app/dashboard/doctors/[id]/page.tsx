@@ -80,6 +80,9 @@ const DoctorDetail = () => {
           <img src={doctor.userId.profile} alt="Doctor Profile" className='md:h-[500px] md:w-[500px] rounded-lg h-[150px] w-full md:object-cover object-contain' />
           
         </div>
+        <div className="flex ">
+          <p>hello</p>
+        </div>
 
         {showModal && (
           <AppointmentModal

@@ -13,30 +13,12 @@ export function PatientAppointmentCard({ cardData }) {
   const router = useRouter();
 
   const handleCardClick = () => {
-    const patientId = cardData.patientId;
-    const doctorId = cardData.doctorId.userId._id;
+    
 
-    fetchConversationOrCreate(patientId, doctorId);
+    router.push(`/dashboard/appointments/${cardData._id}`);
   };
 
-  const fetchConversationOrCreate = async (patientId, doctorId) => {
-    try {
-      const conversationRes = await axios.get(`${API_BASE_URL}/conversations/doctor/${doctorId}/patient/${patientId}`);
-      const conversationData = conversationRes.data;
-
-      if (conversationData) {
-        router.push(`/conversations/${conversationData._id}`);
-      } else {
-        const newConversationRes = await axios.post(`${API_BASE_URL}/conversations/create`, {
-          participants: [doctorId, patientId],
-        });
-        const newConversationData = newConversationRes.data;
-        router.push(`/conversations/${newConversationData._id}`);
-      }
-    } catch (error) {
-      console.error('Error handling card click:', error);
-    }
-  };
+  
 
   // Log the timing data
   console.log("Raw Timing Data:", cardData.timing);
