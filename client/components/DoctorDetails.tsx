@@ -12,7 +12,8 @@ const DoctorDetails = ({ doctor }) => {
   const { userId, specialization, doctor_qualification, availability } = doctor;
 
   return (
-    <div className="flex justify-around p-20 gap-5 md:flex-row flex-col">
+    <div className='flex flex-col'>
+      <div className="flex justify-around p-20 gap-5 md:flex-row flex-col">
       <div className="">
         <p className='flex-1 text-4xl font-bold'>{userId.firstName} {userId.lastName}</p>
         <p className="mt-4">Contact:</p>
@@ -32,10 +33,14 @@ const DoctorDetails = ({ doctor }) => {
           <AppoitmentModal />
         </div>
       </div>
-      <div className=''>
-        <img src={userId.profile} alt="Doctor Profile" className='md:h-[500px] md:w-[500px] rounded-lg h-[150px] w-full md:object-cover object-contain' />
+        <div className=''>
+          <img src={userId.profile} alt="Doctor Profile" className='md:h-[500px] md:w-[500px] rounded-lg h-[150px] w-full md:object-cover object-contain' />
+        </div>
       </div>
+          <p>ahjlahdj</p>
+
     </div>
+    
   );
 }
 

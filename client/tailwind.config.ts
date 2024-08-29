@@ -27,6 +27,13 @@ module.exports = {
           "100": "#E4ECFF",
         },
         purple: "#CBACF9",
+
+        //admin colors
+        agreen: '#D85275',
+        ablue: '#1F1E30',
+        awhite: '#FDFFF4',
+        ablack: '#565851',
+
        
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",

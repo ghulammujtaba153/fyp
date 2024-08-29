@@ -46,7 +46,7 @@ const DoctorUpcomingAppointment = () => {
 
   if (!appointment) {
     return (
-      <div className='flex justify-center items-center h-screen'>
+      <div className='flex flex-col justify-center bg-white-100 rounded-md w-full items-center p-4'>
         <p>No upcoming appointments</p>
       </div>
     );

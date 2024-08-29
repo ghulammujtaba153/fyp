@@ -1,14 +1,18 @@
 "use client";
 
-import React, { useContext, useEffect, useState } from 'react';
+import React, { use, useContext, useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import axios from 'axios';
 import API_BASE_URL from '@/utils/apiConfig';
 import AppointmentModal from '@/components/AppointmentModal';
 import { UserContext } from '@/context/UserContext';
+import StarRating from '@/components/dashboard/StarRatings';
+import { Rating } from '@mui/material';
 
 const DoctorDetail = () => {
   const [doctor, setDoctor] = useState(null);
+  const [reviews, setReviews] = useState([]);
+  const [totalRating, setTotalRating] = useState(4);
   const [showModal, setShowModal] = useState(false); // State to control modal visibility
   const pathname = usePathname();
   const userId = pathname?.split("=").pop();
@@ -29,6 +33,26 @@ const DoctorDetail = () => {
       fetchDoctor();
     }
   }, [userId]);
+
+  useEffect(() => { 
+    if (userId) {
+      const fetchDoctor = async () => {
+        try {
+          const res = await axios.get(`${API_BASE_URL}/ratings/doctor/${userId}`);
+          console.log(res.data);
+          const reviewsData=res.data;
+          const sum = reviewsData.reduce((acc, review) => acc + review.rating, 0);
+          const averageRating = sum / reviewsData.length;
+          setTotalRating(averageRating);
+          setReviews(res.data);
+        } catch (error) {
+          console.error('Error fetching doctor ratings:', error);
+        }
+      };
+
+      fetchDoctor();
+    }
+  },[userId]);
 
   const formatTime = (time24) => {
     const [hour, minute] = time24.split(':');
@@ -52,6 +76,7 @@ const DoctorDetail = () => {
         <div className="flex justify-between p-2 gap-5 md:flex-row flex-col ">
           <div className="mr-[50px]">
             <p className='flex-1 text-4xl font-bold'>{doctor.userId.firstName} {doctor.userId.lastName}</p>
+            <StarRating num={totalRating} />
             <p className="mt-4">Contact:</p>
             <p className="text-gray-300 text-sm">{doctor.userId.email}</p>
             <p className="text-gray-300 text-sm">{doctor.userId.contactNumber}</p>
@@ -80,9 +105,32 @@ const DoctorDetail = () => {
           <img src={doctor.userId.profile} alt="Doctor Profile" className='md:h-[500px] md:w-[500px] rounded-lg h-[150px] w-full md:object-cover object-contain' />
           
         </div>
-        <div className="flex ">
-          <p>hello</p>
+        
+        <div className="flex flex-col gap-4 pl-[100px] mt-[40px] w-full">
+          <p className="text-lg font-semibold">Reviews</p>
+          {reviews && 
+            reviews.map((review, index) => (
+              <div 
+                key={index} 
+                className="flex flex-col gap-2 p-4 border border-gray-300 rounded-lg shadow-md bg-white w-full"
+              >
+                <div className="flex gap-4 items-center">
+                  <img 
+                    src={review.patientId.profile} 
+                    alt="Profile" 
+                    className="w-[40px] h-[40px] rounded-full border border-gray-300" 
+                  />
+                  <StarRating num={review.rating} />
+                </div>
+                <p className="ml-[50px] mt-2 text-gray-700">{review.comment}</p>
+              </div>
+
+              
+            ))
+          }
         </div>
+
+
 
         {showModal && (
           <AppointmentModal

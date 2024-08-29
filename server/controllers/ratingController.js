@@ -41,3 +41,46 @@ export const addRating = async (req, res) => {
     res.status(500).json({ message: 'Internal server error' });
   }
 };
+
+
+
+export const getRatingsByAppointmentId = async (req, res) => {
+  try {
+    const { appointmentId } = req.params;
+
+    // Find all ratings for the given doctorId
+    const ratings = await Rating.find({ appointmentId })
+      .populate('patientId', 'firstName lastName profile') // Populate patient details if needed
+      .exec();
+
+    if (!ratings) {
+      return res.status(404).json({ message: 'No ratings found for this doctor' });
+    }
+
+    res.json(ratings);
+  } catch (error) {
+    res.status(500).json({ message: 'An error occurred', error });
+  }
+};
+
+
+
+export const getRatingsByDoctorId = async (req, res) => {
+  try {
+    const { doctorId } = req.params;
+
+    // Find all ratings for the given doctorId
+    const ratings = await Rating.find({ doctorId })
+      .populate('patientId', 'firstName lastName profile') // Populate patient details if needed
+      .populate('appointmentId', 'date') // Populate appointment details if needed
+      .exec();
+
+    if (!ratings) {
+      return res.status(404).json({ message: 'No ratings found for this doctor' });
+    }
+
+    res.json(ratings);
+  } catch (error) {
+    res.status(500).json({ message: 'An error occurred', error });
+  }
+};

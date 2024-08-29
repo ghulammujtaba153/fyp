@@ -3,22 +3,37 @@ import API_BASE_URL from '@/utils/apiConfig';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import moment from 'moment';
+import StarRating from '@/components/dashboard/StarRatings';
 
 const AppointmentDetails = ({ params: { id } }) => {
   const [data, setData] = useState({});
+  const [review, setReview] = useState({});
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const res = await axios.get(`${API_BASE_URL}/prescriptions/${id}`);
         const prescriptionData = res.data.prescriptions[0];
-        console.log(res.data)
+        console.log(res.data);
         setData(prescriptionData);
       } catch (error) {
         console.error('Error fetching prescription data:', error);
       }
     };
     fetchData();
+  }, [id]);
+
+  useEffect(() => {
+    const fetchReviewData = async () => {
+      try {
+        const res = await axios.get(`${API_BASE_URL}/ratings/appointment/${id}`);
+        console.log(res.data[0]);
+        setReview(res.data[0]); // Set the first review in the state
+      } catch (error) {
+        console.error('Error fetching review data:', error);
+      }
+    };
+    fetchReviewData();
   }, [id]);
 
   const formatTiming = (timing) => {
@@ -33,21 +48,21 @@ const AppointmentDetails = ({ params: { id } }) => {
   };
 
   return (
-    <div className="h-screen w-full flex pl-[130px] flex-col text-white">
+    <div className="h-[100%] w-full flex pl-[130px] flex-col text-white">
       <h1 className="text-2xl text-center mb-6">Appointment Details</h1>
 
       <div className="mb-6">
         <div className="flex items-center gap-4 mb-2">
           <img
-            src={data.patientId?.profile}
+            src={data.doctorId?.profile}
             alt="Doctor's profile"
             className="w-16 h-16 rounded-full object-cover"
           />
           <div>
             <p className="text-lg font-semibold">
-              {data.patientId?.firstName} {data.patientId?.lastName}
+              {data.doctorId?.firstName} {data.doctorId?.lastName}
             </p>
-            <p className="text-sm text-gray-400">Email: {data.patientId?.email}</p>
+            <p className="text-sm text-gray-400">Email: {data.doctorId?.email}</p>
           </div>
         </div>
         <p className="text-lg font-semibold">
@@ -95,6 +110,33 @@ const AppointmentDetails = ({ params: { id } }) => {
           <p>{formatTiming(data.nextReviewDate)}</p>
         </div>
       )}
+
+      <div>
+        <h2 className="text-xl font-semibold mb-2">Review:</h2>
+        {review ? (
+          <div className="flex flex-col gap-2">
+            <div className="flex items-center gap-4">
+              <img
+                src={review.patientId?.profile}
+                alt="Patient's profile"
+                className="w-16 h-16 rounded-full object-cover"
+              />
+              <div className="flex flex-col">
+                <p className="font-medium">
+                  {review.patientId?.firstName} {review.patientId?.lastName}
+                </p>
+                
+                 <StarRating num={review.rating} />
+                
+                
+              </div>
+            </div>
+            <p>Comment: {review.comment}</p>
+          </div>
+        ) : (
+          <p>No review available.</p>
+        )}
+      </div>
     </div>
   );
 };

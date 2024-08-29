@@ -24,7 +24,7 @@ const Dashboard = () => {
   ];
 
   return (
-    <>
+    <div className="flex flex-col items-center gap-4 pl-[100px] h-screen">
       <div className='flex justify-between items-center gap-4 flex-wrap'>
         {cardData.map((data, index) => (
           <Card key={index} data={data} />
@@ -32,8 +32,8 @@ const Dashboard = () => {
       </div>
       <DoctorUpcomingAppointment/>
       {/* <Medicine /> */}
-      <p className="text-white">Notes</p>
-    </>
+      <p className="text-white ">Notes</p>
+    </div>
   );
 };
 

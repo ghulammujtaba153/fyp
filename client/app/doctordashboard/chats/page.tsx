@@ -10,10 +10,10 @@ const ChatPage = () => {
     
 
     return (
-        <>
+        <div className='flex flex-col w-full pl-[50px] pr-[30px] h-screen'>
             <div>Chat Page</div>
             <ChatComponent/>
-        </>
+        </div>
     );
 };
 

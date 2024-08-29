@@ -18,13 +18,16 @@ const layout = ({ children }) => {
 
   useEffect(() => {
     const pathSegments = pathname.split('/');
-    const lastSegment = pathSegments.pop() || 'dashboard';
-    if(lastSegment=="doctordashboard"){
-      setActiveItem("Dashboard");
-    }else{
+    if (pathSegments.length > 3) {
+      console.log(pathSegments[2])
+      const lastSegment = pathSegments[2] || 'dashboard';
+      console.log(lastSegment)
       setActiveItem(lastSegment.charAt(0).toUpperCase() + lastSegment.slice(1));
+    }else{
+      const lastSegment = pathSegments.pop() || 'dashboard';
+      setActiveItem(lastSegment.charAt(0).toUpperCase() + lastSegment.slice(1));
+
     }
-    // setActiveItem(lastSegment.charAt(0).toUpperCase() + lastSegment.slice(1));
     
   }, [pathname]);
 

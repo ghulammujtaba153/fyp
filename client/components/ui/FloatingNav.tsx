@@ -54,8 +54,10 @@ export const FloatingNav = ({
     // Navigate based on the user's role
     if (user.role === "doctor") {
       router.push("/doctordashboard");
-    } else {
+    } if (user.role === "patient"){
       router.push("/dashboard");
+    } else {
+      router.push("/admin");
     }
   };
 

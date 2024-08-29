@@ -1,10 +1,6 @@
 "use client";
 
-import DashboardLayout from '../DashboardLayout'
 import React from 'react';
-
-import DoctorProfile from '@/components/DoctorProfile';
-import AdminProfile from '@/components/AdminProfile';
 import TabContainer from '@/components/TabContainer';
 
 const MainPage = () => {
@@ -33,14 +29,13 @@ const MainPage = () => {
   };
 
   return (
-    <DashboardLayout>
       <div className='p-2'>
         <TabContainer />
         {/* Pass user data to DoctorProfile and AdminProfile as needed */}
         {/* <DoctorProfile />
         <AdminProfile /> */}
       </div>
-    </DashboardLayout>
+
   );
 };
 
