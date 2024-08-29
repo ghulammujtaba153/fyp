@@ -59,6 +59,8 @@ export const getDoctorInfo = async (req, res) => {
 
   export const updateProfile = async (req, res) => {
     const userId = req.params.id;
+    console.log(userId)
+    console.log(req.body)
     const {
       _id,
       firstName,
@@ -71,7 +73,7 @@ export const getDoctorInfo = async (req, res) => {
       postalAddress,
       permanentAddress,
       profile,
-      doctorId,
+      
       specialization,
       doctor_qualification,
       availability
@@ -133,6 +135,26 @@ export const getDoctorInfo = async (req, res) => {
       res.status(200).json(doctor);
     } catch (error) {
       console.error('Error retrieving doctor information:', error);
+      res.status(500).json({ message: 'Internal server error' });
+    }
+  };
+
+
+  export const deleteDoctor = async (req, res) => {
+    const userId = req.params.userId;
+    const doctorId = req.params.doctorId;
+    console.log(userId, doctorId);
+
+    try {
+      const doctor = await Doctor.findByIdAndDelete(doctorId);
+      if (!doctor) {
+        return res.status(404).json({ message: 'Doctor not found' });
+      }
+      const user = await User.findByIdAndDelete(userId);
+
+      res.status(200).json({ message: 'Doctor deleted successfully' });
+    } catch (error) {
+      console.error('Error deleting doctor:', error);
       res.status(500).json({ message: 'Internal server error' });
     }
   };

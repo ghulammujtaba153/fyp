@@ -10,7 +10,10 @@ import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import Button from '@mui/material/Button';
+import EditDoctorModal from './EditDoctorModal';
 import API_BASE_URL from '@/utils/apiConfig';
+import axios from 'axios';
+
 
 const columns = [
   { id: 'profile', label: 'Profile', minWidth: 50 },
@@ -35,12 +38,23 @@ export default function DoctorsTable({ doctors }) {
     setPage(0);
   };
 
-  const handleDelete = (doctorId: string) => {
-    console.log(doctorId);
+  const handleDelete = async(doctor: {}) => {
+    console.log(doctor);
+    const userId=doctor.userId._id;
+    const doctorId=doctor._id;
+
+    try {
+      const res = await axios.delete(`${API_BASE_URL}/doctors/delete/${userId}/${doctorId}`);
+      console.log(res.data);
+      handleDoctorUpdated();
+      
+    } catch (error) {
+      
+    }
   };
 
-  const handleEdit = (doctorId: string) => {
-    console.log(doctorId);
+  const handleDoctorUpdated = () => {
+    // Logic to refresh the doctor list after editing, e.g., refetching the list of doctors from the API
   };
 
   return (
@@ -80,16 +94,12 @@ export default function DoctorsTable({ doctors }) {
                   </TableCell>
                   <TableCell>{doctor.specialization}</TableCell>
                   <TableCell align="right">
+                    <EditDoctorModal
+                      doctorId={doctor}
+                      onDoctorUpdated={handleDoctorUpdated}
+                    />
                     <Button
-                      onClick={() => handleEdit(doctor.userId._id)}
-                      variant="contained"
-                      color="primary"
-                      sx={{ mr: 2 }}
-                    >
-                      Edit
-                    </Button>
-                    <Button
-                      onClick={() => handleDelete(doctor.userId._id)}
+                      onClick={() => handleDelete(doctor)}
                       variant="contained"
                       color="error"
                     >
