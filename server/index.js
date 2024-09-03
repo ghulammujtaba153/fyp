@@ -9,6 +9,8 @@ import conversationRouter from './routes/conversationRoutes.js';
 import videoCallRouter from './routes/videoCallRoutes.js';
 import perscriptionRouter from './routes/perscriptionRoutes.js';
 import ratingRouter from './routes/ratingRoutes.js';
+import adminRouter from './routes/adminRoutes.js';
+import testsRouter from './routes/testsRoutes.js';
 
 dotenv.config();
 
@@ -28,6 +30,8 @@ app.use('/api/conversations', conversationRouter);
 app.use('/api/videoCalls', videoCallRouter);
 app.use('/api/prescriptions', perscriptionRouter);
 app.use('/api/ratings', ratingRouter);
+app.use('/api/admin', adminRouter);
+app.use('/api/tests', testsRouter);
 
 app.listen(port, () => {
   console.log(`Server is running on port: ${port}`);

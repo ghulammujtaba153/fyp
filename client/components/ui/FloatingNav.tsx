@@ -30,7 +30,8 @@ export const FloatingNav = ({
         pathname.startsWith("/conversation") ||
         pathname.startsWith("/conference") ||
         pathname.startsWith("/room") ||
-        pathname.startsWith("/admin")) {
+        pathname.startsWith("/admin") ||
+        pathname.startsWith("/nurse")) {
       setVisible(false);
     } else {
       setVisible(true);

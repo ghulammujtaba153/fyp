@@ -2,28 +2,47 @@
 import Card from '@/components/dashboard/admin/Card';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUserMd, faBedPulse } from '@fortawesome/free-solid-svg-icons'; // Combined icon import
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { BadgeDollarSign, Users } from 'lucide-react';
 import EarningGraph from '@/components/dashboard/admin/EarningGraph';
 import TopDoctors from '@/components/dashboard/admin/TopDoctors';
+import axios from 'axios';
+import API_BASE_URL from '@/utils/apiConfig';
 
 const AdminPage = () => {
+  const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await axios.get(`${API_BASE_URL}/admin/stats`);
+        setData(res.data);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, []);
+
   const cardData = {
     icon: <Users />,
     title: "Total Users",
-    data: 100,
+    data: data?.totalUsers,
   };
 
   const doctorData = {
     icon: <FontAwesomeIcon icon={faUserMd} />,
     title: "Total Doctors",
-    data: 50,
+    data: data?.totalDoctors,
   };
 
   const patientData = {
     icon: <FontAwesomeIcon icon={faBedPulse} />,
     title: "Total Patients",
-    data: 200,
+    data: data?.totalPatients,
   };
 
   const revenueData = {
@@ -35,7 +54,7 @@ const AdminPage = () => {
   const appointmentData = {
     icon: <BadgeDollarSign />,
     title: "Total Appointments",
-    data: 150,
+    data: data?.totalAppointments,
   };
 
   const earningsData = {
