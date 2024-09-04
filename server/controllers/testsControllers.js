@@ -32,3 +32,38 @@ export async function getAllTests(req, res) {
         res.status(500).json({ message: err.message });
     }
 }
+
+
+export async function updateTest(req, res) {
+    try {
+        const { _id, testName, price, description, picture } = req.body;
+
+        const test = await Test.findByIdAndUpdate(_id, { testName, price, description, picture });
+
+        if (!test) {
+            return res.status(404).json({ message: 'Test not found.' });
+        }
+
+        res.status(200).json({ message: 'Test updated successfully.', test });
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+}
+
+
+export async function deleteTest(req, res) {
+    try {
+        const { id } = req.params;
+
+        const test = await Test.findByIdAndDelete(id);
+
+        if (!test) {
+            return res.status(404).json({ message: 'Test not found.' });
+        }
+
+        res.status(200).json({ message: 'Test deleted successfully.', test });
+        
+    } catch (error) {
+        res.status(500).json({ message: err.message });
+    }
+}

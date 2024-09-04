@@ -3,8 +3,17 @@
 import Image from 'next/image';
 import React from "react";
 import { CardBody, CardContainer, CardItem } from '../ui/3d-card';
+import TestAppointmentModal from './TestAppointmentModal';
 
 export function TestsCard({cardData}) {
+
+  
+
+  const handleSubmit=(e)=>{
+    e.preventDefault();
+    
+  }
+
   return (
     <CardContainer className="inter-var w-[450px]">
       <CardBody className="relative group/card dark:hover:shadow-2xl dark:hover:shadow-emerald-500/[0.1] text-white dark:bg-black dark:border-white/[0.2] border-black/[0.1] w-full h-auto rounded-xl p-6 border cursor-pointer">
@@ -22,9 +31,7 @@ export function TestsCard({cardData}) {
           />
           <div className="flex w-full justify-between items-center">
             <p className="font-bold">Price: <span className="text-white-200">{cardData.price}</span></p>
-            <button className="p-2 bg-green-200 text-black-default rounded-lg hover:bg-green-400">
-              Take Appointment
-            </button> 
+            <TestAppointmentModal appointmentId={cardData._id}/>
           </div>
         </div>
       </CardBody>

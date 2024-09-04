@@ -34,12 +34,13 @@ const Page = () => {
 
     const handleDelete = async (id: string) => {
         try {
-            await axios.delete(`${API_BASE_URL}/tests/${id}`);
-            setData(data.filter(test => test._id !== id));
+          const res = await axios.delete(`${API_BASE_URL}/tests/${id}`);
+          setData(data.filter((test) => test._id !== id));
+          console.log(res.data)
         } catch (error) {
-            console.error('Error deleting test:', error);
+          console.error('Error deleting test:', error);
         }
-    };
+      };
 
     if (loading) {
         return (

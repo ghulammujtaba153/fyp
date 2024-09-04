@@ -11,6 +11,7 @@ import perscriptionRouter from './routes/perscriptionRoutes.js';
 import ratingRouter from './routes/ratingRoutes.js';
 import adminRouter from './routes/adminRoutes.js';
 import testsRouter from './routes/testsRoutes.js';
+import testAppointmentRouter from './routes/testAppointmentRoutes.js';
 
 dotenv.config();
 
@@ -32,6 +33,7 @@ app.use('/api/prescriptions', perscriptionRouter);
 app.use('/api/ratings', ratingRouter);
 app.use('/api/admin', adminRouter);
 app.use('/api/tests', testsRouter);
+app.use('/api/testappointments', testAppointmentRouter);
 
 app.listen(port, () => {
   console.log(`Server is running on port: ${port}`);

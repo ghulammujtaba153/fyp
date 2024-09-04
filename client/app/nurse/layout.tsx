@@ -9,6 +9,9 @@ import { useRouter } from 'next/navigation';
 import { usePathname } from 'next/navigation';
 import { UserContext } from "@/context/UserContext";
 import DashNavBar from '@/components/dashboard/DashNavBar';
+import PlaylistAddCheckCircleIcon from '@mui/icons-material/PlaylistAddCheckCircle';
+import PlaylistAddIcon from '@mui/icons-material/PlaylistAdd';
+import QueuePlayNextIcon from '@mui/icons-material/QueuePlayNext';
 
 const layout = ({ children }) => {
   const [activeItem, setActiveItem] = useState('Dashboard');
@@ -65,7 +68,7 @@ const layout = ({ children }) => {
           />
 
           <SidebarItem
-            icon={<Home />}
+            icon={<PlaylistAddIcon />}
             text="Tests"
             href="/tests"
             active={activeItem === 'Tests'}
@@ -73,11 +76,19 @@ const layout = ({ children }) => {
           />
 
           <SidebarItem
-            icon={<Home />}
+            icon={<PlaylistAddCheckCircleIcon />}
             text="List"
             href="/list"
             active={activeItem === 'List'}
             onClick={() => handleItemClick('List')}
+          />
+
+          <SidebarItem
+            icon={<QueuePlayNextIcon />}
+            text="Appointments"
+            href="/appointments"
+            active={activeItem === 'Appointments'}
+            onClick={() => handleItemClick('Appointments')}
           />
           
           
