@@ -1,5 +1,6 @@
 "use client";
 
+import Spinner from '@/components/Spinner';
 import TestAppointmentTable from '@/components/dashboard/nurse/AppointmentsTable';
 import API_BASE_URL from '@/utils/apiConfig';
 import axios from 'axios';
@@ -108,7 +109,9 @@ const AppointmentPage = () => {
         />
       </div>
       {loading ? (
-        <p>Loading...</p>
+        <div className='flex items-center justify-center h-screen'>
+          <Spinner />
+        </div>
       ) : (
         <TestAppointmentTable data={filteredData} />
       )}

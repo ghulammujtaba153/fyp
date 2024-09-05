@@ -69,3 +69,21 @@ export async function updateTestAppointmentById(req, res) {
         res.status(500).json({ message: err.message });
     }
 }
+
+
+export async function getTestAppointmentByTestId(req, res) {
+    try {
+        const { id } = req.params;
+        const testAppointment = await TestAppointment.findById((id)).populate(
+            'testId'
+        ).populate('patientId', 'firstName lastName profile email contactNumber');
+
+        if (!testAppointment) {
+            return res.status(404).json({ message: 'Test appointment not found.' });
+        }
+
+        res.status(200).json({ message: 'Test appointment retrieved successfully.', testAppointment });
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+}

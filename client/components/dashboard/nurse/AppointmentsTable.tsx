@@ -9,6 +9,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
+import { useRouter } from 'next/navigation';
 
 interface Column {
   id: 'avatar' | 'fullName' | 'email' | 'contactNumber' | 'testName' | 'appointmentDate' | 'appointmentTime';
@@ -44,6 +45,7 @@ interface TestAppointmentTableProps {
 const TestAppointmentTable: React.FC<TestAppointmentTableProps> = ({ data }) => {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const router =useRouter();
 
   const handleChangePage = (event: React.MouseEvent<HTMLButtonElement> | null, newPage: number) => {
     setPage(newPage);
@@ -52,6 +54,10 @@ const TestAppointmentTable: React.FC<TestAppointmentTableProps> = ({ data }) => 
   const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
     setRowsPerPage(+event.target.value);
     setPage(0);
+  };
+
+  const handleClick = (row: Data) => {
+    router.push(`/nurse/appointments/${row._id}`);
   };
 
   return (
@@ -75,7 +81,7 @@ const TestAppointmentTable: React.FC<TestAppointmentTableProps> = ({ data }) => 
             {data
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((row, index) => (
-                <TableRow hover role="checkbox" tabIndex={-1} key={index}>
+                <TableRow onClick={()=>{handleClick(row)}} hover role="checkbox" tabIndex={-1} key={index}>
                   {columns.map((column) => {
                     const value = row[column.id];
                     return (
