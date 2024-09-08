@@ -1,3 +1,4 @@
+"use client";
 import * as React from 'react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -5,6 +6,10 @@ import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import CloseIcon from '@mui/icons-material/Close';
 import IconButton from '@mui/material/IconButton';
+import axios from 'axios';
+import { useState } from 'react';
+import upload from '@/utils/upload';
+import API_BASE_URL from '@/utils/apiConfig';
 
 const style = {
   position: 'absolute' as 'absolute',
@@ -19,10 +24,94 @@ const style = {
   p: 4,
 };
 
-export default function ECGuploadModal() {
-  const [open, setOpen] = React.useState(false);
+interface ECGuploadModalProps {
+  id: string;
+}
+
+export default function ECGuploadModal({ id }: ECGuploadModalProps) {
+  console.log(id)
+  const [open, setOpen] = useState(false);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [prediction, setPrediction] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string>("");
+  
+
   const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const handleClose = () => {
+    setOpen(false);
+    setSelectedFile(null);
+    setPrediction(null);
+    setError("");
+  };
+
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0] || null;
+    setSelectedFile(file);
+    setError(""); // Reset error if the user selects a file
+  };
+
+  const handleSubmit = async () => {
+    if (!selectedFile) {
+      setError("Please upload a file.");
+      return;
+    }
+    setLoading(true);
+    setError("");
+    try {
+      const formData = new FormData();
+      formData.append("file", selectedFile);
+
+      const response = await axios.post(
+        "http://127.0.0.1:8000/process_ecg",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      setPrediction(response.data.result);
+    } catch (error) {
+      console.error("Error:", error);
+      setError("An error occurred while uploading. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleSendToPatient = async () => {
+    if (!selectedFile || !prediction) {
+      setError("Please upload a file and generate a prediction.");
+      return;
+    }
+    setLoading(true);
+    setError("");
+  
+    try {
+      const res = await upload(selectedFile);
+
+      const formData={
+        testId: id,
+        ecg: res,
+        prediction: prediction,
+      }
+
+  
+      const resp=await axios.post(`${API_BASE_URL}/testReports/ecg/create`, formData);
+      console.log(resp);
+      setOpen(false);
+      
+    } catch (error) {
+      console.error("Error:", error);
+      setError("An error occurred while sending the report. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
+  
+  
+  
 
   return (
     <div>
@@ -61,12 +150,12 @@ export default function ECGuploadModal() {
           <Typography id="modal-modal-title" variant="h6" component="h2" mb={2} textAlign="center">
             Upload ECG File
           </Typography>
+
           <input
             type="file"
             id="ecg-upload"
-            style={{
-              display: 'none',
-            }}
+            onChange={handleFileChange}
+            style={{ display: 'none' }}
           />
           <label htmlFor="ecg-upload">
             <Button
@@ -87,7 +176,11 @@ export default function ECGuploadModal() {
               Choose File
             </Button>
           </label>
-          <Button
+
+          {
+            !prediction && (
+              <Button
+            onClick={handleSubmit}
             sx={{
               marginTop: 2,
               display: 'block',
@@ -102,8 +195,43 @@ export default function ECGuploadModal() {
               },
             }}
           >
-            Upload
+            {loading ? "Uploading..." : "Upload"}
           </Button>
+            )
+          }
+
+          {prediction && (
+            <Button
+              onClick={handleSendToPatient}
+              sx={{
+                marginTop: 2,
+                display: 'block',
+                width: '100%',
+                borderRadius: '8px',
+                padding: '8px 16px',
+                backgroundColor: '#1976d2',
+                color: 'white',
+                textTransform: 'none',
+                '&:hover': {
+                  backgroundColor: '#0056b3',
+                },
+              }}
+            >
+              {loading ? "Sending..." : "Send to Patient"}
+            </Button>
+          )}
+
+          {error && (
+            <Typography color="error" mt={2} textAlign="center">
+              {error}
+            </Typography>
+          )}
+
+          {prediction && (
+            <Typography color="green" mt={2} textAlign="center">
+              Prediction: {prediction}
+            </Typography>
+          )}
         </Box>
       </Modal>
     </div>

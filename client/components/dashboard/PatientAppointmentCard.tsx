@@ -13,12 +13,8 @@ export function PatientAppointmentCard({ cardData }) {
   const router = useRouter();
 
   const handleCardClick = () => {
-    
-
     router.push(`/dashboard/appointments/${cardData._id}`);
   };
-
-  
 
   // Log the timing data
   console.log("Raw Timing Data:", cardData.timing);
@@ -35,8 +31,9 @@ export function PatientAppointmentCard({ cardData }) {
   return (
     <div onClick={handleCardClick}>
       <CardContainer className="inter-var w-[90%]">
-        <CardBody className="relative group/card dark:hover:shadow-2xl dark:hover:shadow-emerald-500/[0.1] text-white dark:bg-black dark:border-white/[0.2] border-black/[0.1] w-full h-auto rounded-xl p-6 border cursor-pointer">
-          <div className='flex items-center justify-between'>
+        <CardBody className="relative group/card dark:hover:shadow-2xl dark:hover:shadow-emerald-500/[0.1] text-white dark:bg-black dark:border-white/[0.2] border-black/[0.1] h-auto rounded-xl gap-3 p-6 border cursor-pointer">
+          
+          <div className='flex items-center justify-between gap-4 mb-4'>
             <div className='flex items-center gap-3'>
               <div className="w-15 h-15">
                 <img
@@ -59,15 +56,9 @@ export function PatientAppointmentCard({ cardData }) {
             </div>
           </div>
           
-          <div className='flex items-center justify-between'>
-            <div>
-              <p className="font-bold">Medication</p>
-              <p className="text-white-200">Medicine 1</p>
-            </div>
-            <div>
-              <p className="font-bold">Timing</p>
-              <p className="text-white-200">{formattedTiming || "Invalid Date"}</p>
-            </div>
+          <div className='flex items-center'>
+            <p className="font-bold">Timing: </p>
+            <p className="text-white-200"> {formattedTiming || "Invalid Date"}</p>
           </div>    
         </CardBody>
       </CardContainer>

@@ -87,7 +87,7 @@ const TestAppointmentDetails: React.FC<TestAppointmentDetailsProps> = ({ params:
       </div>
 
       <div className="flex items-center ">
-        <ECGuploadModal/>
+        <ECGuploadModal id={id}/>
         <p className="text-center text-gray-500">or</p>
         <CBCuploadModal/>
       </div>

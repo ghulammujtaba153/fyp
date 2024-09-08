@@ -1,5 +1,5 @@
 "use client";
-import { ThreeDCardDemo } from '@/components/DoctorList';
+
 import Filters from '@/components/Filters';
 import React from 'react';
 import { Label } from "@/components/ui/label";

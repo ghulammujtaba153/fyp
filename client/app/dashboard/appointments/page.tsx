@@ -77,7 +77,7 @@ function Assignments() {
 
   return (
     <>
-      <div className="grid grid-cols-1 gap-4 w-full h-screen">
+      <div className="grid grid-cols-2 gap-4 w-full h-screen">
         {currentAppointments.map((appointment) => (
           <PatientAppointmentCard 
             key={appointment._id} 
@@ -86,7 +86,7 @@ function Assignments() {
           />
         ))}
       </div>
-      <div className="flex items-center justify-center gap-4 mt-10">
+      <div className="flex items-center justify-center gap-4 ">
         <button
           onClick={handlePreviousPage}
           disabled={currentPage === 1}
