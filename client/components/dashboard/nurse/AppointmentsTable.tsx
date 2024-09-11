@@ -81,7 +81,7 @@ const TestAppointmentTable: React.FC<TestAppointmentTableProps> = ({ data }) => 
             {data
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((row, index) => (
-                <TableRow onClick={()=>{handleClick(row)}} hover role="checkbox" tabIndex={-1} key={index}>
+                <TableRow onClick={()=>{handleClick(row)}} hover sx={{cursor: 'pointer'}} role="checkbox" tabIndex={-1} key={index}>
                   {columns.map((column) => {
                     const value = row[column.id];
                     return (

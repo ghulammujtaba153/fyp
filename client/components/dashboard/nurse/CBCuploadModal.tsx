@@ -6,6 +6,7 @@ import Modal from '@mui/material/Modal';
 import CloseIcon from '@mui/icons-material/Close';
 import IconButton from '@mui/material/IconButton';
 import axios from "axios";
+import API_BASE_URL from "@/utils/apiConfig";
 
 // Define types for the result and error
 interface CBCResult {
@@ -32,7 +33,7 @@ const style = {
   p: 4,
 };
 
-export default function CBCuploadModal() {
+export default function CBCuploadModal({id}) {
   const [open, setOpen] = useState<boolean>(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -87,6 +88,26 @@ export default function CBCuploadModal() {
       setLoading(false);
       setError("An error occurred while submitting the data.");
     }
+  };
+
+  const handleClick = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setLoading(true);
+    console.log(result);
+    const form={
+      testId: id,
+      gender: gender,
+      hemoglobin: hema,
+      MCH: mch,
+      MCHC: mchc,
+      MCV: mcv,
+      result: result,
+    }
+    
+    const res = await axios.post(`${API_BASE_URL}/testReports/cbc/create`, form);
+    console.log(res.data);
+    setLoading(false);
+    
   };
 
   return (
@@ -179,7 +200,7 @@ export default function CBCuploadModal() {
                 onChange={(e: ChangeEvent<HTMLInputElement>) => setMcv(e.target.value)}
               />
             </label>
-            <Button 
+            {!result &&<Button 
               type="submit"
               sx={{
                 marginTop: 2,
@@ -195,8 +216,27 @@ export default function CBCuploadModal() {
                 },
               }}
             >
-              Classify
+              {loading ? "Loading..." : "Classify"}
+            </Button>}
+            {result && <Button 
+              onClick={handleClick}
+              sx={{
+                marginTop: 2,
+                display: 'block',
+                width: '100%',
+                borderRadius: '8px',
+                padding: '8px 16px',
+                backgroundColor: '#1976d2',
+                color: 'white',
+                textTransform: 'none',
+                '&:hover': {
+                  backgroundColor: '#0056b3',
+                },
+              }}
+            >
+              {loading ? "Loading..." : "Submit"}
             </Button>
+            }
             {loading && <p>Loading...</p>}
             {result && (
               <>
