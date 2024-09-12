@@ -34,13 +34,13 @@ interface Errors {
   permanentAddress?: string;
 }
 
-export default function AdminProfile() {
+export default function NurseProfile() {
   const [formData, setFormData] = useState<FormData>({
     firstName: "",
     lastName: "",
     email: "",
     password: "",
-    role: "admin",
+    role: "nurse",
     dateOfBirth: "",
     contactNumber: "",
     postalAddress: "",
@@ -113,7 +113,7 @@ export default function AdminProfile() {
       lastName: "",
       email: "",
       password: "",
-      role: "admin",
+      role: "nurse",
       dateOfBirth: "",
       contactNumber: "",
       postalAddress: "",
@@ -129,7 +129,7 @@ export default function AdminProfile() {
         transition={{ type: "spring", stiffness: 50 }} 
         className="bg-white text-black max-w-md w-full mx-auto rounded-none md:rounded-2xl p-4 md:p-8 shadow-input rounded-lg border border-black/.1 shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),0px_1px_0px_0px_rgba(25,28,33,0.02),0px_0px_0px_1px_rgba(25,28,33,0.08)]"
       >
-        <h2 className="font-bold text-xl">Register Admin</h2>
+        <h2 className="font-bold text-xl">Register Nurse</h2>
         <form className="my-8" onSubmit={handleSubmit} className="flex flex-col gap-4">
           <div className="flex items-center justify-center mb-4 bg-black-default border rounded-full w-[100px] h-[100px] align-middle relative">
             {profilePicPreview ? (

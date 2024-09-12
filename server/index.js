@@ -13,6 +13,7 @@ import adminRouter from './routes/adminRoutes.js';
 import testsRouter from './routes/testsRoutes.js';
 import testAppointmentRouter from './routes/testAppointmentRoutes.js';
 import testReportRouter from './routes/testReportRoutes.js';
+import feedBackRouter from './routes/feedBackRoutes.js';
 
 dotenv.config();
 
@@ -36,6 +37,7 @@ app.use('/api/admin', adminRouter);
 app.use('/api/tests', testsRouter);
 app.use('/api/testappointments', testAppointmentRouter);
 app.use('/api/testReports', testReportRouter);
+app.use('/api/feedBack', feedBackRouter);
 
 app.listen(port, () => {
   console.log(`Server is running on port: ${port}`);
