@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { loginUser, registerUser, updateUser, user } from "../../controllers/patientControllers/auth.js";
-import { bookAppointment, getAllAppointmentforDoctor, getAllAppointmentforPatients, getDoctorUpcomingAppointments, getUpcomingAppointments, updateAppointmentStatus } from "../../controllers/patientControllers/appointment.js";
+import { bookAppointment, getAllApointment, getAllAppointmentforDoctor, getAllAppointmentforPatients, getDoctorUpcomingAppointments, getUpcomingAppointments, updateAppointmentStatus } from "../../controllers/patientControllers/appointment.js";
 
 const router = Router();
 
@@ -18,5 +18,6 @@ router.get('/appointments/all/:patientId', getAllAppointmentforPatients);
 
 router.get('/appointments/doctor/:doctorId', getDoctorUpcomingAppointments);
 router.get('/appointments/all/doctor/:doctorId', getAllAppointmentforDoctor);
+router.get('/appointments/all', getAllApointment);
 
 export default router;

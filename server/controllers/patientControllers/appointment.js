@@ -160,3 +160,12 @@ export const getUpcomingAppointments = async (req, res) => {
     }
   };
   
+
+export const getAllApointment=async(req,res)=>{
+  try{
+    const appointment=await Appointment.find().populate('doctorId').populate('patientId');
+    res.status(200).json(appointment);
+  }catch(error){
+    res.status(500).json({message:"Internal server error"});
+  }
+}

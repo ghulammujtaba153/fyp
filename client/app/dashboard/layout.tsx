@@ -124,7 +124,7 @@
 
 import Sidebar from '@/components/dashboard/Sidebar';
 import { SidebarItem } from '@/components/dashboard/SidebarItem';
-import { BellIcon, Home, LogOut, MessageCircleMore, NotebookText, Settings, Star, TestTubeDiagonal } from 'lucide-react';
+import { BellIcon, Home, LogOut, MessageCircleMore, MessagesSquare, NotebookText, Settings, Star, TestTubeDiagonal } from 'lucide-react';
 import React, { useContext, useEffect, useState } from 'react';
 import { HiUser } from 'react-icons/hi';
 import { useRouter, usePathname } from 'next/navigation';
@@ -246,11 +246,11 @@ const Layout = ({ children }) => {
             onClick={() => handleItemClick('Labtests')}
           />
           <SidebarItem
-            icon={<Star />}
-            text="Favorites"
-            href="/dashboard/favorites"
-            active={activeItem === 'Favorites'}
-            onClick={() => handleItemClick('Favorites')}
+            icon={<MessagesSquare />}
+            text="Feedback"
+            href="/dashboard/feedback"
+            active={activeItem === 'Feedback'}
+            onClick={() => handleItemClick('Feedback')}
           />
         </Sidebar>
       </div>

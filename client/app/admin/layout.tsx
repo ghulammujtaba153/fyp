@@ -2,7 +2,7 @@
 
 import Sidebar from '@/components/dashboard/Sidebar';
 import { SidebarItem } from '@/components/dashboard/SidebarItem';
-import { BellIcon, Home, LogOut, MessageCircleMore, Settings, Star, TestTubeDiagonal } from 'lucide-react';
+import { BellIcon, Home, LogOut, MessageCircleMore, MessagesSquare, Settings, Star, TestTubeDiagonal } from 'lucide-react';
 import React, { useEffect, useState, useContext } from 'react';
 import { HiUser } from 'react-icons/hi';
 import { useRouter } from 'next/navigation';
@@ -98,6 +98,14 @@ const layout = ({ children }) => {
             href="/admin/appointments"
             active={activeItem === 'Appointments'}
             onClick={() => handleItemClick('Appointments')}
+          />
+
+          <SidebarItem
+            icon={<MessagesSquare />}
+            text="Feedback"
+            href="/admin/feedback"
+            active={activeItem === 'Feedback'}
+            onClick={() => handleItemClick('Feedback')}
           />
           
           

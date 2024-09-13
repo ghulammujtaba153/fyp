@@ -14,7 +14,6 @@ import EditDoctorModal from './EditDoctorModal';
 import API_BASE_URL from '@/utils/apiConfig';
 import axios from 'axios';
 
-
 const columns = [
   { id: 'profile', label: 'Profile', minWidth: 50 },
   { id: 'name', label: 'Name', minWidth: 150 },
@@ -38,28 +37,26 @@ export default function DoctorsTable({ doctors }) {
     setPage(0);
   };
 
-  const handleDelete = async(doctor: {}) => {
-    console.log(doctor);
-    const userId=doctor.userId._id;
-    const doctorId=doctor._id;
+  const handleDelete = async (doctor: any) => {
+    const userId = doctor.userId._id;
+    const doctorId = doctor._id;
 
     try {
       const res = await axios.delete(`${API_BASE_URL}/doctors/delete/${userId}/${doctorId}`);
       console.log(res.data);
       handleDoctorUpdated();
-      
     } catch (error) {
-      
+      console.error('Error deleting doctor:', error);
     }
   };
 
   const handleDoctorUpdated = () => {
-    // Logic to refresh the doctor list after editing, e.g., refetching the list of doctors from the API
+    // Logic to refresh the doctor list after editing
   };
 
   return (
-    <Paper sx={{ width: '100%', overflow: 'hidden' }}>
-      <TableContainer sx={{ maxHeight: 440, overflowX: 'auto' }}>
+    <Paper sx={{ width: '100%', overflow: 'hidden' }} className="shadow-lg rounded-md">
+      <TableContainer className="overflow-x-auto">
         <Table stickyHeader aria-label="sticky table" sx={{ minWidth: 750 }}>
           <TableHead>
             <TableRow>
@@ -68,6 +65,7 @@ export default function DoctorsTable({ doctors }) {
                   key={column.id}
                   align={column.align}
                   style={{ minWidth: column.minWidth, fontWeight: 'bold' }}
+                  className="bg-gray-200 text-gray-700"
                 >
                   {column.label}
                 </TableCell>
@@ -83,28 +81,29 @@ export default function DoctorsTable({ doctors }) {
                     <img
                       src={doctor.userId.profile}
                       alt="Profile"
-                      style={{ width: '50px', height: '50px', borderRadius: '50%' }}
+                      className="w-12 h-12 rounded-full object-cover"
                     />
                   </TableCell>
                   <TableCell>{doctor.userId.firstName} {doctor.userId.lastName}</TableCell>
                   <TableCell>{doctor.userId.email}</TableCell>
                   <TableCell>{doctor.userId.contactNumber}</TableCell>
-                  <TableCell>
-                    {doctor.availability?.startTime} - {doctor.availability?.endTime}
-                  </TableCell>
+                  <TableCell>{doctor.availability?.startTime} - {doctor.availability?.endTime}</TableCell>
                   <TableCell>{doctor.specialization}</TableCell>
                   <TableCell align="right">
-                    <EditDoctorModal
-                      doctorId={doctor}
-                      onDoctorUpdated={handleDoctorUpdated}
-                    />
-                    <Button
-                      onClick={() => handleDelete(doctor)}
-                      variant="contained"
-                      color="error"
-                    >
-                      Delete
-                    </Button>
+                    <div className="flex gap-2 justify-end">
+                      <EditDoctorModal
+                        doctorId={doctor}
+                        onDoctorUpdated={handleDoctorUpdated}
+                      />
+                      <Button
+                        onClick={() => handleDelete(doctor)}
+                        variant="contained"
+                        color="error"
+                        className="bg-red-500 text-white"
+                      >
+                        Delete
+                      </Button>
+                    </div>
                   </TableCell>
                 </TableRow>
               ))}
