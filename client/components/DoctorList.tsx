@@ -7,23 +7,15 @@ import API_BASE_URL from "@/utils/apiConfig";
 
 const ITEMS_PER_PAGE = 4;
 
-export function DoctorList() {
+export function DoctorList({doctors}) {
   const [currentPage, setCurrentPage] = useState(1);
-  const [doctors, setDoctors] = useState([]);
+  
   const [totalPages, setTotalPages] = useState(1);
 
   useEffect(() => {
-    const fetchDoctors = async () => {
-      try {
-        const res = await axios.get(`${API_BASE_URL}/doctors`);
-        setDoctors(res.data);
-        setTotalPages(Math.ceil(res.data.length / ITEMS_PER_PAGE));
-      } catch (error) {
-        console.log(error.message);
-      }
-    };
 
-    fetchDoctors();
+      setTotalPages(Math.ceil(doctors.length / ITEMS_PER_PAGE));
+
   }, []);
 
   const handleNextPage = () => {

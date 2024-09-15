@@ -51,7 +51,7 @@ export const getConversationById = async (req, res) => {
   
   try {
     const conversation = await Conversation.findById(id)
-      .populate('participants', 'firstName lastName profile')
+      .populate('participants', 'firstName lastName profile role')
       .populate('appointmentId');
 
     if (!conversation) {

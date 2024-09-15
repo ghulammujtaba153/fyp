@@ -31,7 +31,7 @@ const ChatComponent = () => {
         console.log(users)
         setOnlineUsers(users.map(user => user.userId));
     });
-},[conversations, user]);
+},[user]);
 
     
 
@@ -50,17 +50,13 @@ const ChatComponent = () => {
                 }
             };
             fetchChats();
-
-
-            // Clean up on unmount
-            
         }
     }, [user]);
 
     
 
     const handleConversationClick = (id) => {
-        router.push(`/conversations/${id}`);
+        router.push(`/doctordashboard/chats/conversations/${id}`);
     };
 
     const isOnline = (participantId) => onlineUsers.includes(participantId);
