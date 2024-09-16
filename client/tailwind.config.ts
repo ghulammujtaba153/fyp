@@ -29,7 +29,7 @@ module.exports = {
         purple: "#CBACF9",
 
         //admin colors
-        agreen: '#D85275',
+        agreen: '#D8F275',
         ablue: '#1F1E30',
         awhite: '#FDFFF4',
         ablack: '#565851',
