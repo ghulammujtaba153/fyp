@@ -52,6 +52,13 @@ const AppointmentModal = ({ doctorId, onClose, doctorAvailability }) => {
         timing: appointmentDateTime, // Send time as string
         status
       });
+      const notRes=await axios.post(`${API_BASE_URL}/notifications`, {
+        receiverId: doctorId,
+        title: 'New Appointment',
+        message: `New appointment booked for ${appointmentDateTime}`,
+        link: `/doctordashboard/appointments`,
+      });
+      console.log(notRes.data);
       console.log(res.data);
       handleBookAppointment(res.data._id);
       onClose();
