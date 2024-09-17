@@ -11,7 +11,7 @@ import { v4 as uuid } from 'uuid';
 import VideoCall from '@/components/dashboard/videoCall';
 import { io } from 'socket.io-client';
 import Prescription from '@/components/dashboard/Prescription';
-import '../../scroll.css'
+// import '../../../scroll.css'
 import PatientReviewModal from '@/components/dashboard/PatientReview';
 
 const Loader = () => (
@@ -29,7 +29,7 @@ const ErrorMessage = ({ message, onClose }) => (
   </div>
 );
 
-const ConversationPage = ({ params }: { params: { id: string } }) => {
+const Conversation = ({ id }) => {
   const [conversation, setConversation] = useState(null);
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
@@ -47,9 +47,11 @@ const ConversationPage = ({ params }: { params: { id: string } }) => {
   const messagesEndRef = useRef(null);
   const socket = useRef();
 
+  console.log(id);
+
+
   useEffect(() => {
     socket.current = io("ws://localhost:8900");
-   
     socket.current.on("getMessage", (data: any) => {
       console.log(data)
       setArrivalMessage({
@@ -58,8 +60,8 @@ const ConversationPage = ({ params }: { params: { id: string } }) => {
         createdAt: Date.now(),
       });
     });
-  }, []);  
-
+  }, []);
+  
   useEffect(() => {
     if (!user){
         return;
@@ -71,7 +73,6 @@ const ConversationPage = ({ params }: { params: { id: string } }) => {
   },[user]);
 
   useEffect(() => {
-    console.log(arrivalMessage)
     if (arrivalMessage && conversation?.participants.find(participant => participant._id !== arrivalMessage.senderId)) {
       setMessages((prev) => [...prev, arrivalMessage]);
     }
@@ -83,7 +84,7 @@ const ConversationPage = ({ params }: { params: { id: string } }) => {
         console.log(users);
       });
     }
-  }, [user]);
+  }, [id,user]);
 
   useEffect(() => {
     const fetchCalls = async () => {
@@ -109,7 +110,7 @@ const ConversationPage = ({ params }: { params: { id: string } }) => {
     }
 
     try {
-      const res = await axios.get(`${API_BASE_URL}/conversations/${params.id}`);
+      const res = await axios.get(`${API_BASE_URL}/conversations/${id}`);
       setMessages(res.data.messages);
       setConversation(res.data);
       console.log(res.data);
@@ -125,7 +126,7 @@ const ConversationPage = ({ params }: { params: { id: string } }) => {
 
   useEffect(() => {
     fetchConversation();
-  }, [params.id, user]);
+  }, [id, user]);
 
   const scrollToBottom = () => {
     if (messagesEndRef.current) {
@@ -190,7 +191,7 @@ const ConversationPage = ({ params }: { params: { id: string } }) => {
         });
             
         await axios.post(
-          `${API_BASE_URL}/conversations/${params.id}/messages`,
+          `${API_BASE_URL}/conversations/${id}/messages`,
           {
             sender: user._id,
             content: newMessage,
@@ -204,10 +205,14 @@ const ConversationPage = ({ params }: { params: { id: string } }) => {
     }
   };
 
+  const handleNameClick = (id: string) => {
+    router.push(`/doctordashboard/chats/conversations/${conversation._id}/profile/${id}`);
+  };
+
   if (!user) return <p>Loading user information...</p>;
 
   return (
-    <div className=" relative flex flex-col max-w-[1000px] h-screen bg-red-100 mx-auto">
+    <div className=" relative flex flex-col max-w-[1000px] h-screen bg-red-100 mx-auto rounded-lg over-flow-hidden">
       {isLoading && <Loader />}
       {error && <ErrorMessage message={error} onClose={() => setError('')} />}
 
@@ -221,9 +226,12 @@ const ConversationPage = ({ params }: { params: { id: string } }) => {
                   alt="profile"
                   className="w-[40px] h-[40px] rounded-full"
                 />
-                <p className="ml-2">
-                  {participant.firstName + " " + participant.lastName}
-                </p>
+                <p
+                onClick={participant.role === "patient" ? () => handleNameClick(participant._id) : undefined}
+                className={participant.role === "patient" ? "cursor-pointer ml-2 hover:underline" : "ml-2"}
+              >
+                {participant.firstName + " " + participant.lastName}
+              </p>
               </div>
             )
           ))}
@@ -286,4 +294,4 @@ const ConversationPage = ({ params }: { params: { id: string } }) => {
   );
 };
 
-export default ConversationPage;
+export default Conversation;

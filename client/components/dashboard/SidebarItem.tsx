@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useContext } from 'react';
-import Link from 'next/link';
 import { SidebarContext } from './Sidebar';
 
 export const SidebarItem = ({ icon, text, href, active, onClick }) => {
@@ -11,12 +10,12 @@ export const SidebarItem = ({ icon, text, href, active, onClick }) => {
     <li
       className={`
         relative flex items-center py-2 px-3 my-1
-        font-medium rounded-md cursor-pointer
+        font-medium rounded-full cursor-pointer
         transition-colors group
         ${
           active
-            ? "bg-gradient-to-tr from-indigo-200 to-indigo-100 text-indigo-800"
-            : "hover:bg-indigo-50 text-gray-600"
+            ? "bg-agreen text-black-default"
+            : "hover:bg-agreen hover:text-black-default text-gray-100"
         }
       `}
       onClick={onClick}
@@ -29,12 +28,11 @@ export const SidebarItem = ({ icon, text, href, active, onClick }) => {
       >
         {text}
       </span>
-      {active && <div className="absolute right-2 w-2 h-2 rounded bg-indigo-400" />}
       {!expanded && (
         <div
           className={`
           absolute left-full rounded-md px-2 py-1 ml-6
-          bg-indigo-100 text-indigo-800 text-sm
+          bg-agreen text-black-default text-sm
           invisible opacity-20 -translate-x-3 transition-all
           group-hover:visible group-hover:opacity-100 group-hover:translate-x-0
         `}

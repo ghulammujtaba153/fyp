@@ -34,7 +34,7 @@ function AppointmentsTable({ appointments }) {
     { id: 'fullName', label: 'Patient Name', minWidth: 170 },
     { id: 'email', label: 'Email', minWidth: 170 },
     { id: 'status', label: 'Status', minWidth: 100 },
-    { id: 'appointmentSchedule', label: 'Appointment Schedule', minWidth: 170, align: 'right' }
+    { id: 'appointmentCreatedAt', label: 'Appointment Created At', minWidth: 170, align: 'right' }
   ];
 
   const rows = appointments.map((appointment) => ({
@@ -49,7 +49,7 @@ function AppointmentsTable({ appointments }) {
     fullName: `${appointment.patientId.firstName} ${appointment.patientId.lastName}`,
     email: appointment.patientId.email,
     status: appointment.status,
-    appointmentSchedule: new Date(appointment.createdAt).toLocaleString(), // Format for date and time
+    appointmentCreatedAt: new Date(appointment.createdAt).toLocaleString(), // Format for date and time
   }));
 
   return (

@@ -61,6 +61,7 @@ const UserProvider = ({ children }) => {
       });
 
       const currentUser = userRes.data.user;
+      console.log(currentUser)
 
       let updateUrl;
       if (currentUser.role === 'doctor') {

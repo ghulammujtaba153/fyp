@@ -38,7 +38,8 @@ export const createPrescription = async (req, res) => {
 export const getPrescriptionsByPatientId = async (req, res) => {
     try {
       const { patientId } = req.params;
-      const prescriptions = await Prescription.find({ patientId }).populate('doctorId').populate('appointmentId');
+      console.log(patientId);
+      const prescriptions = await Prescription.find({ doctorId: patientId }).populate('patientId').populate('doctorId').populate('appointmentId');
   
       if (!prescriptions) {
         return res.status(404).json({
@@ -46,6 +47,7 @@ export const getPrescriptionsByPatientId = async (req, res) => {
           message: 'No prescriptions found for this patient'
         });
       }
+      console.log(prescriptions);
   
       res.status(200).json({
         success: true,

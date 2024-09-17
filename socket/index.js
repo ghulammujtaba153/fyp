@@ -8,8 +8,15 @@ const io = require("socket.io")(8900, {
   
   const addUser = (userId, socketId) => {
     console.log(userId, socketId);
+
+    removeUserByUserId(userId);
+
     !users.some((user) => user.userId === userId) &&
       users.push({ userId, socketId });
+  };
+
+  const removeUserByUserId = (userId) => {
+    users = users.filter((user) => user.userId !== userId);
   };
   
   const removeUser = (socketId) => {
@@ -34,6 +41,7 @@ const io = require("socket.io")(8900, {
     socket.on("sendMessage", ({ senderId, receiverId, content }) => {
         const user = getUser(receiverId);
         console.log(senderId, receiverId, content);
+        console.log(user);
       
         if (user) {
             console.log(user);
@@ -41,6 +49,7 @@ const io = require("socket.io")(8900, {
             senderId,
             content,
           });
+          console.log("messages sent");
         } else {
           console.error(`User with ID ${receiverId} not found in the connected users.`);
         }

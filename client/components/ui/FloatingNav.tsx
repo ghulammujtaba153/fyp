@@ -51,15 +51,25 @@ export const FloatingNav = ({
   const handleDashboardClick = () => {
     setDropdownVisible(false);
     // setVisible(false);
+    console.log(user)
 
-    // Navigate based on the user's role
-    if (user.role === "doctor") {
-      router.push("/doctordashboard");
-    } if (user.role === "patient"){
-      router.push("/dashboard");
-    } else {
-      router.push("/admin");
+
+    if(user){
+      if (user.role === "doctor") {
+        console.log(user.role)
+        router.push("/doctordashboard");
+      } else if (user.role === "patient"){
+        console.log(user.role)
+        router.push("/dashboard");
+      } else if (user.role="admin") {
+        console.log(user.role)
+        router.push("/admin");
+      } else if (user.role="nurse") {
+        console.log(user.role)
+        router.push("/nurse");
+      }
     }
+    
   };
 
   const dropdownVariants = {

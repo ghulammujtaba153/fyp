@@ -2,9 +2,10 @@
 
 import React from 'react';
 import UpcomingAppointment from '@/components/dashboard/UpcomingAppointment';
-import Medicine from '@/components/dashboard/Medicine';
+
 import "../globals.css"
 import Card from '@/components/dashboard/Card';
+import Medicine from '@/components/dashboard/Medicine';
 
 const Dashboard = () => {
   const cardData = [
@@ -16,7 +17,7 @@ const Dashboard = () => {
   ];
 
   return (
-    < div className='h-screen flex flex-col jutify-center items-center gap-5 overflow-hidden'>
+    < div className='h-[100%] flex flex-col jutify-center items-center gap-5 pl-[100px]'>
       <div className='flex justify-between  items-center gap-4 flex-wrap'>
         {cardData.map((data, index) => (
           <Card key={index} data={data} />
