@@ -85,6 +85,14 @@ const layout = ({ children }) => {
             active={activeItem === 'Feedback'}
             onClick={() => handleItemClick('Feedback')}
           />
+
+        <SidebarItem
+            icon={<LogOut />}
+            text="Logout"
+            href="/"
+            active={activeItem === 'Logout'}
+            onClick={() => handleLogout()}
+          />
           
         </Sidebar>
       </div>

@@ -17,7 +17,7 @@ const Dashboard = () => {
   ];
 
   return (
-    < div className='h-[100%] flex flex-col jutify-center items-center gap-5 pl-[100px]'>
+    < div className='h-screen flex flex-col jutify-center items-center gap-5 pl-[100px]'>
       <div className='flex justify-between  items-center gap-4 flex-wrap'>
         {cardData.map((data, index) => (
           <Card key={index} data={data} />

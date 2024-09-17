@@ -252,6 +252,13 @@ const Layout = ({ children }) => {
             active={activeItem === 'Feedback'}
             onClick={() => handleItemClick('Feedback')}
           />
+          <SidebarItem
+            icon={<LogOut />}
+            text="Logout"
+            href="/"
+            active={activeItem === 'Logout'}
+            onClick={() => handleLogout()}
+          />
         </Sidebar>
       </div>
       <div className='flex flex-col w-full gap-6 items-center m-5'>

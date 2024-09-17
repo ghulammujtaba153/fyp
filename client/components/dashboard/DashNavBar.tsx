@@ -78,9 +78,9 @@ const DashNavBar = () => {
       ) : (
         <div className="w-[40px] h-[40px] rounded-full bg-gray-500" />
       )}
-      <p className="flex items-center gap-2 cursor-pointer" onClick={handleLogout}>
+      {/* <p className="flex items-center gap-2 cursor-pointer" onClick={handleLogout}>
         Logout <LogOut />
-      </p>
+      </p> */}
     </div>
   );
 };

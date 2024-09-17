@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation"; // Import usePathname
 import { cn } from "@/utils/cn";
 import { UserContext } from "@/context/UserContext";
+import { Contact, Stethoscope, TestTube, LogIn } from "lucide-react"; // Add other icons here
 
 export const FloatingNav = ({
   navItems,
@@ -24,20 +25,20 @@ export const FloatingNav = ({
   const pathname = usePathname(); // Get the current route
 
   useEffect(() => {
-    // Hide the navbar on specific routes
-    if (pathname.startsWith("/doctordashboard") || 
-        pathname.startsWith("/dashboard") || 
-        pathname.startsWith("/conversation") ||
-        pathname.startsWith("/conference") ||
-        pathname.startsWith("/room") ||
-        pathname.startsWith("/admin") ||
-        pathname.startsWith("/nurse")) {
+    if (
+      pathname.startsWith("/doctordashboard") ||
+      pathname.startsWith("/dashboard") ||
+      pathname.startsWith("/conversation") ||
+      pathname.startsWith("/conference") ||
+      pathname.startsWith("/room") ||
+      pathname.startsWith("/admin") ||
+      pathname.startsWith("/nurse")
+    ) {
       setVisible(false);
     } else {
       setVisible(true);
     }
-}, [pathname]);
- // Re-run the effect when the rou
+  }, [pathname]);
 
   const toggleDropdown = () => {
     setDropdownVisible((prev) => !prev);
@@ -50,26 +51,17 @@ export const FloatingNav = ({
 
   const handleDashboardClick = () => {
     setDropdownVisible(false);
-    // setVisible(false);
-    console.log(user)
-
-
-    if(user){
+    if (user) {
       if (user.role === "doctor") {
-        console.log(user.role)
         router.push("/doctordashboard");
-      } else if (user.role === "patient"){
-        console.log(user.role)
+      } else if (user.role === "patient") {
         router.push("/dashboard");
-      } else if (user.role="admin") {
-        console.log(user.role)
+      } else if (user.role === "admin") {
         router.push("/admin");
-      } else if (user.role="nurse") {
-        console.log(user.role)
+      } else if (user.role === "nurse") {
         router.push("/nurse");
       }
     }
-    
   };
 
   const dropdownVariants = {
@@ -143,7 +135,7 @@ export const FloatingNav = ({
               "relative dark:text-neutral-50 items-center flex space-x-1 text-neutral-600 dark:hover:text-neutral-300 hover:text-neutral-500"
             )}
           >
-            <span className="block sm:hidden"></span>
+            <Stethoscope size={20} />
             <span className="text-sm !cursor-pointer">Find Doctor</span>
           </Link>
 
@@ -153,7 +145,7 @@ export const FloatingNav = ({
               "relative dark:text-neutral-50 items-center flex space-x-1 text-neutral-600 dark:hover:text-neutral-300 hover:text-neutral-500"
             )}
           >
-            <span className="block sm:hidden"></span>
+            <TestTube size={20} />
             <span className="text-sm !cursor-pointer">Tests</span>
           </Link>
 
@@ -163,7 +155,7 @@ export const FloatingNav = ({
               "relative dark:text-neutral-50 items-center flex space-x-1 text-neutral-600 dark:hover:text-neutral-300 hover:text-neutral-500"
             )}
           >
-            <span className="block sm:hidden"></span>
+            <Contact size={20} />
             <span className="text-sm !cursor-pointer">Contact</span>
           </Link>
 
@@ -174,7 +166,7 @@ export const FloatingNav = ({
                 "relative dark:text-neutral-50 items-center flex space-x-1 text-neutral-600 dark:hover:text-neutral-300 hover:text-neutral-500"
               )}
             >
-              <span className="block sm:hidden"></span>
+              <LogIn size={20} />
               <span className="text-sm !cursor-pointer">Login</span>
             </Link>
           )}
