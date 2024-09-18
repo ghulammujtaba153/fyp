@@ -2,7 +2,7 @@
 
 import Sidebar from '@/components/dashboard/Sidebar';
 import { SidebarItem } from '@/components/dashboard/SidebarItem';
-import { BellIcon, Home, LogOut, MessageCircleMore, MessagesSquare, Settings, Star, TestTubeDiagonal } from 'lucide-react';
+import { BellIcon, Bot, Home, LogOut, MessageCircleMore, MessagesSquare, Settings, Star, TestTubeDiagonal } from 'lucide-react';
 import React, { useEffect, useState, useContext } from 'react';
 import { HiUser } from 'react-icons/hi';
 import { useRouter } from 'next/navigation';
@@ -18,6 +18,7 @@ const layout = ({ children }) => {
 
   useEffect(() => {
     const pathSegments = pathname.split('/');
+    console.log(pathSegments)
     if (pathSegments.length > 3) {
       console.log(pathSegments[2])
       const lastSegment = pathSegments[2] || 'dashboard';
@@ -25,7 +26,13 @@ const layout = ({ children }) => {
       setActiveItem(lastSegment.charAt(0).toUpperCase() + lastSegment.slice(1));
     }else{
       const lastSegment = pathSegments.pop() || 'dashboard';
-      setActiveItem(lastSegment.charAt(0).toUpperCase() + lastSegment.slice(1));
+      console.log(lastSegment)
+      if(lastSegment==="doctordashboard"){
+        setActiveItem("Dashboard");
+      }else{
+        setActiveItem(lastSegment.charAt(0).toUpperCase() + lastSegment.slice(1));
+      }
+      
 
     }
     
@@ -84,6 +91,14 @@ const layout = ({ children }) => {
             href="/doctordashboard/feedback"
             active={activeItem === 'Feedback'}
             onClick={() => handleItemClick('Feedback')}
+          />
+
+          <SidebarItem
+            icon={<Bot/>}
+            text="Medicalbot"
+            href="/doctordashboard/medicalbot"
+            active={activeItem === 'Medicalbot'}
+            onClick={() => handleItemClick('Medicalbot')}
           />
 
         <SidebarItem

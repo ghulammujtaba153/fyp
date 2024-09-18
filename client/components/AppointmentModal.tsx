@@ -1,10 +1,11 @@
 // components/AppointmentModal.js
 
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext, useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import API_BASE_URL from '@/utils/apiConfig';
 import { UserContext } from '@/context/UserContext';
 import { useRouter } from 'next/navigation';
+import { io } from 'socket.io-client';
 
 const AppointmentModal = ({ doctorId, onClose, doctorAvailability }) => {
   const [appointmentDate, setAppointmentDate] = useState('');
@@ -13,6 +14,31 @@ const AppointmentModal = ({ doctorId, onClose, doctorAvailability }) => {
   const [status, setStatus] = useState('new');
   const { user } = useContext(UserContext);
   const router = useRouter();
+
+  const socket = useRef();
+
+  useEffect(() => {
+    socket.current = io("ws://localhost:8900");
+   
+    // socket.current.on("getMessage", (data: any) => {
+    //   console.log(data)
+    //   setArrivalMessage({
+    //     sender: data.senderId,
+    //     content: data.content,
+    //     createdAt: Date.now(),
+    //   });
+    // });
+  }, []);  
+
+  // useEffect(() => {
+  //   if (!user){
+  //       return;
+  //   }
+  //   socket.current.emit("addUser", user._id);
+  //   socket.current.on("getUsers", (users) => {
+  //       console.log(users)
+  //   });
+  // },[user]);
 
   useEffect(() => {
     if (doctorAvailability) {
@@ -53,6 +79,13 @@ const AppointmentModal = ({ doctorId, onClose, doctorAvailability }) => {
         status
       });
       const notRes=await axios.post(`${API_BASE_URL}/notifications`, {
+        receiverId: doctorId,
+        title: 'New Appointment',
+        message: `New appointment booked for ${appointmentDateTime}`,
+        link: `/doctordashboard/appointments`,
+      });
+      socket.current.emit("sendNotification", {
+        _id: notRes.data._id,
         receiverId: doctorId,
         title: 'New Appointment',
         message: `New appointment booked for ${appointmentDateTime}`,

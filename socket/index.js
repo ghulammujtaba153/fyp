@@ -54,6 +54,23 @@ const io = require("socket.io")(8900, {
           console.error(`User with ID ${receiverId} not found in the connected users.`);
         }
       });
+
+    //send notification
+    socket.on("sendNotification", ({_id, receiverId, title, message, link }) => {
+      const user = getUser(receiverId);
+      console.log(receiverId, title, message, link);
+      console.log(user);
+    
+      if (user) {
+          console.log(user);
+        io.to(user.socketId).emit("getNotification", {
+          _id,receiverId, title, message, link
+        });
+        console.log("notification sent");
+      } else {
+        console.error(`User with ID ${receiverId} not found in the connected users.`);
+      }
+    });
   
     //when disconnect
     socket.on("disconnect", () => {

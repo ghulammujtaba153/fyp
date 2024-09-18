@@ -1,10 +1,10 @@
 import express from 'express';
-import { changeNotificationStatus, createNotification, getNotificationsById } from '../controllers/notificationController.js';
+import { createNotification, getNotificationsById, markNotificationsAsRead } from '../controllers/notificationController.js';
 
 const notificationRouter = express.Router();
 
 notificationRouter.post('/', createNotification);
 notificationRouter.get('/:userId', getNotificationsById);
-notificationRouter.put('/:notificationId', changeNotificationStatus);
+notificationRouter.post('/mark-read', markNotificationsAsRead);
 
 export default notificationRouter;
