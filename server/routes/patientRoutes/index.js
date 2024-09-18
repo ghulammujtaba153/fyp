@@ -20,4 +20,6 @@ router.get('/appointments/doctor/:doctorId', getDoctorUpcomingAppointments);
 router.get('/appointments/all/doctor/:doctorId', getAllAppointmentforDoctor);
 router.get('/appointments/all', getAllApointment);
 
+
+
 export default router;

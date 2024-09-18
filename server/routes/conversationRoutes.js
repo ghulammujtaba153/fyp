@@ -1,6 +1,6 @@
 // routes/conversationRoutes.js
 import express from 'express';
-import { createConversation, getConversationById, getUserConversations, sendMessage } from '../controllers/conversationController/conversationController.js';
+import { createConversation, existingRoomOfBothParticipants, getConversationById, getUserConversations, sendMessage } from '../controllers/conversationController/conversationController.js';
 import Conversation from '../models/conversationSchema.js';
 
 
@@ -16,6 +16,9 @@ conversationRouter.get('/doctor/:doctorId/patient/:patientId', async (req, res) 
       const conversation = await Conversation.findOne({
         participants: { $all: [doctorId, patientId] }
       });
+      if (!conversation) {
+        return res.status(404).json({ message: 'Conversation not found' });
+      }
       res.status(200).json(conversation);
     } catch (error) {
       console.error('Error checking conversation:', error);
@@ -30,5 +33,7 @@ conversationRouter.get('/user/:userId', getUserConversations);
 conversationRouter.get('/:id', getConversationById);
 
 conversationRouter.post('/:conversationId/messages', sendMessage);
+
+conversationRouter.get('/existingRoomOfBothParticipants', existingRoomOfBothParticipants);
 
 export default conversationRouter;

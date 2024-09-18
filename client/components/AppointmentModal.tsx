@@ -104,22 +104,34 @@ const AppointmentModal = ({ doctorId, onClose, doctorAvailability }) => {
   
   
 
-  const handleBookAppointment = async(id) => {
+  const handleBookAppointment = async (id) => {
     const patientId = user._id;
+    console.log(patientId);
+    console.log(doctorId);
     try {
-      const newConversationRes = await axios.post(`${API_BASE_URL}/conversations/create`, {
-        participants: [doctorId, patientId], appointmentId:id
-      });
-      const newConversationData = newConversationRes.data;
-      router.push(`/conversations/${newConversationData._id}`);
+      const checkExistingRoom = await axios.get(`${API_BASE_URL}/conversations/doctor/${doctorId}/patient/${patientId}`);
+      
+      console.log(checkExistingRoom.data);
+      
+      if (!checkExistingRoom.data.message) {
+        router.push(`/doctordashboard/chats/conversations/${checkExistingRoom.data._id}`);
+      } else {
+        const newConversationRes = await axios.post(`${API_BASE_URL}/conversations/create`, {
+          participants: [doctorId, patientId], 
+          appointmentId: id
+        });
+        const newConversationData = newConversationRes.data;
+        router.push(`/doctordashboard/chats/conversations/${newConversationData._id}`);
+      }
     } catch (error) {
       console.error('Error creating conversation:', error);
     }
   };
+  
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-      <div className="bg-black-default p-6 rounded-lg shadow-lg w-80 text-black">
+    <div className="fixed inset-0 flex items-center justify-center bg-opacity-50">
+      <div className="bg-white p-6 rounded-lg shadow-lg w-80 text-black-default">
         <h2 className="text-lg font-bold">Book Appointment</h2>
         <form onSubmit={handleSubmit}>
           <label className="block mt-4">
@@ -159,7 +171,7 @@ const AppointmentModal = ({ doctorId, onClose, doctorAvailability }) => {
           <button
             type="button"
             onClick={onClose}
-            className="mt-2 px-4 py-2 bg-gray-500 text-white rounded-md"
+            className="mt-2 px-4 py-2 bg-gray-500 text-white rounded-md ml-2"
           >
             Cancel
           </button>

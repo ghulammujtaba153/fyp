@@ -237,7 +237,7 @@ const Conversation = ({ id }) => {
           ))}
         </div>
         <div className="flex items-center gap-4">
-          {conversation?.appointmentId.doctorId === user._id ? (
+          {conversation?.appointmentId?.doctorId === user._id ? (
             <div className="p-3 cursor-pointer bg-red-500 rounded-md" onClick={()=>setPrescription(!prescription)}><ShieldPlus /></div>
           ):(
             <div className="p-3 cursor-pointer bg-red-500 rounded-md" onClick={()=>setIsReviewModalOpen(true)}><Star /></div>

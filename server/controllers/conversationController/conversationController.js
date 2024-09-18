@@ -97,3 +97,33 @@ export const sendMessage = async (req, res) => {
     res.status(500).json({ message: 'Internal server error' });
   }
 };
+
+
+export const existingRoomOfBothParticipants = async (req, res) => {
+  let { participantIdArray } = req.query;
+
+  console.log(participantIdArray);
+
+  try {
+    // Ensure the array exists and contains valid MongoDB
+    if (!Array.isArray(participantIdArray) || participantIdArray.some(id => !mongoose.Types.ObjectId.isValid(id))) {
+      return res.status(400).json({ message: 'Invalid participant IDs' });
+    }
+
+    const conversation = await Conversation.find({
+      participants: {
+        $all: participantIdArray,
+        $size: participantIdArray.length
+      }
+    }).populate('participants');
+
+    if (!conversation.length) {
+      return res.status(404).json({ message: 'No conversation found' });
+    }
+    res.status(200).json(conversation);
+  } catch (error) {
+    console.error('Error retrieving conversations:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+};
+
