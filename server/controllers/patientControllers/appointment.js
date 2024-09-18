@@ -70,18 +70,20 @@ export const updateAppointmentStatus = async (req, res) => {
 
 
 
-export const getUpcomingAppointments = async (req, res) => {
+  export const getUpcomingAppointments = async (req, res) => {
     const { patientId } = req.params;
   
     try {
-      const now = new Date();
+      const currentDate = new Date().toISOString();
+      console.log(currentDate);
   
       const appointments = await Appointment.find({
         patientId,
-        timing: { $gte: now },
-      }).populate('doctorId');
+        timing: { $gt: currentDate },
+      }).populate('doctorId').sort({ timing: 1 });
+      console.log(appointments);
   
-      if (!appointments.length) {
+      if (appointments.length === 0) {
         return res.status(404).json({ message: 'No upcoming appointments found' });
       }
   
@@ -91,20 +93,23 @@ export const getUpcomingAppointments = async (req, res) => {
       res.status(500).json({ message: 'Internal server error' });
     }
   };
+  
 
 
   export const getDoctorUpcomingAppointments = async (req, res) => {
     const { doctorId } = req.params;
   
     try {
-      const now = new Date();
+      const currentDate = new Date().toISOString();
+      console.log(currentDate);
   
       const appointments = await Appointment.find({
-        doctorId,
-        timing: { $gte: now },
-      }).populate('patientId');
+        doctorId: doctorId,
+        timing: { $gt: currentDate },
+      }).populate('patientId').sort({ timing: 1 });
+      console.log(appointments);
   
-      if (!appointments.length) {
+      if (appointments.length === 0) {
         return res.status(404).json({ message: 'No upcoming appointments found' });
       }
   

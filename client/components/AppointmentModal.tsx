@@ -30,15 +30,6 @@ const AppointmentModal = ({ doctorId, onClose, doctorAvailability }) => {
     // });
   }, []);  
 
-  // useEffect(() => {
-  //   if (!user){
-  //       return;
-  //   }
-  //   socket.current.emit("addUser", user._id);
-  //   socket.current.on("getUsers", (users) => {
-  //       console.log(users)
-  //   });
-  // },[user]);
 
   useEffect(() => {
     if (doctorAvailability) {

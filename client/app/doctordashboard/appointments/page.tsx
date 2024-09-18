@@ -23,7 +23,14 @@ function Assignments() {
       try {
         const userRes = await axios.get(`${API_BASE_URL}/doctors/${user._id}`);
         const res = await axios.get(`${API_BASE_URL}/appointments/all/doctor/${userRes.data._id}`);
-        setAppointments(res.data);
+        
+        // Convert custom date format and sort appointments
+        const appointmentsWithParsedDates = res.data.map((appointment) => ({
+          ...appointment,
+          parsedTiming: parseCustomDateFormat(appointment.timing),
+        })).sort((a, b) => a.parsedTiming - b.parsedTiming);
+
+        setAppointments(appointmentsWithParsedDates);
       } catch (error) {
         console.error('Error fetching upcoming appointments:', error);
       } finally {
@@ -37,9 +44,9 @@ function Assignments() {
   useEffect(() => {
     const filtered = appointments.filter(appointment => {
       const fullName = `${appointment.patientId.firstName} ${appointment.patientId.lastName}`.toLowerCase();
-      const appointmentDate = new Date(appointment.createdAt).setHours(0, 0, 0, 0); // Set time to 00:00:00 for accurate date comparison
+      const appointmentDate = new Date(appointment.parsedTiming).setHours(0, 0, 0, 0); // Set time to 00:00:00 for accurate date comparison
       const selectedDate = searchDate ? new Date(searchDate).setHours(0, 0, 0, 0) : null; // Set time to 00:00:00 for accurate date comparison
-      
+
       const nameMatch = fullName.includes(searchQuery.toLowerCase());
       const dateMatch = searchDate ? appointmentDate >= selectedDate : true; // Include appointments on or after the selected date
 
@@ -55,6 +62,23 @@ function Assignments() {
 
   const handleDateChange = (e) => {
     setSearchDate(e.target.value); // Update search date
+  };
+
+  // Function to parse the custom date format
+  const parseCustomDateFormat = (dateString) => {
+    const [datePart, timePart] = dateString.split('T');
+    const [year, month, day] = datePart.split('-');
+    let [hour, minute] = timePart.split(' ')[0].split(':');
+    const period = timePart.split(' ')[1];
+    
+    // Convert hour to 24-hour format
+    if (period === 'PM' && hour !== '12') {
+      hour = parseInt(hour, 10) + 12;
+    } else if (period === 'AM' && hour === '12') {
+      hour = 0;
+    }
+
+    return new Date(`${year}-${month}-${day}T${hour}:${minute}:00`);
   };
 
   if (loading) {
