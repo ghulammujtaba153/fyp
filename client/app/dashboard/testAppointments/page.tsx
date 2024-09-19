@@ -57,7 +57,7 @@ const TestAppointmentPage: React.FC = () => {
     
 
     return (
-        <div className="p-6 h-screen">
+        <div className="pl-[100px] h-screen">
             <h1 className="text-3xl font-bold mb-6 text-white">Test Appointments</h1>
             {
                 loading? 
@@ -68,8 +68,8 @@ const TestAppointmentPage: React.FC = () => {
                 (
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                     {appointments.map(appointment => (
-                        <div onClick={()=>handleClick(appointment._id)} key={appointment._id} className="flex items-center p-4 bg-white shadow-md rounded-lg hover:shadow-lg hover:bg-gray-200 cursor-pointer">
-                            <img src={appointment.testId.picture} alt={appointment.testId.testName} className="w-24 h-24 object-cover rounded-lg mr-4" />
+                        <div onClick={()=>handleClick(appointment._id)} key={appointment._id} className="flex flex-col p-4 bg-white shadow-md rounded-lg hover:shadow-lg hover:bg-gray-200 cursor-pointer">
+                            <img src={appointment.testId.picture} alt={appointment.testId.testName} className="w-full h-24 object-cover rounded-lg mb-4" />
                             <div>
                                 <h2 className="text-xl font-semibold">{appointment.testId.testName}</h2>
                                 <p className="text-gray-600">Date: {new Date(appointment.appointmentDate).toLocaleDateString()}</p>

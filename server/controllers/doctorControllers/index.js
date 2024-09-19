@@ -4,7 +4,7 @@ import bcrypt from 'bcrypt';
 
 
 export const registerDoctor = async (req, res) => {
-  const { firstName, lastName, email, password, role, dateOfBirth, contactNumber, postalAddress, permanentAddress, profile, specialization, doctor_qualification, availability } = req.body;
+  const { firstName, lastName, email, password, role, dateOfBirth, contactNumber, postalAddress, permanentAddress, profile, specialization, doctor_qualification, experience, fee, availability } = req.body;
   console.log(req.body);
 
   try {
@@ -20,6 +20,8 @@ export const registerDoctor = async (req, res) => {
       userId: newUser._id,
       specialization,
       doctor_qualification,
+      experience,
+      fee,
       availability
     });
 
@@ -74,8 +76,11 @@ export const getDoctorInfo = async (req, res) => {
       permanentAddress,
       profile,
       
+      
       specialization,
       doctor_qualification,
+      experience,
+      fee,
       availability
     } = req.body;
   
@@ -112,6 +117,8 @@ export const getDoctorInfo = async (req, res) => {
 
       doctor.specialization = specialization;
       doctor.doctor_qualification = doctor_qualification;
+      doctor.experience= experience,
+      doctor.fee= fee,
       doctor.availability = availability;
       await doctor.save();
   

@@ -7,6 +7,7 @@ import API_BASE_URL from "@/utils/apiConfig";
 import axios from "axios";
 import { UserContext } from "@/context/UserContext";
 import moment from "moment";
+import { Pencil } from "lucide-react";
 
 export function PatientAppointmentCard({ cardData }) {
   const { user } = useContext(UserContext);
@@ -29,39 +30,46 @@ export function PatientAppointmentCard({ cardData }) {
   }
 
   return (
-    <div onClick={handleCardClick}>
-      <CardContainer className="inter-var w-[90%]">
-        <CardBody className="relative group/card dark:hover:shadow-2xl dark:hover:shadow-emerald-500/[0.1] text-white dark:bg-black dark:border-white/[0.2] border-black/[0.1] h-auto rounded-xl gap-3 p-6 border cursor-pointer">
-          
-          <div className='flex items-center justify-between gap-4 mb-4'>
-            <div className='flex items-center gap-3'>
-              <div className="w-15 h-15">
-                <img
-                  src={cardData.doctorId.profile}
-                  height={60}
-                  width={60}
-                  className="object-cover rounded-full group-hover/card:shadow-xl"
-                  alt="Profile"
-                />
-              </div>
-              <CardItem 
-                translateZ="50"
-                className="text-xl font-bold text-neutral-600 dark:text-white"
-              >
-                {cardData.doctorId.firstName + " " + cardData.doctorId.lastName}
-              </CardItem>
-            </div>
-            <div className="font-bold">
-              Status: <span className="text-white-200">{cardData.status}</span>
-            </div>
+    <CardContainer className="inter-var w-[90%]">
+      <CardBody className="flex flex-col justify-center relative group/card hover:shadow-2xl hover:shadow-emerald-500/[0.1] text-white dark:bg-black dark:border-white/[0.2] border-black/[0.1] h-auto rounded-xl gap-3 pt-6 pb-6 pr-6 pl-6 border">
+        <button className="absolute top-4 right-4 hover:text-gray-200 cursor-pointer p-1 ">
+          <Pencil />
+        </button>
+        
+        
+        <div className="flex items-center gap-4">
+          <div className="w-[60px] h-[60px]">
+            <img
+              src={cardData?.doctorId?.profile}
+              height={60}
+              width={60}
+              className="object-cover rounded-full group-hover/card:shadow-xl"
+              alt="Doctor Profile"
+            />
           </div>
-          
-          <div className='flex items-center'>
-            <p className="font-bold">Timing: </p>
-            <p className="text-white-200"> {formattedTiming || "Invalid Date"}</p>
-          </div>    
-        </CardBody>
-      </CardContainer>
-    </div>
+          <CardItem 
+            translateZ="50"
+            className="text-xl font-bold text-neutral-600 dark:text-white"
+          >
+            {cardData?.doctorId?.firstName} {cardData?.doctorId?.lastName}
+          </CardItem>
+        </div>
+
+        <div className="mt-4">
+          <p className="font-bold text-neutral-600 text-white">
+            Appointment Timing: <span className=" text-gray-300">{formattedTiming || "Invalid Date"}</span>
+          </p>
+        </div>
+
+        <div className="flex justify-center mt-6">
+          <button 
+            onClick={handleCardClick} 
+            className="p-2 bg-white text-sm text-black-default rounded-md"
+          >
+            View Prescription
+          </button>
+        </div>
+      </CardBody>
+    </CardContainer>
   );
 }

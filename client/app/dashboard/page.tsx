@@ -1,23 +1,25 @@
 "use client";
 
-import React from 'react';
+import React, {useContext} from 'react';
 import UpcomingAppointment from '@/components/dashboard/UpcomingAppointment';
-
 import "../globals.css"
 import Card from '@/components/dashboard/Card';
 import Medicine from '@/components/dashboard/Medicine';
 
 const Dashboard = () => {
+  // const {user}=useContext(UserContext);
+
   const cardData = [
-    { title: 'Appointments', num: 12 },
-    { title: 'Patients', num: 34 },
-    { title: 'Earnings', num: 56 },
-    { title: 'Messages', num: 78 },
-    { title: 'Notifications', num: 90 }
+    { title: 'Total Appointments', num: 10 },
+    { title: 'UpComming Appointments', num: 2 },
+    { title: 'Test Appointments', num: 5 },
+    { title: 'UpComming Test Appointments', num: 1 },
+    
   ];
 
   return (
-    < div className='h-screen flex flex-col jutify-center items-center gap-5 pl-[100px]'>
+    < div className='h-screen flex flex-col jutify-center items-center gap-5 pl-[100px] m-5'>
+      <p className="text-white">Welcome! Patient </p>
       <div className='flex justify-between  items-center gap-4 flex-wrap'>
         {cardData.map((data, index) => (
           <Card key={index} data={data} />

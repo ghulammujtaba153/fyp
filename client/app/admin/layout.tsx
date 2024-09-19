@@ -2,7 +2,7 @@
 
 import Sidebar from '@/components/dashboard/Sidebar';
 import { SidebarItem } from '@/components/dashboard/SidebarItem';
-import { BellIcon, Home, LogOut, MessageCircleMore, MessagesSquare, Settings, Star, TestTubeDiagonal } from 'lucide-react';
+import { BellIcon, Home, LogOut, LucideLogOut, MessageCircleMore, MessagesSquare, Settings, Star, TestTubeDiagonal } from 'lucide-react';
 import React, { useEffect, useState, useContext } from 'react';
 import { HiUser } from 'react-icons/hi';
 import { useRouter } from 'next/navigation';
@@ -106,6 +106,14 @@ const layout = ({ children }) => {
             href="/admin/feedback"
             active={activeItem === 'Feedback'}
             onClick={() => handleItemClick('Feedback')}
+          />
+
+        <SidebarItem
+            icon={<LucideLogOut />}
+            text="Logout"
+            href="/"
+            active={activeItem === 'Logout'}
+            onClick={() => handleLogout()}
           />
           
           

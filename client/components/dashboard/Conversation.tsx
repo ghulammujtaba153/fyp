@@ -96,6 +96,7 @@ const Conversation = ({ id }) => {
       try {
         const res = await axios.get(`${API_BASE_URL}/videoCalls/user/${user._id}/active`);
         setVideoCalls(res.data);
+        console.log(res.data)
       } catch (error) {
         console.error('Error fetching video calls:', error);
       }
@@ -138,9 +139,11 @@ const Conversation = ({ id }) => {
     scrollToBottom(); // Scroll down when conversation or messages update
   }, [messages]);
 
-  const handleJoin = async () => {
+  const handleVideoStart = async () => {
     setIsLoading(true);
     setError('');
+
+    console.log("videoCall",user);
 
     if (!user) {
       setError('User is not logged in');
@@ -151,12 +154,13 @@ const Conversation = ({ id }) => {
     try {
       if (participant) {
         const roomId = uuid();
+        console.log("uuid", roomId);
         setParticipants([user._id, participant]);
         console.log(participant);
-        const room = await axios.put(`${API_BASE_URL}/videoCalls/${roomId}/status`, {
-          status: 'completed',
-        });
-        console.log(room);
+        // const room = await axios.put(`${API_BASE_URL}/videoCalls/${roomId}/status`, {
+        //   status: 'completed',
+        // });
+        // console.log(room);
         router.push(`/room/${roomId}`);
       } else {
         setError('Participant not found');
@@ -167,6 +171,8 @@ const Conversation = ({ id }) => {
       setIsLoading(false);
     }
   };
+
+  
 
   const handleSendMessage = async () => {
     if (newMessage.trim()) {
@@ -212,11 +218,11 @@ const Conversation = ({ id }) => {
   if (!user) return <p>Loading user information...</p>;
 
   return (
-    <div className=" relative flex flex-col max-w-[1000px] h-screen bg-red-100 mx-auto rounded-lg over-flow-hidden">
+    <div className=" relative flex flex-col max-w-[1000px] h-screen bg-[#1F1E30] text-white mx-auto rounded-lg over-flow-hidden">
       {isLoading && <Loader />}
       {error && <ErrorMessage message={error} onClose={() => setError('')} />}
 
-      <div className="flex items-center justify-between p-4 bg-red-300">
+      <div className="flex items-center justify-between p-4 bg-[#1F1E30] shadow-lg">
         <div className="flex items-center">
           {conversation?.participants?.map((participant, index) => (
             user._id !== participant._id && (
@@ -250,7 +256,7 @@ const Conversation = ({ id }) => {
           )}
 
           
-          <div onClick={handleJoin} className="p-3 cursor-pointer bg-red-500 rounded-md">
+          <div onClick={handleVideoStart} className="p-3 cursor-pointer bg-red-500 rounded-md">
             <Video />
           </div>
         </div>
@@ -269,7 +275,7 @@ const Conversation = ({ id }) => {
           placeholder="write your message..."
           value={newMessage}
           onChange={(e) => setNewMessage(e.target.value)}
-          className="w-full h-full p-2 text-md border outline-none border-gray-300 rounded-md"
+          className="w-full h-full p-2 text-md border outline-none border-gray-300 text-black-default"
         />
         <div className="p-6 bg-green-300 cursor-pointer" onClick={handleSendMessage}>
           <Send />

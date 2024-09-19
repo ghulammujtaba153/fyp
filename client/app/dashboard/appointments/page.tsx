@@ -77,7 +77,8 @@ function Assignments() {
 
   return (
     <>
-      <div className="grid grid-cols-2 gap-4 w-full h-screen">
+      <h1 className="text-white pl-[80px] text-xl font-bold">Doctor Appointments</h1>
+      <div className="grid md:grid-cols-2 grid-cols-1 gap-4 w-full h-screen pl-[80px]">
         {currentAppointments.map((appointment) => (
           <PatientAppointmentCard 
             key={appointment._id} 
@@ -86,7 +87,7 @@ function Assignments() {
           />
         ))}
       </div>
-      <div className="flex items-center justify-center gap-4 ">
+      <div className="flex items-center justify-center gap-4 mb-6">
         <button
           onClick={handlePreviousPage}
           disabled={currentPage === 1}
@@ -99,7 +100,7 @@ function Assignments() {
           </svg>
           Previous
         </button>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 ">
           {Array.from({ length: totalPages }, (_, index) => (
             <button
               key={index + 1}

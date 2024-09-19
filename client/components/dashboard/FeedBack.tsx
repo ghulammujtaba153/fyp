@@ -40,10 +40,9 @@ const FeedBack: React.FC = () => {
 
   return (
     <div className="min-w-[300px] mx-auto p-6 bg-white shadow-md rounded-lg">
-      <h1 className="text-2xl font-bold mb-6 text-gray-800">Feedback</h1>
 
-      <div className="mb-4">
-        <p className="font-medium text-gray-700 mb-2">Ratings</p>
+      <div className="mb-4 flex items-center gap-4">
+        <p className="font-medium text-gray-700 mb-2">Give Stars</p>
         <Rating
           name="appointment-rating"
           value={rating}
@@ -55,7 +54,7 @@ const FeedBack: React.FC = () => {
         />
       </div>
 
-      <div className="mb-4">
+      <div className="mb-4 flex items-center gap-4">
         <label htmlFor="liked" className="font-medium text-gray-700">
           What you liked
         </label>
@@ -69,7 +68,7 @@ const FeedBack: React.FC = () => {
         />
       </div>
 
-      <div className="mb-4">
+      <div className="mb-4 flex items-center gap-4">
         <label htmlFor="disliked" className="font-medium text-gray-700">
           What you disliked
         </label>
@@ -83,7 +82,7 @@ const FeedBack: React.FC = () => {
         />
       </div>
 
-      <div className="mb-4">
+      <div className="mb-4 flex items-center gap-4">
         <label htmlFor="suggestion" className="font-medium text-gray-700">
           Any suggestion?
         </label>

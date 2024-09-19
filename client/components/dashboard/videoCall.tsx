@@ -18,10 +18,13 @@ const VideoCall = ({ videoCalls }) => {
     }
   }, [videoCalls]);
 
+  console.log("active calll", activeCall)
+
   const handleJoinCall = async (activeCall: any) => {
     try {
       // Update the call status to 'completed'
-      await axios.put(`${API_BASE_URL}/videoCalls/${activeCall._id}/status`, { status: 'completed' });
+      const res =await axios.put(`${API_BASE_URL}/videoCalls/${activeCall._id}/status`, { status: 'completed' });
+      console.log("res update", res.data); 
       // Navigate to the room
       router.push(`/room/${activeCall.link}`);
     } catch (error) {
@@ -33,7 +36,7 @@ const VideoCall = ({ videoCalls }) => {
     <div>
       {(activeCall && user._id !== startedBy) && (
         <div
-          className='absolute top-4 right-4 flex flex-col items-center p-5 w-[300px] bg-white rounded-lg shadow-md'
+          className='absolute top-4 right-4 flex flex-col items-center p-5 w-[300px] bg-white text-black-default rounded-lg shadow-md'
         >
           <p className='text-center'>Video call has been started</p>
           <div

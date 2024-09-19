@@ -111,7 +111,7 @@ const DashNavBar = () => {
   };
 
   return (
-    <div className="text-white w-full flex gap-5 items-center justify-end p-4">
+    <div className="text-white w-full flex gap-5 bg-[#1F1E30] w-full items-center justify-end p-4 rounded-md">
       <div className="relative">
         <Box
           sx={{ color: 'white' }}

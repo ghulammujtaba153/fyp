@@ -55,6 +55,8 @@ export const getActiveVideoCallsForUser = async (req, res) => {
       status: 'active',
     }).populate('startedBy participants');
 
+    console.log(activeVideoCalls)
+
     res.status(200).json(activeVideoCalls);
   } catch (error) {
     res.status(500).json({ message: 'Error fetching active video calls', error });

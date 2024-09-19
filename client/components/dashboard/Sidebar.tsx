@@ -10,7 +10,7 @@ export default function Sidebar({ children }) {
 
   return (
     <aside className="h-screen fixed z-10">
-      <nav className="h-full flex flex-col bg-[#1F1E30] border-r shadow-sm">
+      <nav className="h-full flex flex-col bg-[#1F1E30] shadow-lg">
         <div className="p-4 pb-2 flex justify-between items-center">
           <img
             src="Laboratory.png"

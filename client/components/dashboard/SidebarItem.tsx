@@ -9,8 +9,8 @@ export const SidebarItem = ({ icon, text, href, active, onClick }) => {
   return (
     <li
       className={`
-        relative flex items-center py-2 px-3 my-1
-        font-medium rounded-full cursor-pointer
+        relative flex justify-center items-center py-2 px-3 my-1
+        font-small rounded-full cursor-pointer
         transition-colors group
         ${
           active

@@ -90,7 +90,7 @@ function Assignments() {
   }
 
   return (
-    <div className="flex flex-col gap-4 h-screen w-full pl-[70px] pr-[30px]">
+    <div className="flex flex-col gap-4 h-screen w-full pl-[80px] pr-[30px]">
       <div className="flex items-center justify-between">
         <input 
           type="text" 

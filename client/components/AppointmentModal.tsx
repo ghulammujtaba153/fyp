@@ -6,6 +6,7 @@ import API_BASE_URL from '@/utils/apiConfig';
 import { UserContext } from '@/context/UserContext';
 import { useRouter } from 'next/navigation';
 import { io } from 'socket.io-client';
+import {X} from 'lucide-react'
 
 const AppointmentModal = ({ doctorId, onClose, doctorAvailability }) => {
   const [appointmentDate, setAppointmentDate] = useState('');
@@ -14,6 +15,7 @@ const AppointmentModal = ({ doctorId, onClose, doctorAvailability }) => {
   const [status, setStatus] = useState('new');
   const { user } = useContext(UserContext);
   const router = useRouter();
+  console.log("doctorId",doctorId);
 
   const socket = useRef();
 
@@ -97,32 +99,43 @@ const AppointmentModal = ({ doctorId, onClose, doctorAvailability }) => {
 
   const handleBookAppointment = async (id) => {
     const patientId = user._id;
-    console.log(patientId);
-    console.log(doctorId);
+    console.log("BookAppointment patient:", patientId);
+    console.log("BookAppointment doctor:", doctorId);
+  
     try {
+      // Check if a conversation already exists between the doctor and patient
       const checkExistingRoom = await axios.get(`${API_BASE_URL}/conversations/doctor/${doctorId}/patient/${patientId}`);
-      
-      console.log(checkExistingRoom.data);
-      
-      if (!checkExistingRoom.data.message) {
+      console.log("checkExistingRoom", checkExistingRoom.data);
+  
+      // If a conversation exists, navigate to the chat page
+      if (checkExistingRoom.data && !checkExistingRoom.data) {
         router.push(`/doctordashboard/chats/conversations/${checkExistingRoom.data._id}`);
-      } else {
+      } 
+      // If no existing conversation, create a new one
+      else {
         const newConversationRes = await axios.post(`${API_BASE_URL}/conversations/create`, {
-          participants: [doctorId, patientId], 
+          participants: [doctorId, patientId],
           appointmentId: id
         });
         const newConversationData = newConversationRes.data;
         router.push(`/doctordashboard/chats/conversations/${newConversationData._id}`);
       }
     } catch (error) {
-      console.error('Error creating conversation:', error);
+      console.error('Error handling booking appointment:', error);
     }
   };
   
+  
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-opacity-50">
-      <div className="bg-white p-6 rounded-lg shadow-lg w-80 text-black-default">
+    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 bg-[#1F1E30]">
+  <div className="relative bg-white p-6 rounded-lg shadow-lg w-80 text-black-default">
+      <button
+      onClick={onClose}
+      className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
+    >
+      <X />
+    </button>
         <h2 className="text-lg font-bold">Book Appointment</h2>
         <form onSubmit={handleSubmit}>
           <label className="block mt-4">
@@ -159,13 +172,7 @@ const AppointmentModal = ({ doctorId, onClose, doctorAvailability }) => {
           >
             Book
           </button>
-          <button
-            type="button"
-            onClick={onClose}
-            className="mt-2 px-4 py-2 bg-gray-500 text-white rounded-md ml-2"
-          >
-            Cancel
-          </button>
+          
         </form>
       </div>
     </div>

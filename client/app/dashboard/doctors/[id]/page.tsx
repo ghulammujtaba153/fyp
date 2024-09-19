@@ -7,15 +7,14 @@ import API_BASE_URL from '@/utils/apiConfig';
 import AppointmentModal from '@/components/AppointmentModal';
 import { UserContext } from '@/context/UserContext';
 import StarRating from '@/components/dashboard/StarRatings';
-import { Rating } from '@mui/material';
 
-const DoctorDetail = () => {
+const DoctorDetail = ({ params: { id } }) => {
   const [doctor, setDoctor] = useState(null);
   const [reviews, setReviews] = useState([]);
   const [totalRating, setTotalRating] = useState(4);
-  const [showModal, setShowModal] = useState(false); // State to control modal visibility
+  const [showModal, setShowModal] = useState(false);
   const pathname = usePathname();
-  const userId = pathname?.split("=").pop();
+  const userId = id;
   const { user } = useContext(UserContext);
 
   useEffect(() => {
@@ -23,24 +22,21 @@ const DoctorDetail = () => {
       const fetchDoctor = async () => {
         try {
           const res = await axios.get(`${API_BASE_URL}/doctors/${userId}`);
-          console.log(res.data);
           setDoctor(res.data);
         } catch (error) {
           console.error('Error fetching doctor:', error);
         }
       };
-
       fetchDoctor();
     }
   }, [userId]);
 
-  useEffect(() => { 
+  useEffect(() => {
     if (userId) {
-      const fetchDoctor = async () => {
+      const fetchReviews = async () => {
         try {
           const res = await axios.get(`${API_BASE_URL}/ratings/doctor/${userId}`);
-          console.log(res.data);
-          const reviewsData=res.data;
+          const reviewsData = res.data;
           const sum = reviewsData.reduce((acc, review) => acc + review.rating, 0);
           const averageRating = sum / reviewsData.length;
           setTotalRating(averageRating);
@@ -49,10 +45,9 @@ const DoctorDetail = () => {
           console.error('Error fetching doctor ratings:', error);
         }
       };
-
-      fetchDoctor();
+      fetchReviews();
     }
-  },[userId]);
+  }, [userId]);
 
   const formatTime = (time24) => {
     const [hour, minute] = time24.split(':');
@@ -64,83 +59,94 @@ const DoctorDetail = () => {
 
   if (!doctor) {
     return (
-      <div className="flex justify-between items-center h-screen">
+      <div className="flex justify-center items-center h-screen">
         <div className="w-16 h-16 border-4 border-dashed rounded-full animate-spin border-blue-500"></div>
       </div>
     );
   }
 
   return (
-    <>
-      <div className="text-white w-full flex items-center flex-col">
-        <div className="flex justify-between p-2 gap-5 md:flex-row flex-col ">
-          <div className="mr-[50px]">
-            <p className='flex-1 text-4xl font-bold'>{doctor.userId.firstName} {doctor.userId.lastName}</p>
-            <StarRating num={totalRating} />
-            <p className="mt-4">Contact:</p>
-            <p className="text-gray-300 text-sm">{doctor.userId.email}</p>
-            <p className="text-gray-300 text-sm">{doctor.userId.contactNumber}</p>
-            <p className="mt-2">Specialization</p>
-            <p className="text-gray-300 text-sm">{doctor.specialization}</p>
-            <p className="mt-2">Qualifications</p>
-            {doctor.doctor_qualification.map((qualification, index) => (
-              <p key={index} className="text-gray-300 text-sm">
-                {qualification.qualificationName} ({qualification.startYear} - {qualification.endYear})
+    <div className="text-white w-full flex items-center flex-col">
+      <div className="flex flex-col gap-6 max-w-5xl mx-auto w-full bg-white p-8 rounded-lg shadow-md">
+        <div className="flex justify-between gap-8 md:flex-row flex-col items-center md:items-start">
+          {/* Doctor Information Section */}
+          <div className="flex flex-col items-start gap-6">
+            <div className="flex items-center gap-4">
+              <img src={doctor.userId.profile} alt="Doctor Profile" className="h-24 w-24 rounded-full object-cover border border-gray-300" />
+              <div>
+                <p className="text-2xl font-semibold text-gray-900">{doctor.userId.firstName} {doctor.userId.lastName}</p>
+                {totalRating ? (
+                  <StarRating num={totalRating} />
+                ) : (
+                  <p className="text-gray-500 text-sm">New Doctor</p>
+                )}
+              </div>
+            </div>
+            <div>
+              <p className="text-lg font-semibold text-gray-700">Contact:</p>
+              <p className="text-gray-600">{doctor.userId.email}</p>
+              <p className="text-gray-600">{doctor.userId.contactNumber}</p>
+            </div>
+            <div>
+              <p className="text-lg font-semibold text-gray-700">Specialization:</p>
+              <p className="text-gray-600">{doctor.specialization}</p>
+            </div>
+            <div>
+              <p className="text-lg font-semibold text-gray-700">Qualifications:</p>
+              {doctor.doctor_qualification.map((qualification, index) => (
+                <p key={index} className="text-gray-600">
+                  {qualification.qualificationName} ({qualification.startYear} - {qualification.endYear})
+                </p>
+              ))}
+            </div>
+            <div>
+              <p className="text-lg font-semibold text-gray-700">Availability:</p>
+              <p className="text-gray-600">
+                {formatTime(doctor.availability.startTime)} - {formatTime(doctor.availability.endTime)}
               </p>
-            ))}
-            <p className="mt-2">Availability</p>
-            <p className="text-gray-300 text-sm">
-              {formatTime(doctor.availability.startTime)} - {formatTime(doctor.availability.endTime)}
-            </p>
-            <div className="flex justify-center">
-              <button
-                onClick={() => setShowModal(true)}
-                className="px-4 py-2 mt-4 bg-blue-500 rounded text-white"
-              >
-                Book Appointment
-              </button>
             </div>
           </div>
-          
-          <img src={doctor.userId.profile} alt="Doctor Profile" className='md:h-[500px] md:w-[500px] rounded-lg h-[150px] w-full md:object-cover object-contain' />
-          
+
+          {/* Book Appointment Section */}
+          <div className="flex flex-col items-center justify-center bg-blue-100 p-6 rounded-lg shadow-lg">
+            <p className="text-lg font-bold text-gray-800 mb-4">Consultation Fee: $100</p>
+            <button
+              onClick={() => setShowModal(true)}
+              className="px-6 py-3 bg-blue-500 text-white rounded-lg shadow-lg hover:bg-blue-600 transition-all"
+            >
+              Book Appointment
+            </button>
+          </div>
         </div>
-        
-        <div className="flex flex-col gap-4 pl-[100px] mt-[40px] w-full">
-          <p className="text-lg font-semibold">Reviews</p>
-          {reviews && 
-            reviews.map((review, index) => (
-              <div 
-                key={index} 
-                className="flex flex-col gap-2 p-4 border border-gray-300 rounded-lg shadow-md bg-white w-full"
-              >
-                <div className="flex gap-4 items-center">
-                  <img 
-                    src={review.patientId.profile} 
-                    alt="Profile" 
-                    className="w-[40px] h-[40px] rounded-full border border-gray-300" 
-                  />
-                  <StarRating num={review.rating} />
-                </div>
-                <p className="ml-[50px] mt-2 text-gray-700">{review.comment}</p>
+      </div>
+
+      {/* Reviews Section */}
+      <div className="flex flex-col gap-6 mt-8 w-full max-w-4xl bg-white p-8 rounded-lg shadow-md">
+        <p className="text-xl font-semibold text-gray-900">Reviews</p>
+        {reviews.length > 0 ? (
+          reviews.map((review, index) => (
+            <div key={index} className="flex flex-col gap-4 p-4 border border-gray-300 rounded-lg shadow-md bg-gray-50">
+              <div className="flex gap-4 items-center">
+                <img src={review.patientId.profile} alt="Profile" className="w-10 h-10 rounded-full border border-gray-300" />
+                <StarRating num={review.rating} />
               </div>
-
-              
-            ))
-          }
-        </div>
-
-
-
-        {showModal && (
-          <AppointmentModal
-            doctorId={doctor.userId._id}
-            onClose={() => setShowModal(false)}
-            doctorAvailability={doctor.availability}
-          />
+              <p className="text-gray-700">{review.comment}</p>
+            </div>
+          ))
+        ) : (
+          <p className="text-gray-500">No reviews yet</p>
         )}
       </div>
-    </>
+
+      {/* Appointment Modal */}
+      {showModal && (
+        <AppointmentModal
+          doctorId={userId}
+          onClose={() => setShowModal(false)}
+          doctorAvailability={doctor.availability}
+        />
+      )}
+    </div>
   );
 };
 

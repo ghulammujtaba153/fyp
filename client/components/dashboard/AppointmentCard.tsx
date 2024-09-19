@@ -67,7 +67,7 @@ export function AppointmentCard({ cardData }) {
             <div className='flex items-center gap-3'>
               <div className="w-15 h-15">
                 <img
-                  src={cardData.patientId.profile}
+                  src={cardData?.patientId?.profile}
                   height={60}
                   width={60}
                   className="object-cover rounded-full group-hover/card:shadow-xl"
@@ -78,11 +78,11 @@ export function AppointmentCard({ cardData }) {
                 translateZ="50"
                 className="text-xl font-bold text-neutral-600 dark:text-white"
               >
-                {cardData.patientId.firstName + " " + cardData.patientId.lastName}
+                {cardData?.patientId?.firstName + " " + cardData?.patientId?.lastName}
               </CardItem>
             </div>
             <div className="font-bold">
-              Status: <span className="text-white-200">{cardData.status}</span>
+              Status: <span className="text-white-200">{cardData?.status}</span>
             </div>
           </div>
           
@@ -93,7 +93,7 @@ export function AppointmentCard({ cardData }) {
             </div>
             <div>
               <p className="font-bold">Timing</p>
-              <p className="text-white-200">{formatDateTime(cardData.timing)}</p>
+              <p className="text-white-200">{formatDateTime(cardData?.timing)}</p>
             </div>
           </div>    
         </CardBody>

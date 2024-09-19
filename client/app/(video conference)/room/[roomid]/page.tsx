@@ -68,6 +68,7 @@ import API_BASE_URL from '@/utils/apiConfig';
 const RoomPage = ({ params }: { params: { roomid: string } }) => {
     const { user , videoCallsPariticipants} = useContext(UserContext);
     const meetingRef = useRef<HTMLDivElement>(null);
+    console.log("room page", videoCallsPariticipants)
 
 
     useEffect(() => {

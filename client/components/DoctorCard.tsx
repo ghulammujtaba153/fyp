@@ -11,7 +11,17 @@ export function DoctorCard({cardData}) {
 
   return (
     <CardContainer className="inter-var ">
-      <CardBody className=" relative group/card dark:hover:shadow-2xl dark:hover:shadow-emerald-500/[0.1] dark:bg-black dark:border-white/[0.2] border-black/[0.1] w-auto sm:w-[20rem] h-auto rounded-xl p-6 border">
+      <CardBody className=" relative flex items-center jutify-center flex-col group/card dark:hover:shadow-2xl hover:shadow-emerald-500/[0.1] bg-black dark:border-white/[0.2] border-black/[0.1] w-auto sm:w-[20rem] h-auto rounded-xl p-6 border">
+        
+        <CardItem translateZ="100" className="w-full mt-4">
+          <img
+            src={cardData.userId.profile}
+            height={250}
+            width={250}
+            className="h-60 w-full object-cover rounded-full group-hover/card:shadow-xl"
+            alt="thumbnail"
+          />
+        </CardItem>
         <CardItem
           translateZ="50"
           className="text-xl font-bold text-neutral-600 dark:text-white"
@@ -25,31 +35,15 @@ export function DoctorCard({cardData}) {
         >
          {cardData.specialization}
         </CardItem>
-        <CardItem translateZ="100" className="w-full mt-4">
-          <img
-            src={cardData.userId.profile}
-            height={400}
-            width={400}
-            className="h-60 w-full object-cover rounded-xl group-hover/card:shadow-xl"
-            alt="thumbnail"
-          />
-        </CardItem>
         <div className='flex items-center mt-5'>
-          <p className='font-bold'>Price: <span className='text-sm text-gray-400'>{1000}</span></p>
+          <p className='font-bold'>Fee: <span className='text-sm text-gray-400'>{1000}</span></p>
         </div>
         <div className="flex justify-between items-center mt-10">
-          <Link href={`/dashboard/doctors/id=${cardData.userId._id}`} passHref>
-            <p className="px-4 py-2 rounded-xl text-xs font-normal dark:text-white">
-              Take Appointment now →
+          <Link href={`/dashboard/doctors/${cardData.userId._id}`} className="cursor-pointer p-2 bg-white rounded-md" passHref>
+            <p className="px-4 py-2 rounded-xl text-xs font-bold text-black-default">
+              View now →
             </p>
           </Link>
-          <CardItem
-            translateZ={20}
-            as="button"
-            className="px-4 py-2 rounded-xl bg-black dark:bg-white dark:text-black  text-black-default text-xs font-bold"
-          >
-            online
-          </CardItem>
         </div>
       </CardBody>
     </CardContainer>

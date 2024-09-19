@@ -17,6 +17,11 @@ const userSchema = new Schema({
         required: true,
         trim: true
     },
+    gender: {
+        type: String,
+        required: true,
+        trim: true
+    },
     email: {
         type: String,
         required: true,
@@ -30,7 +35,7 @@ const userSchema = new Schema({
     },
     role: {
         type: String,
-        enum: ['admin', 'doctor', 'patient', 'nurse'],
+        enum: ['admin', 'doctor', 'patient', 'nurse', "driver"],
         default: 'patient'
     },
     dateOfBirth: {

@@ -186,28 +186,28 @@ const Layout = ({ children }) => {
       <div className='flex'>
         <Sidebar>
           <SidebarItem
-            icon={<Home />}
+            icon={<Home size={24}/>}
             text="Dashboard"
             href="/dashboard"
             active={activeItem === 'Dashboard'}
             onClick={() => handleItemClick('Dashboard')}
           />
           <SidebarItem
-            icon={<HiUser />}
+            icon={<HiUser size={24}/>}
             text="Profile"
             href="/dashboard/profile"
             active={activeItem === 'Profile'}
             onClick={() => handleItemClick('Profile')}
           />
           <SidebarItem
-            icon={<FontAwesomeIcon icon={faUserMd} />}
+            icon={<FontAwesomeIcon icon={faUserMd} size="lg"/>}
             text="Doctors"
             href="/dashboard/doctors"
             active={activeItem === 'Doctors'}
             onClick={() => handleItemClick('Doctors')}
           />
           <SidebarItem
-            icon={<NotebookText />}
+            icon={<NotebookText size={24}/>}
             text="Appointments"
             href="/dashboard/"
             active={activeItem === 'Appointments'}
@@ -216,14 +216,14 @@ const Layout = ({ children }) => {
           {isSubMenuVisible && (
             <div className="ml-6">
               <SidebarItem
-                icon={<FontAwesomeIcon icon={faUserMd} />}
+                icon={<FontAwesomeIcon icon={faUserMd} size="lg"/>}
                 text="Doctor"
                 href="/dashboard/appointments"
                 active={pathname.includes('/appointments')}
                 onClick={() => handleSubItemClick('Doctor')}
               />
               <SidebarItem
-                icon={<TestTubeDiagonal />}
+                icon={<TestTubeDiagonal size={24}/>}
                 text="Lab"
                 href="/dashboard/testAppointments"
                 active={pathname.includes('/testAppointments')}
@@ -232,28 +232,28 @@ const Layout = ({ children }) => {
             </div>
           )}
           <SidebarItem
-            icon={<MessageCircleMore />}
+            icon={<MessageCircleMore size={24}/>}
             text="Chats"
             href="/dashboard/chats"
             active={activeItem === 'Chats'}
             onClick={() => handleItemClick('Chats')}
           />
           <SidebarItem
-            icon={<TestTubeDiagonal />}
+            icon={<TestTubeDiagonal size={24}/>}
             text="Lab Tests"
             href="/dashboard/labtests"
             active={activeItem === 'Labtests'}
             onClick={() => handleItemClick('Labtests')}
           />
           <SidebarItem
-            icon={<MessagesSquare />}
+            icon={<MessagesSquare size={24}/>}
             text="Feedback"
             href="/dashboard/feedback"
             active={activeItem === 'Feedback'}
             onClick={() => handleItemClick('Feedback')}
           />
           <SidebarItem
-            icon={<LogOut />}
+            icon={<LogOut size={24}/>}
             text="Logout"
             href="/"
             active={activeItem === 'Logout'}
@@ -261,11 +261,13 @@ const Layout = ({ children }) => {
           />
         </Sidebar>
       </div>
-      <div className='flex flex-col w-full gap-6 items-center m-5'>
+      <div className='flex flex-col w-full gap-6'>
         <div className='w-full flex flex-end'>
           <DashNavBar />
         </div>
+        <div className="w-full pr-3">
         {children}
+        </div>
       </div>
     </div>
   );

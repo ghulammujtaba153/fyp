@@ -14,6 +14,14 @@ const doctorSchema = new Schema({
     required: true
   },
   doctor_qualification: [],
+  experience: {
+    type: String,
+    required: true
+  },
+  fee: {
+    type: String,
+    required: true
+  },
   availability: {
     startTime: {
       type: String,

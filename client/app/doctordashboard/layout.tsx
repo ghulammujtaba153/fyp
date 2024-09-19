@@ -2,7 +2,7 @@
 
 import Sidebar from '@/components/dashboard/Sidebar';
 import { SidebarItem } from '@/components/dashboard/SidebarItem';
-import { BellIcon, Bot, Home, LogOut, MessageCircleMore, MessagesSquare, Settings, Star, TestTubeDiagonal } from 'lucide-react';
+import { BellIcon, Bot, Home, LogOut, MessageCircleMore, MessagesSquare,NotebookText, Settings, Star, TestTubeDiagonal } from 'lucide-react';
 import React, { useEffect, useState, useContext } from 'react';
 import { HiUser } from 'react-icons/hi';
 import { useRouter } from 'next/navigation';
@@ -57,28 +57,28 @@ const layout = ({ children }) => {
       <div className='flex'>
         <Sidebar>
           <SidebarItem
-            icon={<Home />}
+            icon={<Home size={24}/>}
             text="Dashboard"
             href="/doctordashboard"
             active={activeItem === 'Dashboard'}
             onClick={() => handleItemClick('Dashboard')}
           />
           <SidebarItem
-            icon={<HiUser />}
+            icon={<HiUser size={24}/>}
             text="Profile"
             href="/doctordashboard/profile"
             active={activeItem === 'Profile'}
             onClick={() => handleItemClick('Profile')}
           />
           <SidebarItem
-            icon={<Settings />}
+            icon={<NotebookText size={24}/>}
             text="Appointments"
             href="/doctordashboard/appointments"
             active={activeItem === 'Appointments'}
             onClick={() => handleItemClick('Appointments')}
           />
           <SidebarItem
-            icon={<MessageCircleMore />}
+            icon={<MessageCircleMore size={24}/>}
             text="Chats"
             href="/doctordashboard/chats"
             active={activeItem === 'Chats'}
@@ -86,7 +86,7 @@ const layout = ({ children }) => {
           />
 
           <SidebarItem
-            icon={<MessagesSquare />}
+            icon={<MessagesSquare size={24}/>}
             text="Feedback"
             href="/doctordashboard/feedback"
             active={activeItem === 'Feedback'}
@@ -94,7 +94,7 @@ const layout = ({ children }) => {
           />
 
           <SidebarItem
-            icon={<Bot/>}
+            icon={<Bot size={24}/>}
             text="Medicalbot"
             href="/doctordashboard/medicalbot"
             active={activeItem === 'Medicalbot'}
@@ -102,7 +102,7 @@ const layout = ({ children }) => {
           />
 
         <SidebarItem
-            icon={<LogOut />}
+            icon={<LogOut size={24}/>}
             text="Logout"
             href="/"
             active={activeItem === 'Logout'}
@@ -112,7 +112,7 @@ const layout = ({ children }) => {
         </Sidebar>
       </div>
       
-      <div className='flex flex-col  w-full gap-6 items-center m-5'>
+      <div className='flex flex-col  w-full gap-6 items-center'>
       <div className='w-full flex flex-end'>
       <DashNavBar/>
       </div>

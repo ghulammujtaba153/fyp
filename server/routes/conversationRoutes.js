@@ -11,20 +11,24 @@ conversationRouter.post('/create', createConversation);
 
 // Check if conversation exists between doctor and patient
 conversationRouter.get('/doctor/:doctorId/patient/:patientId', async (req, res) => {
-    const { doctorId, patientId } = req.params;
-    try {
-      const conversation = await Conversation.findOne({
-        participants: { $all: [doctorId, patientId] }
-      });
-      if (!conversation) {
-        return res.status(404).json({ message: 'Conversation not found' });
-      }
-      res.status(200).json(conversation);
-    } catch (error) {
-      console.error('Error checking conversation:', error);
-      res.status(500).json({ message: 'Internal server error' });
-    }
-  });
+  const { doctorId, patientId } = req.params;
+
+  try {
+    // Find conversation with both participants
+    const conversation = await Conversation.findOne({
+      participants: { $all: [doctorId, patientId] }
+    });
+
+    // If conversation is found, return it
+    return res.status(200).json(conversation);
+
+  } catch (error) {
+    // Catch any internal server error and return 500
+    console.error('Error checking conversation:', error);
+    return res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
 
 // Get all conversations for a user
 conversationRouter.get('/user/:userId', getUserConversations);
