@@ -1,120 +1,144 @@
 "use client";
 
-import Spinner from '@/components/Spinner';
-import FeedbackTable from '@/components/dashboard/admin/FeedbackTable';
-import API_BASE_URL from '@/utils/apiConfig';
-import axios from 'axios';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
+import { BarChart, Bar, PieChart, Pie, Tooltip, XAxis, YAxis, CartesianGrid, Legend } from 'recharts';
 
 const Page = () => {
-  const [data, setData] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [stats, setStats] = useState({
+    totalPatients: 800000,
+    totalDoctors: 160,
+    totalAppointments: 600000,
+    totalEarnings: 70000,
+  });
 
-  // State for search, role, and rating filter
-  const [searchName, setSearchName] = useState('');
-  const [selectedRole, setSelectedRole] = useState('');
-  const [selectedRating, setSelectedRating] = useState(''); 
+  const [topDoctors, setTopDoctors] = useState([
+    { name: 'Dr. Thomas White', department: 'Cardiology', reviews: 216 },
+    { name: 'Dr. Emilia Williamson', department: 'Surgery', reviews: 200 },
+    { name: 'Dr. Justine Hextall', department: 'Neurology', reviews: 180 },
+    { name: 'Dr. Dianne Russell', department: 'Pharmacy', reviews: 50 },
+    { name: 'Dr. Kristin Watson', department: 'Psychiatry', reviews: 25 },
+  ]);
 
+  const patientOverviewData = [
+    { month: 'Jan', Hospitalized: 2000, Recovered: 1000 },
+    { month: 'Feb', Hospitalized: 3000, Recovered: 1500 },
+    { month: 'Mar', Hospitalized: 2500, Recovered: 2000 },
+    { month: 'Apr', Hospitalized: 3200, Recovered: 2200 },
+    { month: 'May', Hospitalized: 3400, Recovered: 1800 },
+    { month: 'Jun', Hospitalized: 3900, Recovered: 2600 },
+  ];
 
-  const [filteredData, setFilteredData] = useState([]);
+  const earningsData = [
+    { day: 'Sat', Income: 5000, Expense: 3000 },
+    { day: 'Sun', Income: 4000, Expense: 2500 },
+    { day: 'Mon', Income: 4500, Expense: 2000 },
+    { day: 'Tue', Income: 4700, Expense: 2100 },
+    { day: 'Wed', Income: 4800, Expense: 2200 },
+    { day: 'Thu', Income: 5000, Expense: 3000 },
+    { day: 'Fri', Income: 5100, Expense: 3500 },
+  ];
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const res = await axios.get(`${API_BASE_URL}/feedBack`);
-        setData(res.data);
-        setFilteredData(res.data); 
-      } catch (error) {
-        console.error('Error fetching feedback:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchData();
-  }, []);
-
- 
-  const handleFilter = () => {
-    let filtered = data;
-
-    if (searchName) {
-      filtered = filtered.filter((feedback) =>
-        `${feedback.userId.firstName} ${feedback.userId.lastName}`
-          .toLowerCase()
-          .includes(searchName.toLowerCase())
-      );
-    }
-
-    if (selectedRole) {
-      filtered = filtered.filter(
-        (feedback) => feedback.userId.role === selectedRole
-      );
-    }
-
-    if (selectedRating) {
-      filtered = filtered.filter(
-        (feedback) => feedback.rating === parseInt(selectedRating)
-      );
-    }
-
-    setFilteredData(filtered);
-  };
-
-  if (loading) {
-    return <div className='flex items-center justify-center h-screen'>
-        <Spinner />
-        </div>
-  }
+  const topDepartmentsData = [
+    { name: 'Surgery', value: 400 },
+    { name: 'Cardiology', value: 300 },
+    { name: 'Neurology', value: 200 },
+    { name: 'Medicine', value: 100 },
+  ];
 
   return (
-    <div className="flex flex-col container mx-auto bg-gray-100 h-screen pl-[100px] p-2">
-      <div className="flex md:items-center  flex-col gap-2 md:flex-row md:justify-between mb-4 space-x-4">
-        {/* Search by name */}
-        <input
-          type="text"
-          placeholder="Search by name"
-          className="border border-gray-300 p-2 rounded"
-          value={searchName}
-          onChange={(e) => setSearchName(e.target.value)}
-        />
-
-        {/* Filter by role */}
-        <select
-          value={selectedRole}
-          onChange={(e) => setSelectedRole(e.target.value)}
-          className="border border-gray-300 p-2 rounded"
-        >
-          <option value="">All Roles</option>
-          <option value="doctor">Doctor</option>
-          <option value="nurse">Nurse</option>
-          <option value="patient">Patient</option>
-        </select>
-
-        {/* Filter by rating */}
-        <select
-          value={selectedRating}
-          onChange={(e) => setSelectedRating(e.target.value)}
-          className="border border-gray-300 p-2 rounded"
-        >
-          <option value="">All Ratings</option>
-          <option value="1">1 Star</option>
-          <option value="2">2 Stars</option>
-          <option value="3">3 Stars</option>
-          <option value="4">4 Stars</option>
-          <option value="5">5 Stars</option>
-        </select>
-
-        {/* Apply Filter button */}
-        <button
-          onClick={handleFilter}
-          className="bg-blue-500 text-white px-4 py-2 rounded"
-        >
-          Apply Filter
-        </button>
+    <div className="container mt-5">
+      {/* Stats Row */}
+      <div className="row text-center mb-4">
+        <div className="col-md-3">
+          <div className="card p-3 shadow">
+            <h4>Total Patients</h4>
+            <p className="h2">{stats.totalPatients.toLocaleString()}</p>
+          </div>
+        </div>
+        <div className="col-md-3">
+          <div className="card p-3 shadow">
+            <h4>Total Doctors</h4>
+            <p className="h2">{stats.totalDoctors}</p>
+          </div>
+        </div>
+        <div className="col-md-3">
+          <div className="card p-3 shadow">
+            <h4>Total Appointments</h4>
+            <p className="h2">{stats.totalAppointments.toLocaleString()}</p>
+          </div>
+        </div>
+        <div className="col-md-3">
+          <div className="card p-3 shadow">
+            <h4>Total Earnings</h4>
+            <p className="h2">${stats.totalEarnings.toLocaleString()}</p>
+          </div>
+        </div>
       </div>
 
-      {/* Feedback table */}
-      <FeedbackTable feedbackData={filteredData} />
+      {/* Charts Row */}
+      <div className="row mb-4">
+        {/* Patient Overview */}
+        <div className="col-md-6 mb-3">
+          <div className="card p-3 shadow">
+            <h4>Patient Overview</h4>
+            <BarChart width={500} height={300} data={patientOverviewData}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="month" />
+              <YAxis />
+              <Tooltip />
+              <Legend />
+              <Bar dataKey="Hospitalized" fill="#8884d8" />
+              <Bar dataKey="Recovered" fill="#82ca9d" />
+            </BarChart>
+          </div>
+        </div>
+
+        {/* Top Departments */}
+        <div className="col-md-6 mb-3">
+          <div className="card p-3 shadow">
+            <h4>Top Departments</h4>
+            <PieChart width={400} height={300}>
+              <Pie dataKey="value" isAnimationActive={false} data={topDepartmentsData} cx={200} cy={150} outerRadius={80} fill="#8884d8" label />
+              <Tooltip />
+            </PieChart>
+          </div>
+        </div>
+      </div>
+
+      {/* Earnings Row */}
+      <div className="row">
+        <div className="col-md-6 mb-3">
+          <div className="card p-3 shadow">
+            <h4>Earnings</h4>
+            <BarChart width={500} height={300} data={earningsData}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="day" />
+              <YAxis />
+              <Tooltip />
+              <Legend />
+              <Bar dataKey="Income" fill="#8884d8" />
+              <Bar dataKey="Expense" fill="#82ca9d" />
+            </BarChart>
+          </div>
+        </div>
+
+        {/* Top Doctors */}
+        <div className="col-md-6 mb-3">
+          <div className="card p-3 shadow">
+            <h4>Top Doctors</h4>
+            <ul className="list-group">
+              {topDoctors.map((doctor, index) => (
+                <li key={index} className="list-group-item d-flex justify-content-between align-items-center">
+                  <div>
+                    <strong>#{index + 1}</strong> {doctor.name} - {doctor.department}
+                  </div>
+                  <span className="badge bg-primary">{doctor.reviews} Reviews</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

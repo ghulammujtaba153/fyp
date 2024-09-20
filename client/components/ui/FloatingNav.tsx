@@ -117,16 +117,21 @@ export const FloatingNav = ({
         )}
         style={{
           backdropFilter: "blur(16px) saturate(180%)",
-          backgroundColor: "rgba(17, 25, 40, 0.75)",
+          backgroundColor: "rgba(255, 255, 255, 0)", // Transparent background
           borderRadius: "0px", // Removed rounded corners
-          border: "1px solid rgba(255, 255, 255, 0.125)",
+          height: "60px", // Adjust the height of the navbar
+          padding: "10px 20px", // Adjust padding for a smaller navbar
+
         }}
       >
-        <div>
-          <Link href="/">
-            <img src="Laboratory.png" alt="Laboratory Image" className="w-[40px] h-[40px]" />
-          </Link>
-        </div>
+        <div className="flex items-center space-x-2 text-white"> {/* Flexbox to align inline */}
+      <Link href="/">
+        <img src="Laboratory.png" alt="Laboratory Image" className="w-[40px] h-[40px]" />
+      </Link>
+      <Link href="/">
+        <span className="text-lg font-semibold">Cardio Hema Hub</span> {/* Updated Text Styling */}
+      </Link>
+    </div>
 
         <div className="flex items-center justify-center space-x-4">
           <Link
@@ -136,7 +141,7 @@ export const FloatingNav = ({
             )}
           >
             <Stethoscope size={20} />
-            <span className="text-sm !cursor-pointer">Find Doctor</span>
+            <span className="text-sm !cursor-pointer">Home</span>
           </Link>
 
           <Link
@@ -146,7 +151,7 @@ export const FloatingNav = ({
             )}
           >
             <TestTube size={20} />
-            <span className="text-sm !cursor-pointer">Tests</span>
+            <span className="text-sm !cursor-pointer">About</span>
           </Link>
 
           <Link
@@ -156,9 +161,28 @@ export const FloatingNav = ({
             )}
           >
             <Contact size={20} />
-            <span className="text-sm !cursor-pointer">Contact</span>
+            <span className="text-sm !cursor-pointer">Services</span>
           </Link>
 
+          <Link
+            href="/contact"
+            className={cn(
+              "relative dark:text-neutral-50 items-center flex space-x-1 text-neutral-600 dark:hover:text-neutral-300 hover:text-neutral-500"
+            )}
+          >
+            <Contact size={20} />
+            <span className="text-sm !cursor-pointer">Reviews</span>
+          </Link>
+
+          <Link
+            href="/contact"
+            className={cn(
+              "relative dark:text-neutral-50 items-center flex space-x-1 text-neutral-600 dark:hover:text-neutral-300 hover:text-neutral-500"
+            )}
+          >
+            <Contact size={20} />
+            <span className="text-sm !cursor-pointer">Contact Us</span>
+          </Link>
           {!user && (
             <Link
               href="/login"

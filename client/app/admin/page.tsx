@@ -1,74 +1,91 @@
 "use client";
-import Card from '@/components/dashboard/admin/Card';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUserMd, faBedPulse } from '@fortawesome/free-solid-svg-icons'; // Combined icon import
-import React, { useEffect, useState } from 'react';
-import { BadgeDollarSign, Users } from 'lucide-react';
-import EarningGraph from '@/components/dashboard/admin/EarningGraph';
-import TopDoctors from '@/components/dashboard/admin/TopDoctors';
-import axios from 'axios';
-import API_BASE_URL from '@/utils/apiConfig';
 
-const AdminPage = () => {
-  const [data, setData] = useState([]);
-  const [loading, setLoading] = useState(true);
+import React, { useState } from 'react';
+import PersonIcon from '@mui/icons-material/Person';
+import LocalHospitalIcon from '@mui/icons-material/LocalHospital';
+import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
+import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
+import { BarChart, Bar, PieChart, Pie, Tooltip, XAxis, YAxis, CartesianGrid, Legend } from 'recharts';
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const res = await axios.get(`${API_BASE_URL}/admin/stats`);
-        setData(res.data);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchData();
-  }, []);
+const Page = () => {
+  const [stats, setStats] = useState({
+    totalPatients: 800000,
+    totalDoctors: 160,
+    totalAppointments: 600000,
+    totalEarnings: 70000,
+  });
 
-  const cardData = {
-    icon: <Users />,
-    title: "Total Users",
-    data: data?.totalUsers,
-  };
+  const [topDoctors, setTopDoctors] = useState([
+    { name: 'Dr. Thomas White', department: 'Cardiology', reviews: 216 },
+    { name: 'Dr. Emilia Williamson', department: 'Surgery', reviews: 200 },
+    { name: 'Dr. Justine Hextall', department: 'Neurology', reviews: 180 },
+    { name: 'Dr. Dianne Russell', department: 'Pharmacy', reviews: 50 },
+    { name: 'Dr. Kristin Watson', department: 'Psychiatry', reviews: 25 },
+  ]);
 
-  const doctorData = {
-    icon: <FontAwesomeIcon icon={faUserMd} />,
-    title: "Total Doctors",
-    data: data?.totalDoctors,
-  };
+  const patientOverviewData = [
+    { month: 'Jan', Hospitalized: 2000, Recovered: 1000 },
+    { month: 'Feb', Hospitalized: 3000, Recovered: 1500 },
+    { month: 'Mar', Hospitalized: 2500, Recovered: 2000 },
+    { month: 'Apr', Hospitalized: 3200, Recovered: 2200 },
+    { month: 'May', Hospitalized: 3400, Recovered: 1800 },
+    { month: 'Jun', Hospitalized: 3900, Recovered: 2600 },
+  ];
 
-  const patientData = {
-    icon: <FontAwesomeIcon icon={faBedPulse} />,
-    title: "Total Patients",
-    data: data?.totalPatients,
-  };
+  const earningsData = [
+    { day: 'Sat', Income: 5000, Expense: 3000 },
+    { day: 'Sun', Income: 4000, Expense: 2500 },
+    { day: 'Mon', Income: 4500, Expense: 2000 },
+    { day: 'Tue', Income: 4700, Expense: 2100 },
+    { day: 'Wed', Income: 4800, Expense: 2200 },
+    { day: 'Thu', Income: 5000, Expense: 3000 },
+    { day: 'Fri', Income: 5100, Expense: 3500 },
+  ];
 
-  const revenueData = {
-    icon: <BadgeDollarSign />,
-    title: "Total Revenue",
-    data: "$20,000",
-  };
+  const topDepartmentsData = [
+    { name: 'Surgery', value: 400 },
+    { name: 'Cardiology', value: 300 },
+    { name: 'Neurology', value: 200 },
+    { name: 'Medicine', value: 100 },
+  ];
 
-  const appointmentData = {
-    icon: <BadgeDollarSign />,
-    title: "Total Appointments",
-    data: data?.totalAppointments,
-  };
+  return (
+    <div className="container ml-60">
+      {/* Stats Row */}
+      <div className="container-fluid ">
+  <div className="row display flex g-4 justify-content-start"> {/* g-4 for gap, justify-content-start aligns them in one row */}
+    <div className="col-md-3" style={{marginRight:"2rem", width:"20%" }}> {/* 4 cards per row on medium (md) or larger screens */}
+      <div className="card p-3 shadow d-flex align-items-center justify-content-between" style={{ backgroundColor: "#f0f7ff", borderRadius: "15px" }}>
+        <div className="d-flex align-items-center">
+          <PersonIcon style={{ fontSize: 40, color: "#2d8cf0" }} />
+          <div className="ms-3">
+            <h3>800K</h3>
+            <p>Total Patients</p>
+          </div>
+        </div>
+        <div className="mt-2 text-success">
+          <strong>+20%</strong>
+          <i className="bi bi-graph-up-arrow" style={{ marginLeft: "5px" }}></i>
+        </div>
+      </div>
+    </div>
 
-  const earningsData = {
-    prices: [8107.85, 8128.0, 8122.9, 8165.5, 8340.7, 8423.7, 8423.5],
-    dates: [
-      '2024-02-12',
-      '2024-02-13',
-      '2024-02-14',
-      '2024-02-15',
-      '2024-02-16',
-      '2024-02-17',
-      '2024-02-18',
-    ],
-  };
+    <div className="col-md-3" style={{marginRight:"2rem" , width:"20%" }}>
+      <div className="card p-3 shadow d-flex align-items-center justify-content-between" style={{ backgroundColor: "#fdf6f8", borderRadius: "15px" }}>
+        <div className="d-flex align-items-center">
+          <LocalHospitalIcon style={{ fontSize: 40, color: "#f75467" }} />
+          <div className="ms-3">
+            <h3>160</h3>
+            <p>Total Doctors</p>
+          </div>
+        </div>
+        <div className="mt-2 text-danger">
+          <strong>-12%</strong>
+          <i className="bi bi-graph-down-arrow" style={{ marginLeft: "5px" }}></i>
+        </div>
+      </div>
+    </div>
+
 
   return (
     <div className='flex flex-col items-center pl-[100px] gap-4 h-full w-full mr-8'>
@@ -78,17 +95,94 @@ const AdminPage = () => {
         <Card data={patientData} />
         <Card data={revenueData} />
         <Card data={appointmentData} />
+
       </div>
-      <div className='flex justify-between gap-4 w-full'>
-        <div className="flex-2 flex-[2]">
-          <EarningGraph data={earningsData} />
+    </div>
+
+    <div className="col-md-3" style={{marginRight:"2rem" , width:"20%" }}>
+      <div className="card p-3 shadow d-flex align-items-center justify-content-between" style={{ backgroundColor: "#fff6e0", borderRadius: "15px" }}>
+        <div className="d-flex align-items-center">
+          <MonetizationOnIcon style={{ fontSize: 40, color: "#f6c23e" }} />
+          <div className="ms-3">
+            <h3>$70K</h3>
+            <p>Total Earnings</p>
+          </div>
         </div>
-        <div className="flex-1 flex-[1] bg-white p-4 rounded-lg shadow-md">
-          <TopDoctors />
+        <div className="mt-2 text-danger">
+          <strong>-10%</strong>
+          <i className="bi bi-graph-down-arrow" style={{ marginLeft: "5px" }}></i>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+      {/* Charts Row */}
+      <div className="row mb-4">
+        {/* Patient Overview */}
+        <div className="col-md-6 mb-4">
+          <div className="card p-3 shadow">
+            <h4>Patient Overview</h4>
+            <BarChart width={500} height={300} data={patientOverviewData}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="month" />
+              <YAxis />
+              <Tooltip />
+              <Legend />
+              <Bar dataKey="Hospitalized" fill="#8884d8" />
+              <Bar dataKey="Recovered" fill="#82ca9d" />
+            </BarChart>
+          </div>
+        </div>
+
+        {/* Top Departments */}
+        <div className="col-md-6 mb-4">
+          <div className="card p-3 shadow">
+            <h4>Top Departments</h4>
+            <PieChart width={400} height={300}>
+              <Pie dataKey="value" isAnimationActive={false} data={topDepartmentsData} cx={200} cy={150} outerRadius={80} fill="#8884d8" label />
+              <Tooltip />
+            </PieChart>
+          </div>
+        </div>
+      </div>
+
+      {/* Earnings Row */}
+      <div className="row">
+        <div className="col-md-6 mb-4">
+          <div className="card p-3 shadow">
+            <h4>Earnings</h4>
+            <BarChart width={500} height={300} data={earningsData}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="day" />
+              <YAxis />
+              <Tooltip />
+              <Legend />
+              <Bar dataKey="Income" fill="#8884d8" />
+              <Bar dataKey="Expense" fill="#82ca9d" />
+            </BarChart>
+          </div>
+        </div>
+
+        {/* Top Doctors */}
+        <div className="col-md-6 mb-4">
+          <div className="card p-3 shadow">
+            <h4>Top Doctors</h4>
+            <ul className="list-group">
+              {topDoctors.map((doctor, index) => (
+                <li key={index} className="list-group-item d-flex justify-content-between align-items-center">
+                  <div>
+                    <strong>#{index + 1}</strong> {doctor.name} - {doctor.department}
+                  </div>
+                  <span className="badge bg-primary">{doctor.reviews} Reviews</span>
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
       </div>
     </div>
   );
 };
 
-export default AdminPage;
+export default Page;

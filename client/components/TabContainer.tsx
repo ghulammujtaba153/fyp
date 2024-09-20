@@ -12,9 +12,12 @@ const TabContainer = () => {
     <div className='flex flex-col items-center rounded-lg overflow-hidden'>
       <div className='flex space-x-2'>
         <button
+
+
           className={`px-4 py-2 rounded-full ${
             activeTab === 'doctor' ? 'bg-agreen text-white' : 'bg-gray-200'
           }`}
+
           onClick={() => setActiveTab('doctor')}
         >
           Doctor

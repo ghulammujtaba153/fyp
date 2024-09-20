@@ -13,7 +13,7 @@ const Doctor = () => {
             <Input id="text" placeholder="search" type="text"/>
         </div>
         <div>
-            <ThreeDCardDemo/>
+            {/* <ThreeDCardDemo/> */}
         </div>
        
 
