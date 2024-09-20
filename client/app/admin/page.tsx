@@ -86,19 +86,16 @@ const Page = () => {
       </div>
     </div>
 
-    <div className="col-md-3" style={{marginRight:"2rem" , width:"20%" }}>
-      <div className="card p-3 shadow d-flex align-items-center justify-content-between" style={{ backgroundColor: "#f0fff8", borderRadius: "15px" }}>
-        <div className="d-flex align-items-center">
-          <CalendarTodayIcon style={{ fontSize: 40, color: "#34c38f" }} />
-          <div className="ms-3">
-            <h3>600K</h3>
-            <p>Total Appointments</p>
-          </div>
-        </div>
-        <div className="mt-2 text-success">
-          <strong>+15%</strong>
-          <i className="bi bi-graph-up-arrow" style={{ marginLeft: "5px" }}></i>
-        </div>
+
+  return (
+    <div className='flex flex-col items-center pl-[100px] gap-4 h-full w-full mr-8'>
+      <div className="flex justify-between flex-wrap gap-4 w-full">
+        <Card data={cardData} />
+        <Card data={doctorData} />
+        <Card data={patientData} />
+        <Card data={revenueData} />
+        <Card data={appointmentData} />
+
       </div>
     </div>
 

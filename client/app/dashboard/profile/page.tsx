@@ -1,4 +1,5 @@
-"use client"
+"use client";
+
 import React, { useContext, useState, useEffect } from 'react';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label'; 
@@ -19,6 +20,7 @@ const Profile = () => {
     contactNumber: '',
     postalAddress: '',
     permanentAddress: '',
+    gender: '', // Added gender to formData
   });
   const [profilePic, setProfilePic] = useState(null);
   const [profilePicPreview, setProfilePicPreview] = useState("");
@@ -38,7 +40,9 @@ const Profile = () => {
         contactNumber: user.contactNumber || '',
         postalAddress: user.postalAddress || '',
         permanentAddress: user.permanentAddress || '',
+        gender: user.gender || '', // Set gender from user data
       });
+      console.log(user.gender)
       setProfilePicPreview(user.profile || '/default-profile.png');
     }
   }, [user]);
@@ -118,6 +122,21 @@ const Profile = () => {
                   placeholder="Last Name"
                 />
               </div>
+
+              <div className='mb-4'>
+                <Label htmlFor="gender">Gender</Label>
+                <select 
+                  name="gender" 
+                  value={formData.gender} 
+                  onChange={handleChange} 
+                  className="w-full border rounded px-4 py-2 bg-white-100"
+                >
+                  
+                  <option value="Male">Male</option>
+                  <option value="Female">Female</option>
+                </select>
+              </div>
+
               <div className='mb-4'>
                 <Label htmlFor="email">Email Address</Label>
                 <Input 
@@ -181,6 +200,7 @@ const Profile = () => {
                   placeholder="Permanent Address"
                 />
               </div>
+              
             </div>
             <button 
               type="submit" 

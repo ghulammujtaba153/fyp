@@ -10,6 +10,7 @@ export const registerUser = async (req, res) => {
         profile,
         firstName,
         lastName,
+        gender,
         email,
         password,
         role,
@@ -40,6 +41,7 @@ export const registerUser = async (req, res) => {
             profile,
             firstName,
             lastName,
+            gender,
             email,
             password: hashedPassword,
             role,
@@ -66,6 +68,7 @@ export const registerUser = async (req, res) => {
             user: {
                 firstName: newUser.firstName,
                 lastName: newUser.lastName,
+                gender: newUser.gender,
                 email: newUser.email,
                 role: newUser.role,
                 dateOfBirth: newUser.dateOfBirth,
@@ -109,7 +112,7 @@ export const loginUser = async (req, res) => {
         res.status(200).json({                                         
             message: 'Login successful.',
             token,
-            user: { _id: user._id, profile: user.profile, firstName: user.firstName, lastName: user.lastName, email: user.email, role: user.role }
+            user: { _id: user._id, profile: user.profile, firstName: user.firstName, lastName: user.lastName, gender: user.gender, email: user.email, role: user.role }
         });
     } catch (error) {
         console.error('Error logging in user:', error);
@@ -164,7 +167,7 @@ export const user = async (req, res) => {  // Function renamed to avoid confusio
 
 export const updateUser = async (req, res) => {
     const { userId } = req.params; 
-    const { firstName, lastName, email, password, dateOfBirth, contactNumber, postalAddress, permanentAddress, profile } = req.body;
+    const { firstName, lastName, gender, email, password, dateOfBirth, contactNumber, postalAddress, permanentAddress, profile } = req.body;
   
     if (!userId) {
       return res.status(400).json({ message: 'User ID is required.' });
@@ -179,6 +182,7 @@ export const updateUser = async (req, res) => {
       // Update user details
       user.firstName = firstName || user.firstName;
       user.lastName = lastName || user.lastName;
+      user.gender = gender || user.gender;
       user.email = email || user.email;
       user.dateOfBirth = dateOfBirth || user.dateOfBirth;
       user.contactNumber = contactNumber || user.contactNumber;
@@ -202,6 +206,7 @@ export const updateUser = async (req, res) => {
         user: {
           firstName: user.firstName,
           lastName: user.lastName,
+          gender: user.gender,
           email: user.email,
           dateOfBirth: user.dateOfBirth,
           contactNumber: user.contactNumber,

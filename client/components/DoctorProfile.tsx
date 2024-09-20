@@ -19,6 +19,7 @@ interface Qualification {
 interface FormData {
   firstName: string;
   lastName: string;
+  gender: string;
   email: string;
   password: string;
   role: string;
@@ -32,6 +33,8 @@ interface FormData {
     startTime: string;
     endTime: string;
   };
+  experience: string;
+  fee: Integer;
 }
 
 interface Errors {
@@ -43,6 +46,7 @@ export default function DoctorProfile() {
     firstName: "",
     lastName: "",
     email: "",
+    gender: "",
     password: "",
     role: "doctor",
     dateOfBirth: "",
@@ -54,7 +58,9 @@ export default function DoctorProfile() {
       { qualificationName: "", startYear: "", endYear: "" },
       { qualificationName: "", startYear: "", endYear: "" }
     ],
-    availability: { startTime: "", endTime: "" }
+    availability: { startTime: "", endTime: "" },
+    experience: "",
+    fee: 0,
   });
 
   const [profilePic, setProfilePic] = useState<File | null>(null);
@@ -68,14 +74,36 @@ export default function DoctorProfile() {
     if (!formData.firstName) newErrors.firstName = "First name is required";
     if (!formData.lastName) newErrors.lastName = "Last name is required";
     if (!formData.email) newErrors.email = "Email is required";
-    if (!formData.password) newErrors.password = "Password is required";
+    if (!formData.password) {
+      newErrors.password = "Password is required";
+    } else if (formData.password.length < 7) {
+      newErrors.password = "Password must be at least 7 characters";
+    }
+    
+    // Date of Birth validation
     if (!formData.dateOfBirth) newErrors.dateOfBirth = "Date of Birth is required";
-    if (!formData.contactNumber) newErrors.contactNumber = "Contact Number is required";
+    
+    // Contact Number validation (must be 11 digits)
+    if (!formData.contactNumber) {
+      newErrors.contactNumber = "Contact Number is required";
+    } else if (formData.contactNumber.length !== 11) {
+      newErrors.contactNumber = "Contact Number must be exactly 11 digits";
+    }
     if (!formData.postalAddress) newErrors.postalAddress = "Postal Address is required";
     if (!formData.permanentAddress) newErrors.permanentAddress = "Permanent Address is required";
     if (!formData.specialization) newErrors.specialization = "Specialization is required";
     if (!formData.availability.startTime) newErrors.startTime = "Start Time is required";
     if (!formData.availability.endTime) newErrors.endTime = "End Time is required";
+
+    // Experience validation
+  if (!formData.experience) {
+    newErrors.experience = "Experience is required";
+  }
+
+  // Fee validation (should be a positive number)
+  if (formData.fee <= 0) {
+    newErrors.fee = "Fee must be a positive number";
+  }
 
     formData.doctor_qualification.forEach((qual, index) => {
       if (!qual.qualificationName) newErrors[`qualificationName${index}`] = "Qualification Name is required";
@@ -203,6 +231,17 @@ export default function DoctorProfile() {
             </LabelInputContainer>
           </div>
 
+          {/* Gender Field */}
+          <LabelInputContainer>
+            <Label htmlFor="gender" style={{ color: 'black' }}>Gender</Label>
+            <select id="gender" value={formData.gender} onChange={handleChange} className="bg-white border rounded p-2 mb-4">
+              <option value="">Select Gender</option>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+            </select>
+            {errors.gender && <p className="text-red-500 text-sm">{errors.gender}</p>}
+          </LabelInputContainer>
+
           {/* Email, Password, and Date of Birth Fields */}
           <LabelInputContainer className="mb-4">
             <Label htmlFor="email" style={{ color: 'black' }}>
@@ -257,6 +296,21 @@ export default function DoctorProfile() {
             <Input id="specialization" placeholder="Psychiatrist" type="text" value={formData.specialization} onChange={handleChange} />
             {errors.specialization && <p className="text-red-500 text-sm">{errors.specialization}</p>}
           </LabelInputContainer>
+
+          <LabelInputContainer className="mb-4">
+            <Label htmlFor="experience" style={{ color: 'black' }}>Experience (in years)</Label>
+            <Input id="experience" placeholder="5" type="number" value={formData.experience} onChange={handleChange} />
+            {errors.experience && <p className="text-red-500 text-sm">{errors.experience}</p>}
+          </LabelInputContainer>
+
+          <LabelInputContainer className="mb-4">
+            <Label htmlFor="fee" style={{ color: 'black' }}>Consultation Fee</Label>
+            <Input id="fee" placeholder="500" type="number" value={formData.fee} onChange={handleChange} />
+            {errors.fee && <p className="text-red-500 text-sm">{errors.fee}</p>}
+          </LabelInputContainer>
+
+          
+        <h3 className="font-bold text-lg mb-4">Availability</h3>
 
           {/* Availability Fields */}
           <div className="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-2 mb-4">

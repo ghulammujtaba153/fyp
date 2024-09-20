@@ -14,6 +14,7 @@ import API_BASE_URL from "@/utils/apiConfig";
 interface FormData {
   firstName: string;
   lastName: string;
+  gender: string;
   email: string;
   password: string;
   role: string;
@@ -26,6 +27,7 @@ interface FormData {
 interface Errors {
   firstName?: string;
   lastName?: string;
+  gender?: string;
   email?: string;
   password?: string;
   dateOfBirth?: string;
@@ -36,8 +38,10 @@ interface Errors {
 
 export default function NurseProfile() {
   const [formData, setFormData] = useState<FormData>({
+    
     firstName: "",
     lastName: "",
+    gender: "",
     email: "",
     password: "",
     role: "nurse",
@@ -54,8 +58,10 @@ export default function NurseProfile() {
 
   const validateForm = (): boolean => {
     const newErrors: Errors = {};
+    
     if (!formData.firstName) newErrors.firstName = "First name is required";
     if (!formData.lastName) newErrors.lastName = "Last name is required";
+    if (!formData.gender) newErrors.gender = "Gender is required";
     if (!formData.email) newErrors.email = "Email is required";
     if (!formData.password) newErrors.password = "Password is required";
     if (!formData.dateOfBirth) newErrors.dateOfBirth = "Date of Birth is required";
@@ -111,6 +117,7 @@ export default function NurseProfile() {
     setFormData({
       firstName: "",
       lastName: "",
+      gender: "",
       email: "",
       password: "",
       role: "nurse",
@@ -145,6 +152,7 @@ export default function NurseProfile() {
               onChange={handleProfilePicChange}
               className="cursor-pointer opacity-0 absolute inset-0 z-10"
             />
+
           </div>
 
           <div className="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-2">
@@ -159,6 +167,15 @@ export default function NurseProfile() {
               {errors.lastName && <p className="text-red-500 text-sm">{errors.lastName}</p>}
             </LabelInputContainer>
           </div>
+          <LabelInputContainer className="mb-4">
+            <Label htmlFor="gender" style={{ color: 'black' }}>Gender</Label>
+            <select id="gender" value={formData.gender} onChange={handleChange} className="bg-white border rounded p-2 mb-4">
+              <option value="">Select Gender</option>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+            </select>
+            {errors.gender && <p className="text-red-500 text-sm">{errors.gender}</p>}
+          </LabelInputContainer>
           <LabelInputContainer>
             <Label htmlFor="email" style={{ color: 'black' }}>Email Address</Label>
             <Input id="email" placeholder="projectmayhem@fc.com" type="email" value={formData.email} onChange={handleChange} />
