@@ -1,8 +1,6 @@
 "use client";
 
 import React from 'react';
-import UpcomingAppointment from '@/components/dashboard/UpcomingAppointment';
-import Medicine from '@/components/dashboard/Medicine';
 import EarningGraph from '@/components/dashboard/admin/EarningGraph';
 
 import DoctorUpcomingAppointment from '@/components/dashboard/DoctorUpcommingAppointment';
@@ -23,6 +21,19 @@ const Dashboard = () => {
     // { title: "Monthly Appointments", num: 10 }
   ];
 
+  const earningsData = {
+    prices: [8107.85, 8128.0, 8122.9, 8165.5, 8340.7, 8423.7, 8423.5],
+    dates: [
+      '2024-02-12',
+      '2024-02-13',
+      '2024-02-14',
+      '2024-02-15',
+      '2024-02-16',
+      '2024-02-17',
+      '2024-02-18',
+    ],
+  };
+
   return (
     <div className="flex flex-col items-center gap-4 pl-[100px] h-screen p-5">
       <p className="text-white flex-left">Welcome! Doctor </p>
@@ -32,7 +43,10 @@ const Dashboard = () => {
         ))}
       </div>
       <DoctorUpcomingAppointment/>
-      <EarningGraph/>
+      <div className='w-full bg-white'>
+      <EarningGraph data={earningsData} />
+      </div>
+      
 
     </div>
   );

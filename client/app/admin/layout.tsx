@@ -120,7 +120,7 @@ const layout = ({ children }) => {
         </Sidebar>
       </div>
       
-      <div className='flex flex-col  w-full gap-6 items-center m-5'>
+      <div className='flex flex-col  w-full gap-6 items-center'>
       <div className='w-full flex flex-end'>
       <DashNavBar/>
       </div>

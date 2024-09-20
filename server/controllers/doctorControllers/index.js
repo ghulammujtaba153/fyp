@@ -4,13 +4,13 @@ import bcrypt from 'bcrypt';
 
 
 export const registerDoctor = async (req, res) => {
-  const { firstName, lastName, email, password, role, dateOfBirth, contactNumber, postalAddress, permanentAddress, profile, specialization, doctor_qualification, experience, fee, availability } = req.body;
+  const { firstName, lastName, gender, email, password, role, dateOfBirth, contactNumber, postalAddress, permanentAddress, profile, specialization, doctor_qualification, experience, fee, availability } = req.body;
   console.log(req.body);
 
   try {
     const hashedPassword = await bcrypt.hash(password, 10);
     
-    const user = new User({ profile, firstName, lastName, email, password:hashedPassword, role, dateOfBirth, contactNumber, postalAddress, permanentAddress });
+    const user = new User({ profile, firstName, lastName, gender, email, password: hashedPassword, role, dateOfBirth, contactNumber, postalAddress, permanentAddress });
     
     // Save user
     const newUser = await user.save();
@@ -67,6 +67,7 @@ export const getDoctorInfo = async (req, res) => {
       _id,
       firstName,
       lastName,
+      gender,
       email,
       password,
       role,
@@ -88,6 +89,7 @@ export const getDoctorInfo = async (req, res) => {
       const updateFields = {
         firstName,
         lastName,
+        gender,
         email,
         role,
         dateOfBirth,

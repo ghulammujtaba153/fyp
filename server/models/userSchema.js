@@ -10,17 +10,20 @@ const userSchema = new Schema({
     firstName: {
         type: String,
         required: true,
-        trim: true
+        trim: true,
+        set: (name) => name.charAt(0).toUpperCase() + name.slice(1).toLowerCase()
     },
     lastName: {
         type: String,
         required: true,
-        trim: true
+        trim: true,
+        set: (name) => name.charAt(0).toUpperCase() + name.slice(1).toLowerCase()
     },
     gender: {
         type: String,
-        required: true,
-        trim: true
+        enum: ['Male', 'Female'],
+        default: 'Male',
+        required: true
     },
     email: {
         type: String,

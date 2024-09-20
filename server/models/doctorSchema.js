@@ -19,7 +19,7 @@ const doctorSchema = new Schema({
     required: true
   },
   fee: {
-    type: String,
+    type: Number,
     required: true
   },
   availability: {

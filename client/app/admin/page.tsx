@@ -71,7 +71,7 @@ const AdminPage = () => {
   };
 
   return (
-    <div className='flex flex-col items-center pl-[100px] gap-4 h-full w-full '>
+    <div className='flex flex-col items-center pl-[100px] gap-4 h-full w-full mr-8'>
       <div className="flex justify-between flex-wrap gap-4 w-full">
         <Card data={cardData} />
         <Card data={doctorData} />
