@@ -3,6 +3,7 @@ import '../../app/scroll.css'; // Import the custom scrollbar styles
 import { UserContext } from '@/context/UserContext';
 import API_BASE_URL from '@/utils/apiConfig';
 import axios from 'axios';
+import { X } from 'lucide-react'; // Importing the X icon
 
 const Prescription = ({ users, appointmentId, setPrescription }) => {
   const [medications, setMedications] = useState([{ name: '', dosage: '', frequency: '', duration: '', instructions: '' }]);
@@ -12,15 +13,15 @@ const Prescription = ({ users, appointmentId, setPrescription }) => {
   const [status, setStatus] = useState('Active');
   const [nextReviewDate, setNextReviewDate] = useState('');
   const { user } = useContext(UserContext);
-  const [loading, setLoading]=useState(false);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (users[0]._id === user._id) {
-      setDoctorId(users[0]._id);
-      setPatientId(users[1]._id);
-    } else {
       setDoctorId(users[1]._id);
       setPatientId(users[0]._id);
+    } else {
+      setDoctorId(users[0]._id);
+      setPatientId(users[1]._id);
     }
   }, [users, user]);
 
@@ -35,8 +36,7 @@ const Prescription = ({ users, appointmentId, setPrescription }) => {
     setMedications([...medications, { name: '', dosage: '', frequency: '', duration: '', instructions: '' }]);
   };
 
-  const handleSubmit = async() => {
-    setLoading(true);
+  const handleSubmit = async () => {
     const prescriptionData = {
       patientId,
       doctorId,
@@ -45,26 +45,35 @@ const Prescription = ({ users, appointmentId, setPrescription }) => {
       notes,
       nextReviewDate: nextReviewDate || null,
     };
+
     try {
-      const res=await axios.post(`${API_BASE_URL}/prescriptions/`, prescriptionData);
+      setLoading(true);
+
+      const res = await axios.post(`${API_BASE_URL}/prescriptions/`, prescriptionData);
       console.log(res.data);
 
-      const statusRes= await axios.post(`${API_BASE_URL}/appointments/upcoming/${user._id}`,{status:"completed"});
+      const statusRes = await axios.put(`${API_BASE_URL}/appointments/${appointmentId}/status`, { status: 'completed' });
       console.log(statusRes.data);
+
       
-      setLoading(false);
     } catch (error) {
       console.log(error);
     }
-
-    
-
+    setLoading(false);
     console.log(prescriptionData);
     setPrescription(false); // Close the form after submitting
   };
 
   return (
-    <div className="prescription-container w-[300px] h-[70%] bg-white shadow-lg rounded-lg overflow-y-scroll p-4">
+    <div className="prescription-container w-[300px] h-[70%] bg-white text-black-default shadow-lg rounded-lg overflow-y-scroll p-4 relative">
+      {/* Close Button */}
+      <button
+        onClick={() => setPrescription(false)} // Close the prescription form
+        className="absolute top-2 right-2"
+      >
+        <X className="w-6 h-6 text-gray-500 hover:text-gray-800" /> {/* X Icon */}
+      </button>
+
       <h3 className="text-lg font-semibold mb-4">Prescription</h3>
 
       {medications.map((medicine, index) => (
@@ -129,7 +138,6 @@ const Prescription = ({ users, appointmentId, setPrescription }) => {
 
       <p>Re-visit Date</p>
 
-
       <input
         type="date"
         value={nextReviewDate}
@@ -142,7 +150,7 @@ const Prescription = ({ users, appointmentId, setPrescription }) => {
         onClick={handleSubmit}
         className="w-full bg-green-500 text-white py-2 rounded"
       >
-        {loading? "Submit Prescription" : "loading"}
+        {loading ? 'loading...' : 'Submit Prescription'}
       </button>
     </div>
   );

@@ -3,9 +3,13 @@ import VideoCall from "../models/videoCallSchema.js";
 
 export const createVideoCall = async (req, res) => {
   const { startedBy, participants, link } = req.body;
-  console.log(req.body)
+  console.log("create",req.body)
 
   try {
+    const res=await VideoCall.find({link})
+    if (res.length > 0) {
+      return res.status(400).json({ message: 'Video call already exists' });
+    }
     const newVideoCall = new VideoCall({
       startedBy,
       participants,
@@ -22,6 +26,20 @@ export const createVideoCall = async (req, res) => {
 
 
 
+
+export const getVideoCallOnLink = async (req, res) => {
+  const { link } = req.params;
+
+
+  try {
+    const videoCall = await VideoCall.findOne({ link });
+
+    res.status(200).json(videoCall);
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching video call', error });
+  }
+};
+
 export const updateVideoCallStatus = async (req, res) => {
   const { id } = req.params;
   const { status } = req.body;
@@ -36,6 +54,13 @@ export const updateVideoCallStatus = async (req, res) => {
     if (!updatedVideoCall) {
       return res.status(404).json({ message: 'Video call not found' });
     }
+    const link=updatedVideoCall.link;
+
+    const completedCalls = await VideoCall.updateMany(
+      { link }, // Filter by link
+      { status: "completed" } 
+    );
+
 
     res.status(200).json(updatedVideoCall);
   } catch (error) {
@@ -55,7 +80,7 @@ export const getActiveVideoCallsForUser = async (req, res) => {
       status: 'active',
     }).populate('startedBy participants');
 
-    console.log(activeVideoCalls)
+    // console.log(activeVideoCalls)
 
     res.status(200).json(activeVideoCalls);
   } catch (error) {

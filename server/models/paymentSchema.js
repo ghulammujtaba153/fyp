@@ -1,7 +1,7 @@
 import mongoose, { model } from 'mongoose';
 const { Schema } = mongoose;
 
-const appointmentSchema = new Schema({
+const paymentSchema = new Schema({
   doctorId: { 
     type: Schema.Types.ObjectId, 
     ref: 'User', 
@@ -12,8 +12,8 @@ const appointmentSchema = new Schema({
     ref: 'User', 
     required: true 
   },
-  timing: { 
-    type: String, 
+  amount: { 
+    type: Number, 
     required: true 
   },
   status: {
@@ -25,6 +25,6 @@ const appointmentSchema = new Schema({
   timestamps: true
 });
 
-const Appointment = model('Appointment', appointmentSchema);
+const Payment = model('Payment', paymentSchema);
 
-export default Appointment;
+export default Payment;

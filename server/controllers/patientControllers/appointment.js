@@ -43,6 +43,9 @@ export const bookAppointment = async (req, res) => {
 export const updateAppointmentStatus = async (req, res) => {
     const { id } = req.params;
     const { status } = req.body;
+
+    console.log(id);
+    console.log(status);
   
     try {
       // Validate status value

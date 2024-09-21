@@ -92,15 +92,29 @@ const RoomPage = ({ params }: { params: { roomid: string } }) => {
 
         const joinMeeting = async () => {
             try {
-                await axios.post(`${API_BASE_URL}/videoCalls/create`, {
-                    startedBy: userId,
-                    participants: videoCallsPariticipants, 
-                    link: roomID,
-                    status: 'active',
-                });
-                console.log('Meeting data saved successfully');
+                const res=await axios.get(`${API_BASE_URL}/videoCalls/${roomID}`);
+                console.log(res.data)
+                if(res.data){
+                    console.log("meeting already exists")
+                    return;
+                }else{
+                    console.log(userId);
+                    console.log(videoCallsPariticipants)
+                    console.log(roomID)
+                    
+
+                    await axios.post(`${API_BASE_URL}/videoCalls/create`, {
+                        startedBy: userId,
+                        participants: videoCallsPariticipants, 
+                        link: roomID,
+                        status: 'active',
+                    });   
+
+                    console.log('Meeting data saved successfully!');
+                }
+                
             } catch (error) {
-                console.error('Error saving meeting data:', error);
+                console.error('Error saving meeting data:', error.message);
             }
         };
 

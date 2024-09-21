@@ -7,6 +7,8 @@ import { UserContext } from '@/context/UserContext';
 import { useRouter } from 'next/navigation';
 import { io } from 'socket.io-client';
 import {X} from 'lucide-react'
+import loading from './../app/nurse/tests/loading';
+import Spinner from './Spinner';
 
 const AppointmentModal = ({ doctorId, onClose, doctorAvailability }) => {
   const [appointmentDate, setAppointmentDate] = useState('');
@@ -16,6 +18,7 @@ const AppointmentModal = ({ doctorId, onClose, doctorAvailability }) => {
   const { user } = useContext(UserContext);
   const router = useRouter();
   console.log("doctorId",doctorId);
+  const [loadingState, setLoadingState] = useState(true);
 
   const socket = useRef();
 
@@ -54,6 +57,7 @@ const AppointmentModal = ({ doctorId, onClose, doctorAvailability }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoadingState(true);
   
     // Check if date and time are set
     if (!appointmentDate || !selectedTimeSlot) {
@@ -84,6 +88,13 @@ const AppointmentModal = ({ doctorId, onClose, doctorAvailability }) => {
         message: `New appointment booked for ${appointmentDateTime}`,
         link: `/doctordashboard/appointments`,
       });
+
+      const pay=await axios.post(`${API_BASE_URL}/payments/create`, {
+        doctorId,
+        patientId: user._id, 
+        amount: 100,
+      });
+      console.log(pay.data);
       console.log(notRes.data);
       console.log(res.data);
       handleBookAppointment(res.data._id);
@@ -123,9 +134,14 @@ const AppointmentModal = ({ doctorId, onClose, doctorAvailability }) => {
     } catch (error) {
       console.error('Error handling booking appointment:', error);
     }
+    setLoadingState(false);
   };
   
-  
+  if(loadingState){
+    return <div className="flex items-center justify-center h-screen">
+      <Spinner/>
+    </div>
+  }
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 bg-[#1F1E30]">

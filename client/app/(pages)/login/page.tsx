@@ -37,7 +37,16 @@ export default function Login() {
 
       console.log("Login successful", user);
       setUser(user)
-      router.push("/");
+      if(user.role === "doctor"){
+        router.push("/doctordashboard");
+      }else if(user.role === "patient"){
+        router.push("/dashboard");
+      }else if(user.role === "admin"){
+        router.push("/admin");
+      }else if(user.role === "nurse"){
+        router.push("/nurse");
+      }
+      
 
     } catch (error) {
       console.error("Error logging in:", error.response?.data?.message || error.message);

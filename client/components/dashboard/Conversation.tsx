@@ -204,7 +204,7 @@ const Conversation = ({ id }) => {
           }
         );
         setNewMessage('');
-        scrollToBottom(); // Scroll down when a new message is sent
+        scrollToBottom();
       } catch (error) {
         console.error('Error sending message:', error);
       }

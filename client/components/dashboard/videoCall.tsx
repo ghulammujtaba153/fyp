@@ -25,7 +25,7 @@ const VideoCall = ({ videoCalls }) => {
       // Update the call status to 'completed'
       const res =await axios.put(`${API_BASE_URL}/videoCalls/${activeCall._id}/status`, { status: 'completed' });
       console.log("res update", res.data); 
-      // Navigate to the room
+      // Navigate to the 
       router.push(`/room/${activeCall.link}`);
     } catch (error) {
       console.error('Failed to update call status:', error);

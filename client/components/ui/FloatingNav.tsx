@@ -94,7 +94,7 @@ export const FloatingNav = ({
   };
 
   if (!visible) {
-    return null; // Don't render the navbar if it's not visible
+    return null;
   }
 
   return (
@@ -129,58 +129,58 @@ export const FloatingNav = ({
         <img src="Laboratory.png" alt="Laboratory Image" className="w-[40px] h-[40px]" />
       </Link>
       <Link href="/">
-        <span className="text-lg font-semibold">Cardio Hema Hub</span> {/* Updated Text Styling */}
+        <span className="text-lg font-semibold md:block hidden">Cardio Hema Hub</span> {/* Updated Text Styling */}
       </Link>
     </div>
 
         <div className="flex items-center justify-center space-x-4">
           <Link
-            href="/doctor"
+            href="/"
             className={cn(
               "relative dark:text-neutral-50 items-center flex space-x-1 text-neutral-600 dark:hover:text-neutral-300 hover:text-neutral-500"
             )}
           >
-            <Stethoscope size={20} />
+            {/* <Stethoscope size={20} /> */}
             <span className="text-sm !cursor-pointer">Home</span>
           </Link>
 
           <Link
-            href="/tests"
+            href="/#wobble-card"
             className={cn(
               "relative dark:text-neutral-50 items-center flex space-x-1 text-neutral-600 dark:hover:text-neutral-300 hover:text-neutral-500"
             )}
           >
-            <TestTube size={20} />
-            <span className="text-sm !cursor-pointer">About</span>
-          </Link>
-
-          <Link
-            href="/contact"
-            className={cn(
-              "relative dark:text-neutral-50 items-center flex space-x-1 text-neutral-600 dark:hover:text-neutral-300 hover:text-neutral-500"
-            )}
-          >
-            <Contact size={20} />
+            {/* <TestTube size={20} /> */}
             <span className="text-sm !cursor-pointer">Services</span>
           </Link>
 
           <Link
-            href="/contact"
+            href="/#Testimonials"
             className={cn(
               "relative dark:text-neutral-50 items-center flex space-x-1 text-neutral-600 dark:hover:text-neutral-300 hover:text-neutral-500"
             )}
           >
-            <Contact size={20} />
-            <span className="text-sm !cursor-pointer">Reviews</span>
+            {/* <Contact size={20} /> */}
+            <span className="text-sm !cursor-pointer">Testimonials</span>
           </Link>
 
           <Link
-            href="/contact"
+            href="/#faqs"
             className={cn(
               "relative dark:text-neutral-50 items-center flex space-x-1 text-neutral-600 dark:hover:text-neutral-300 hover:text-neutral-500"
             )}
           >
-            <Contact size={20} />
+            {/* <Contact size={20} /> */}
+            <span className="text-sm !cursor-pointer">FAQs</span>
+          </Link>
+
+          <Link
+            href="/#contact"
+            className={cn(
+              "relative dark:text-neutral-50 items-center flex space-x-1 text-neutral-600 dark:hover:text-neutral-300 hover:text-neutral-500"
+            )}
+          >
+            {/* <Contact size={20} /> */}
             <span className="text-sm !cursor-pointer">Contact Us</span>
           </Link>
           {!user && (
@@ -190,7 +190,7 @@ export const FloatingNav = ({
                 "relative dark:text-neutral-50 items-center flex space-x-1 text-neutral-600 dark:hover:text-neutral-300 hover:text-neutral-500"
               )}
             >
-              <LogIn size={20} />
+              {/* <LogIn size={20} /> */}
               <span className="text-sm !cursor-pointer">Login</span>
             </Link>
           )}

@@ -15,8 +15,10 @@ const Medicine = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get(`${API_BASE_URL}/prescriptions/patient/${user._id}`);
+        console.log(response.data)
         const latestPrescription = response.data.prescriptions[response.data.prescriptions.length - 1];
         setData(latestPrescription);
+        
       } catch (error) {
         console.error("Error fetching prescriptions:", error);
       } finally {
@@ -32,7 +34,8 @@ const Medicine = () => {
   }
 
   if (!data) {
-    return <div>No prescriptions found.</div>;
+    return;
+    // return <div className="flex flex-col justify-center bg-white rounded-md w-full items-center p-4">No prescriptions found.</div>;
   }
 
   return (
@@ -61,7 +64,7 @@ const Medicine = () => {
             </div>
           ))
         ) : (
-          <p>No medications prescribed.</p>
+          <p className="flex flex-col gap-2 w-full max-w-md border-b py-2 px-4">No medications prescribed.</p>
         )}
 
         <p className="mt-4">
