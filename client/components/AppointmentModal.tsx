@@ -108,8 +108,8 @@ const AppointmentModal = ({ doctorId, onClose, doctorAvailability }) => {
       console.log("checkExistingRoom", checkExistingRoom.data);
   
       // If a conversation exists, navigate to the chat page
-      if (checkExistingRoom.data && !checkExistingRoom.data) {
-        router.push(`/doctordashboard/chats/conversations/${checkExistingRoom.data._id}`);
+      if (checkExistingRoom.data) {
+        router.push(`/dashboard/chats/conversations/${checkExistingRoom.data._id}`);
       } 
       // If no existing conversation, create a new one
       else {
@@ -118,7 +118,7 @@ const AppointmentModal = ({ doctorId, onClose, doctorAvailability }) => {
           appointmentId: id
         });
         const newConversationData = newConversationRes.data;
-        router.push(`/doctordashboard/chats/conversations/${newConversationData._id}`);
+        router.push(`/dashboard/chats/conversations/${newConversationData._id}`);
       }
     } catch (error) {
       console.error('Error handling booking appointment:', error);

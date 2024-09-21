@@ -66,7 +66,7 @@ const DoctorDetail = ({ params: { id } }) => {
   }
 
   return (
-    <div className="text-white w-full flex items-center flex-col">
+    <div className="text-white w-full flex items-center flex-col pl-[80px]">
       <div className="flex flex-col gap-6 max-w-5xl mx-auto w-full bg-white p-8 rounded-lg shadow-md">
         <div className="flex justify-between gap-8 md:flex-row flex-col items-center md:items-start">
           {/* Doctor Information Section */}
@@ -78,7 +78,7 @@ const DoctorDetail = ({ params: { id } }) => {
                 {totalRating ? (
                   <StarRating num={totalRating} />
                 ) : (
-                  <p className="text-gray-500 text-sm">New Doctor</p>
+                  <p className="text-gray-500 text-sm">new</p>
                 )}
               </div>
             </div>
@@ -90,6 +90,10 @@ const DoctorDetail = ({ params: { id } }) => {
             <div>
               <p className="text-lg font-semibold text-gray-700">Specialization:</p>
               <p className="text-gray-600">{doctor.specialization}</p>
+            </div>
+            <div>
+              <p className="text-lg font-semibold text-gray-700">Experience:</p>
+              <p className="text-gray-600">{doctor.experience} years</p>
             </div>
             <div>
               <p className="text-lg font-semibold text-gray-700">Qualifications:</p>
@@ -109,7 +113,7 @@ const DoctorDetail = ({ params: { id } }) => {
 
           {/* Book Appointment Section */}
           <div className="flex flex-col items-center justify-center bg-blue-100 p-6 rounded-lg shadow-lg">
-            <p className="text-lg font-bold text-gray-800 mb-4">Consultation Fee: $100</p>
+            <p className="text-lg font-bold text-gray-800 mb-4">Consultation Fee: PKR- {doctor.fee}</p>
             <button
               onClick={() => setShowModal(true)}
               className="px-6 py-3 bg-blue-500 text-white rounded-lg shadow-lg hover:bg-blue-600 transition-all"
@@ -121,7 +125,7 @@ const DoctorDetail = ({ params: { id } }) => {
       </div>
 
       {/* Reviews Section */}
-      <div className="flex flex-col gap-6 mt-8 w-full max-w-4xl bg-white p-8 rounded-lg shadow-md">
+      <div className="flex flex-col gap-6 mt-8 w-full max-w-4xl bg-white p-8 mb-4 rounded-lg shadow-md">
         <p className="text-xl font-semibold text-gray-900">Reviews</p>
         {reviews.length > 0 ? (
           reviews.map((review, index) => (

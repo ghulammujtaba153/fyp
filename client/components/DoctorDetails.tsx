@@ -8,8 +8,9 @@ const DoctorDetails = ({ doctor }) => {
   if (!doctor) {
     return <div>Loading doctor details...</div>;
   }
+  console.log(doctor);
 
-  const { userId, specialization, doctor_qualification, availability } = doctor;
+  const { userId, specialization, doctor_qualification, availability, fee, experience } = doctor;
 
   return (
     <div className='flex flex-col'>
@@ -21,6 +22,8 @@ const DoctorDetails = ({ doctor }) => {
         <p className="text-gray-300 text-sm">{userId.contactNumber}</p>
         <p className="mt-2">Specialization</p>
         <p className="text-gray-300 text-sm">{specialization}</p>
+        <p className="mt-2">Experience</p>
+        <p className="text-gray-300 text-sm">{experience}</p>
         <p className="mt-2">Qualifications</p>
         {doctor_qualification.map((qualification, index) => (
           <p key={index} className="text-gray-300 text-sm">

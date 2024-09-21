@@ -9,12 +9,11 @@ const conversationRouter = express.Router();
 // Create a new conversation
 conversationRouter.post('/create', createConversation);
 
-// Check if conversation exists between doctor and patient
+
 conversationRouter.get('/doctor/:doctorId/patient/:patientId', async (req, res) => {
   const { doctorId, patientId } = req.params;
 
   try {
-    // Find conversation with both participants
     const conversation = await Conversation.findOne({
       participants: { $all: [doctorId, patientId] }
     });

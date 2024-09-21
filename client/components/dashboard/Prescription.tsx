@@ -12,6 +12,7 @@ const Prescription = ({ users, appointmentId, setPrescription }) => {
   const [status, setStatus] = useState('Active');
   const [nextReviewDate, setNextReviewDate] = useState('');
   const { user } = useContext(UserContext);
+  const [loading, setLoading]=useState(false);
 
   useEffect(() => {
     if (users[0]._id === user._id) {
@@ -35,6 +36,7 @@ const Prescription = ({ users, appointmentId, setPrescription }) => {
   };
 
   const handleSubmit = async() => {
+    setLoading(true);
     const prescriptionData = {
       patientId,
       doctorId,
@@ -46,7 +48,11 @@ const Prescription = ({ users, appointmentId, setPrescription }) => {
     try {
       const res=await axios.post(`${API_BASE_URL}/prescriptions/`, prescriptionData);
       console.log(res.data);
+
+      const statusRes= await axios.post(`${API_BASE_URL}/appointments/upcoming/${user._id}`,{status:"completed"});
+      console.log(statusRes.data);
       
+      setLoading(false);
     } catch (error) {
       console.log(error);
     }
@@ -136,7 +142,7 @@ const Prescription = ({ users, appointmentId, setPrescription }) => {
         onClick={handleSubmit}
         className="w-full bg-green-500 text-white py-2 rounded"
       >
-        Submit Prescription
+        {loading? "Submit Prescription" : "loading"}
       </button>
     </div>
   );

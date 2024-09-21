@@ -265,7 +265,7 @@ const Layout = ({ children }) => {
         <div className='w-full flex flex-end'>
           <DashNavBar />
         </div>
-        <div className="w-full pr-3">
+        <div className="w-full pr-3 ">
         {children}
         </div>
       </div>

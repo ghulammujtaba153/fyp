@@ -16,6 +16,7 @@ export default function Profile() {
     _id: "",
     firstName: "",
     lastName: "",
+    gender: "",
     email: "",
     password: "",
     role: "doctor",
@@ -29,7 +30,9 @@ export default function Profile() {
       { qualificationName: "", startYear: "", endYear: "" },
       { qualificationName: "", startYear: "", endYear: "" }
     ],
-    availability: {}
+    availability: {},
+    experience: "",
+    fee: 0,
   });
   const [profilePic, setProfilePic] = useState(null);
   const [profilePicPreview, setProfilePicPreview] = useState("");
@@ -46,6 +49,7 @@ export default function Profile() {
             _id: response.data._id,
             firstName: userData.userId.firstName,
             lastName: userData.userId.lastName,
+            gender: userData.userId.gender,
             email: userData.userId.email,
             password: "", 
             role: userData.userId.role,
@@ -57,6 +61,8 @@ export default function Profile() {
             specialization: userData.specialization,
             doctor_qualification: userData.doctor_qualification,
             availability: userData.availability,
+            experience: userData.experience,
+            fee: userData.fee,
           });
           if (userData.userId.profile) {
             setProfilePicPreview(userData.userId.profile);
@@ -180,6 +186,19 @@ export default function Profile() {
                 />
               </LabelInputContainer>
             </div>
+            <div className='mb-4'>
+                <Label htmlFor="gender">Gender</Label>
+                <select 
+                  name="gender" 
+                  value={formData.gender} 
+                  onChange={handleChange} 
+                  className="w-full border rounded px-4 py-2 bg-white-100 outline-none cursor-pointer"
+                >
+                  
+                  <option value="Male">Male</option>
+                  <option value="Female">Female</option>
+                </select>
+              </div>
             <LabelInputContainer className="mb-4">
               <Label htmlFor="email">Email Address</Label>
               <Input 
@@ -254,6 +273,28 @@ export default function Profile() {
                 placeholder="Cardiology" 
                 type="text" 
                 value={formData.specialization}  
+                onChange={handleChange} 
+              />
+            </LabelInputContainer>
+            <LabelInputContainer className="mb-4">
+              <Label htmlFor="experience">Experience</Label>
+              <Input 
+                id="experience" 
+                name="experience" 
+                placeholder="3 years" 
+                type="text" 
+                value={formData.experience}  
+                onChange={handleChange} 
+              />
+            </LabelInputContainer>
+            <LabelInputContainer className="mb-4">
+              <Label htmlFor="fee">Fee</Label>
+              <Input 
+                id="fee" 
+                name="fee" 
+                placeholder="100" 
+                type="number" 
+                value={formData.fee}  
                 onChange={handleChange} 
               />
             </LabelInputContainer>

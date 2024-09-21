@@ -36,7 +36,7 @@ export function DoctorCard({cardData}) {
          {cardData.specialization}
         </CardItem>
         <div className='flex items-center mt-5'>
-          <p className='font-bold'>Fee: <span className='text-sm text-gray-400'>{1000}</span></p>
+          <p className='font-bold'>Fee(PKR): <span className='text-sm text-gray-400'>{cardData.fee}</span></p>
         </div>
         <div className="flex justify-between items-center mt-10">
           <Link href={`/dashboard/doctors/${cardData.userId._id}`} className="cursor-pointer p-2 bg-white rounded-md" passHref>

@@ -56,7 +56,12 @@ const ChatComponent = () => {
     
 
     const handleConversationClick = (id) => {
-        router.push(`/doctordashboard/chats/conversations/${id}`);
+        if(user.role==="doctor"){
+            router.push(`/doctordashboard/chats/conversations/${id}`);
+        }else{
+            router.push(`/dashboard/chats/conversations/${id}`);
+        }
+        
     };
 
     const isOnline = (participantId) => onlineUsers.includes(participantId);
@@ -64,7 +69,7 @@ const ChatComponent = () => {
     return (
             <div className='prescription-container flex flex-col h-[80%] w-full m-4 overflow-y-scroll'>
                 {conversations && conversations.map((conversation) => (
-                    <div key={conversation._id}>
+                    <div key={conversation._id} >
                         {conversation.participants.map((participant) => (
                             participant._id !== user._id && (
                                 <div
