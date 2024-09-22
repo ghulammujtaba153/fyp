@@ -71,6 +71,7 @@ const TestAppointmentPage: React.FC = () => {
                         <div onClick={()=>handleClick(appointment._id)} key={appointment._id} className="flex flex-col p-4 bg-white shadow-md rounded-lg hover:shadow-lg hover:bg-gray-200 cursor-pointer">
                             <img src={appointment.testId.picture} alt={appointment.testId.testName} className="w-full h-24 object-cover rounded-lg mb-4" />
                             <div>
+                                <p className='inline-block px-2 py-1 text-sm font-medium text-white bg-green-500 rounded-full mb-2'>{appointment.status}</p>
                                 <h2 className="text-xl font-semibold">{appointment.testId.testName}</h2>
                                 <p className="text-gray-600">Date: {new Date(appointment.appointmentDate).toLocaleDateString()}</p>
                                 <p className="text-gray-600">Time: {appointment.appointmentTime}</p>

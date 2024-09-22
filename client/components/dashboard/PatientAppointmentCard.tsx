@@ -55,7 +55,12 @@ export function PatientAppointmentCard({ cardData }) {
           </CardItem>
         </div>
 
+        <div>
+          
+        </div>
+
         <div className="mt-4">
+        <p className="px-2 bg-green-400 inline-block rounded-full">{cardData?.status}</p>
           <p className="font-bold text-neutral-600 text-white">
             Appointment Timing: <span className=" text-gray-300">{formattedTiming || "Invalid Date"}</span>
           </p>

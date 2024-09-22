@@ -20,6 +20,11 @@ const testAppointmentSchema = new Schema({
   appointmentTime: {
     type: String, 
     required: true
+  },
+  status: {
+    type:String,
+    enum: ["scheduled ", "report-pending", "completed "],
+    default: "scheduled "
   }
 });
 

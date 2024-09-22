@@ -19,6 +19,28 @@ export const createPayment = async (req, res) => {
 };
 
 
+export const createTestPayment = async (req, res) => {
+  const { testId, patientId, amount } = req.body;
+  console.log("create",req.body)
+  try {
+    const newPayment = new Payment({
+      testId,
+      patientId,
+      amount,
+    });
+
+    await newPayment.save();
+
+    res.status(201).json(newPayment);
+  } catch (error) {
+    res.status(500).json({ message: 'Error creating payment', error });
+  }
+};
+
+
+
+
+
 export const getPaymentsByPatient = async (req, res) => {
   const { patientId } = req.params;
 

@@ -5,7 +5,12 @@ const paymentSchema = new Schema({
   doctorId: { 
     type: Schema.Types.ObjectId, 
     ref: 'User', 
-    required: true 
+    required: false 
+  },
+  testId: {
+    type: Schema.Types.ObjectId,
+    ref: 'Test', 
+    required: false
   },
   patientId: { 
     type: Schema.Types.ObjectId, 

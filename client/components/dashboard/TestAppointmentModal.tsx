@@ -22,7 +22,12 @@ const style = {
   p: 4,
 };
 
-export default function TestAppointmentModal({ appointmentId }) {
+interface TestAppointmentModalProps {
+  appointmentId: string;
+  fee: number;
+}
+
+export default function TestAppointmentModal({ appointmentId, fee }: TestAppointmentModalProps) {
   const [open, setOpen] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
   const { user } = React.useContext(UserContext);
@@ -45,6 +50,13 @@ export default function TestAppointmentModal({ appointmentId }) {
     try {
       const res = await axios.post(`${API_BASE_URL}/testappointments/create`, data);
       console.log(res.data);
+
+      const payRes= await axios.post(`${API_BASE_URL}/payments/test/create`, {
+        testId: appointmentId,
+        patientId: user._id,
+        amount: fee,
+      });
+      console.log(payRes.data);
       handleClose(); // Close the modal after submission
       toast.success('Appointment created successfully!');
     } catch (error) {

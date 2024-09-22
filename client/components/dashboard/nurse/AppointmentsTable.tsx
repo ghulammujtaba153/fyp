@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import * as React from 'react';
 import Paper from '@mui/material/Paper';
@@ -10,9 +10,11 @@ import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 
+// Define the types for the data you expect to receive
 interface Column {
-  id: 'avatar' | 'fullName' | 'email' | 'contactNumber' | 'testName' | 'appointmentDate' | 'appointmentTime';
+  id: 'avatar' | 'fullName' | 'email' | 'contactNumber' | 'testName' | 'appointmentDate' | 'appointmentTime' | 'status';
   label: string;
   minWidth?: number;
   align?: 'right';
@@ -26,6 +28,7 @@ const columns: readonly Column[] = [
   { id: 'testName', label: 'Test Name', minWidth: 150 },
   { id: 'appointmentDate', label: 'Appointment Date', minWidth: 150 },
   { id: 'appointmentTime', label: 'Appointment Time', minWidth: 150 },
+  { id: 'status', label: 'Status', minWidth: 120 }, // New status column
 ];
 
 interface Data {
@@ -36,6 +39,8 @@ interface Data {
   testName: string;
   appointmentDate: string;
   appointmentTime: string;
+  status: string;
+  _id: string; // Add _id for row navigation
 }
 
 interface TestAppointmentTableProps {
@@ -45,7 +50,8 @@ interface TestAppointmentTableProps {
 const TestAppointmentTable: React.FC<TestAppointmentTableProps> = ({ data }) => {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
-  const router =useRouter();
+  const [loading, setLoading]= React.useState(false);
+  const router = useRouter(); // Use Next.js router for navigation
 
   const handleChangePage = (event: React.MouseEvent<HTMLButtonElement> | null, newPage: number) => {
     setPage(newPage);
@@ -56,8 +62,23 @@ const TestAppointmentTable: React.FC<TestAppointmentTableProps> = ({ data }) => 
     setPage(0);
   };
 
-  const handleClick = (row: Data) => {
-    router.push(`/nurse/appointments/${row._id}`);
+  // Function to format date and time
+  const formatDate = (dateString: string) => {
+    const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'long', day: 'numeric' };
+    return new Date(dateString).toLocaleDateString(undefined, options);
+  };
+
+  const formatTime = (timeString: string) => {
+    const [hour, minute] = timeString.split(':');
+    const formattedTime = new Date();
+    formattedTime.setHours(Number(hour), Number(minute));
+    return formattedTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  };
+
+  const handleRowClick = (id: string) => {
+    setLoading(true);
+    router.push(`/nurse/appointments/${id}`); // Navigate to appointment details page
+    setLoading(false)
   };
 
   return (
@@ -80,16 +101,25 @@ const TestAppointmentTable: React.FC<TestAppointmentTableProps> = ({ data }) => 
           <TableBody>
             {data
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .map((row, index) => (
-                <TableRow onClick={()=>{handleClick(row)}} hover sx={{cursor: 'pointer'}} role="checkbox" tabIndex={-1} key={index}>
+              .map((row) => (
+                <TableRow
+                  key={row._id}
+                  hover
+                  sx={{ cursor: 'pointer' }}
+                  onClick={() => handleRowClick(row._id)} // Handle row click with router.push
+                >
                   {columns.map((column) => {
                     const value = row[column.id];
                     return (
                       <TableCell key={column.id} align={column.align}>
                         {column.id === 'avatar' ? (
                           <img src={value} alt="Profile Avatar" style={{ width: 50, height: 50, borderRadius: '50%' }} />
+                        ) : column.id === 'appointmentDate' ? (
+                          formatDate(value) // Format date
+                        ) : column.id === 'appointmentTime' ? (
+                          formatTime(value) // Format time
                         ) : (
-                          value
+                          value // Display other column values directly
                         )}
                       </TableCell>
                     );
@@ -108,6 +138,7 @@ const TestAppointmentTable: React.FC<TestAppointmentTableProps> = ({ data }) => 
         onPageChange={handleChangePage}
         onRowsPerPageChange={handleChangeRowsPerPage}
       />
+      {loading && <div className="loading-spinner">Loading...</div>}
     </Paper>
   );
 };

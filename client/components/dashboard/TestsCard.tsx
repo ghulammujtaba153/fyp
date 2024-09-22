@@ -31,7 +31,7 @@ export function TestsCard({cardData}) {
           />
           <div className="flex w-full justify-between items-center">
             <p className="font-bold">Price: <span className="text-white-200">{cardData.price}</span></p>
-            <TestAppointmentModal appointmentId={cardData._id}/>
+            <TestAppointmentModal appointmentId={cardData._id} fee={cardData.price}/>
           </div>
         </div>
       </CardBody>

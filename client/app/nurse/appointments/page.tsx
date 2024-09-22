@@ -28,6 +28,7 @@ interface Data {
   testName: string;
   appointmentDate: string;
   appointmentTime: string;
+  status: string;
 }
 
 const AppointmentPage = () => {
@@ -51,7 +52,8 @@ const AppointmentPage = () => {
           contactNumber: item.patientId.contactNumber,
           testName: item.testId.testName,
           appointmentDate: item.appointmentDate,
-          appointmentTime: item.appointmentTime
+          appointmentTime: item.appointmentTime,
+          status: item.status,
         }));
 
         setData(transformedData); // Adjust according to your API response structure
