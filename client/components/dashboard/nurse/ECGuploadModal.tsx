@@ -99,7 +99,11 @@ export default function ECGuploadModal({ id }: ECGuploadModalProps) {
 
   
       const resp=await axios.post(`${API_BASE_URL}/testReports/ecg/create`, formData);
-      console.log(resp);
+      console.log(resp.data);
+
+      const resStatus=await axios.put(`${API_BASE_URL}/testappointments/${id}`, {status: "completed"});
+      console.log(resStatus);
+
       setOpen(false);
       
     } catch (error) {

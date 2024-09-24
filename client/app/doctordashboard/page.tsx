@@ -1,10 +1,14 @@
 "use client";
 
-import React from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import EarningGraph from '@/components/dashboard/admin/EarningGraph';
 
 import DoctorUpcomingAppointment from '@/components/dashboard/DoctorUpcommingAppointment';
 import Card from '@/components/dashboard/Card';
+import { user } from './../../../server/controllers/patientControllers/auth';
+import { UserContext } from '@/context/UserContext';
+import API_BASE_URL from '@/utils/apiConfig';
+import axios from 'axios';
 
 
 interface CardData {
@@ -13,6 +17,33 @@ interface CardData {
 }
 
 const Dashboard = () => {
+  const [appointments, setAppointments] = useState([]);
+  const [earning, setEarning] = useState(0);
+  const {user} = useContext(UserContext);
+
+  useEffect(() => {
+    if (!user) return;
+
+    const fetchAppointments = async () => {
+      try {
+        const res = await axios.get(`${API_BASE_URL}/appointments/all/doctor/${user?._id}`);
+        const data = res.data;
+        console.log(data);
+        setAppointments(data);
+
+        const earning = await axios.get(`${API_BASE_URL}/doctorStats/totalEarning/${user?._id}`);
+        setEarning(earning.data);
+        console.log(earning.data);
+
+      } catch (error) {
+        console.error("Error fetching appointments", error.message);
+      }
+    };
+
+    fetchAppointments();
+  },[user])
+
+
   const cardData: CardData[] = [
     { title: "Total Appointments", num: 50 },
     { title: "Today's Appointments", num: 2 },

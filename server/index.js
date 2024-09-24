@@ -16,6 +16,8 @@ import testReportRouter from './routes/testReportRoutes.js';
 import feedBackRouter from './routes/feedBackRoutes.js';
 import notificationRouter from './routes/notificationRoutes.js';
 import paymentRouter from './routes/paymentRoutes.js';
+import patientStatsRouter from './routes/patientStatsRoutes.js';
+import doctorStatsRouter from './routes/doctorStatsRoutes.js';
 
 dotenv.config();
 
@@ -42,6 +44,10 @@ app.use('/api/testReports', testReportRouter);
 app.use('/api/feedBack', feedBackRouter);
 app.use('/api/notifications', notificationRouter);
 app.use('/api/payments', paymentRouter);
+//stats
+app.use('/api/patientStats', patientStatsRouter);
+//stats
+app.use('/api/doctorStats', doctorStatsRouter);
 
 app.listen(port, () => {
   console.log(`Server is running on port: ${port}`);

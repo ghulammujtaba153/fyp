@@ -106,6 +106,8 @@ export default function CBCuploadModal({id}) {
     
     const res = await axios.post(`${API_BASE_URL}/testReports/cbc/create`, form);
     console.log(res.data);
+    const resStatus=await axios.put(`${API_BASE_URL}/testappointments/${id}`, {status: "completed"});
+    console.log(resStatus.data);
     setLoading(false);
     
   };

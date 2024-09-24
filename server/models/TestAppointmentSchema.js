@@ -23,8 +23,8 @@ const testAppointmentSchema = new Schema({
   },
   status: {
     type:String,
-    enum: ["scheduled ", "report-pending", "completed "],
-    default: "scheduled "
+    enum: ["scheduled", "report-pending", "completed"],
+    default: "scheduled"
   }
 });
 

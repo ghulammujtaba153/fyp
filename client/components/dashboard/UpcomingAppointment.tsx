@@ -24,7 +24,10 @@ const UpcomingAppointment = () => {
         const currentDateTime = new Date();
         console.log('Current DateTime:', currentDateTime);
 
-        // Function to parse custom date format
+        const test=await axios.get(`${API_BASE_URL}/testAppointments/upcoming/${user._id}`);
+        console.log(test.data.upcomingTestAppointments);
+
+        // Function to parse custom date
         const parseCustomDateFormat = (dateString) => {
           const [datePart, timePart] = dateString.split('T');
           const [year, month, day] = datePart.split('-');

@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { createTestAppointment, getAllTestAppointments, getTestAppointmentById, getTestAppointmentByTestId } from '../controllers/testAppointmentControllers.js';
+import { changeStatus, createTestAppointment, getAllTestAppointments, getTestAppointmentById, getTestAppointmentByTestId, getUpcomingTestAppointments } from '../controllers/testAppointmentControllers.js';
 
 
 const testAppointmentRouter = Router();
@@ -12,6 +12,10 @@ testAppointmentRouter.get('/:id', getTestAppointmentById);
 
 //testid
 testAppointmentRouter.get('/test/:id', getTestAppointmentByTestId);
+
+testAppointmentRouter.put('/:id', changeStatus);
+
+testAppointmentRouter.get('/upcoming/:patientId', getUpcomingTestAppointments);
 
 
 export default testAppointmentRouter;

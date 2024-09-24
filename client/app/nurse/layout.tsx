@@ -90,6 +90,14 @@ const layout = ({ children }) => {
             active={activeItem === 'Appointments'}
             onClick={() => handleItemClick('Appointments')}
           />
+
+          <SidebarItem
+            icon={<LogOut size={24}/>}
+            text="Logout"
+            href="/"
+            active={activeItem === 'Logout'}
+            onClick={() => handleLogout()}
+          />
           
           
           

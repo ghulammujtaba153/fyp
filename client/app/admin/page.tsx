@@ -1,185 +1,118 @@
-"use client";
+'use client';
 
-import React, { useState } from 'react';
-import PersonIcon from '@mui/icons-material/Person';
-import LocalHospitalIcon from '@mui/icons-material/LocalHospital';
-import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
-import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
-import { BarChart, Bar, PieChart, Pie, Tooltip, XAxis, YAxis, CartesianGrid, Legend } from 'recharts';
+import StatCard from '@/components/dashboard/admin/StatCard';
+import UserGrowthChart from '@/components/dashboard/admin/UserGrowthChart';
+import AppointmentSuccessRateChart from '@/components/dashboard/admin/AppointmentRateChart';
+import React from 'react';
+import { FaUsers, FaUserMd, FaCalendarCheck, FaFlask } from 'react-icons/fa';
+import DoctorsSpecializationPieChart from '@/components/dashboard/admin/DoctorsSpecializationPieChart';
+import GenderDistributionPieChart from '@/components/dashboard/admin/GenderDistributionPieChart';
+import FeedbackPieChart from '@/components/dashboard/admin/FeedbackPieChart';
+import TopDoctors from '@/components/dashboard/admin/TopDoctors';
 
 const Page = () => {
-  const [stats, setStats] = useState({
-    totalPatients: 800000,
-    totalDoctors: 160,
-    totalAppointments: 600000,
-    totalEarnings: 70000,
-  });
-
-  const [topDoctors, setTopDoctors] = useState([
-    { name: 'Dr. Thomas White', department: 'Cardiology', reviews: 216 },
-    { name: 'Dr. Emilia Williamson', department: 'Surgery', reviews: 200 },
-    { name: 'Dr. Justine Hextall', department: 'Neurology', reviews: 180 },
-    { name: 'Dr. Dianne Russell', department: 'Pharmacy', reviews: 50 },
-    { name: 'Dr. Kristin Watson', department: 'Psychiatry', reviews: 25 },
-  ]);
-
-  const patientOverviewData = [
-    { month: 'Jan', Hospitalized: 2000, Recovered: 1000 },
-    { month: 'Feb', Hospitalized: 3000, Recovered: 1500 },
-    { month: 'Mar', Hospitalized: 2500, Recovered: 2000 },
-    { month: 'Apr', Hospitalized: 3200, Recovered: 2200 },
-    { month: 'May', Hospitalized: 3400, Recovered: 1800 },
-    { month: 'Jun', Hospitalized: 3900, Recovered: 2600 },
+  const userGrowthData = [
+    { month: 'Jan', Doctors: 20, Patients: 50, LabOperators: 5 },
+    { month: 'Feb', Doctors: 40, Patients: 80, LabOperators: 10 },
+    { month: 'Mar', Doctors: 10, Patients: 40, LabOperators: 3 },
+    { month: 'April', Doctors: 2, Patients: 30, LabOperators: 10 },
+    { month: 'May', Doctors: 15, Patients: 50, LabOperators: 8 },
+    { month: 'June', Doctors: 25, Patients: 60, LabOperators: 15 },
+    { month: 'July', Doctors: 35, Patients: 10, LabOperators: 18 },
   ];
 
-  const earningsData = [
-    { day: 'Sat', Income: 5000, Expense: 3000 },
-    { day: 'Sun', Income: 4000, Expense: 2500 },
-    { day: 'Mon', Income: 4500, Expense: 2000 },
-    { day: 'Tue', Income: 4700, Expense: 2100 },
-    { day: 'Wed', Income: 4800, Expense: 2200 },
-    { day: 'Thu', Income: 5000, Expense: 3000 },
-    { day: 'Fri', Income: 5100, Expense: 3500 },
+  const appointmentData = [
+    { month: 'Jan', Completed: 70, Canceled: 20, Missed: 10 },
+    { month: 'Feb', Completed: 60, Canceled: 25, Missed: 15 },
+    { month: 'Mar', Completed: 10, Canceled: 1, Missed: 1 },
+    { month: 'April', Completed: 20, Canceled: 2, Missed: 25 },
+    { month: 'May', Completed: 50, Canceled: 10, Missed: 30 },
+    { month: 'June', Completed: 40, Canceled: 15, Missed: 45 },
+    { month: 'July', Completed: 90, Canceled: 30, Missed: 20 },
   ];
 
-  const topDepartmentsData = [
-    { name: 'Surgery', value: 400 },
-    { name: 'Cardiology', value: 300 },
-    { name: 'Neurology', value: 200 },
-    { name: 'Medicine', value: 100 },
+  const specializationData = [
+    { specialization: 'Cardiology', value: 400 },
+    { specialization: 'Neurology', value: 300 },
+    { specialization: 'Pediatrics', value: 200 }
+  ];
+
+  const feedbackData = [
+    { type: 'Positive', count: 250 },
+    { type: 'Negative', count: 50 }
+  ];
+
+  const genderData = [
+    { gender: 'Male', users: 600 },
+    { gender: 'Female', users: 400 }
+  ];
+
+  const doctors = [
+    { id: 1, name: "Dr. Thomas White", specialty: "Cardiology", reviews: 216, rating: 5 },
+    { id: 2, name: "Dr. Emilia Williamson", specialty: "Surgery", reviews: 200, rating: 4 },
+    { id: 3, name: "Dr. Justine Hextall", specialty: "Neurology", reviews: 180, rating: 5 },
+    { id: 4, name: "Dr. Dianne Russell", specialty: "Pharmacy", reviews: 50, rating: 4 },
+    { id: 5, name: "Dr. Kristin Watson", specialty: "Psychiatry", reviews: 25, rating: 4 }
   ];
 
   return (
-    <div className="container ml-60">
-      {/* Stats Row */}
-      <div className="container-fluid ">
-  <div className="row display flex g-4 justify-content-start"> {/* g-4 for gap, justify-content-start aligns them in one row */}
-    <div className="col-md-3" style={{marginRight:"2rem", width:"20%" }}> {/* 4 cards per row on medium (md) or larger screens */}
-      <div className="card p-3 shadow d-flex align-items-center justify-content-between" style={{ backgroundColor: "#f0f7ff", borderRadius: "15px" }}>
-        <div className="d-flex align-items-center">
-          <PersonIcon style={{ fontSize: 40, color: "#2d8cf0" }} />
-          <div className="ms-3">
-            <h3>800K</h3>
-            <p>Total Patients</p>
-          </div>
-        </div>
-        <div className="mt-2 text-success">
-          <strong>+20%</strong>
-          <i className="bi bi-graph-up-arrow" style={{ marginLeft: "5px" }}></i>
-        </div>
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 pl-[80px] pb-4 pt-4 pr-4">
+      <h1 className="text-3xl font-bold mb-6">Dashboard Overview</h1>
+      
+      {/* Stats Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <StatCard
+          icon={<FaUsers />}
+          iconBg="#e0eafc"
+          title="800K"
+          subtitle="Total Patients"
+        />
+        <StatCard
+          icon={<FaUserMd />}
+          iconBg="#e0f4f1"
+          title="160"
+          subtitle="Total Doctors"
+        />
+        <StatCard
+          icon={<FaCalendarCheck />}
+          iconBg="#fcf4dd"
+          title="600K"
+          subtitle="Total Appointments"
+        />
+        <StatCard
+          icon={<FaFlask />}
+          iconBg="#fff4e5"
+          title="120"
+          subtitle="Total Laboratory Operators"
+        />
       </div>
-    </div>
 
-    <div className="col-md-3" style={{marginRight:"2rem" , width:"20%" }}>
-      <div className="card p-3 shadow d-flex align-items-center justify-content-between" style={{ backgroundColor: "#fdf6f8", borderRadius: "15px" }}>
-        <div className="d-flex align-items-center">
-          <LocalHospitalIcon style={{ fontSize: 40, color: "#f75467" }} />
-          <div className="ms-3">
-            <h3>160</h3>
-            <p>Total Doctors</p>
-          </div>
+      {/* Charts */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 w-full mb-8">
+        <div className="bg-white shadow-md rounded-lg p-4 h-96">
+          <UserGrowthChart data={userGrowthData} />
         </div>
-        <div className="mt-2 text-danger">
-          <strong>-12%</strong>
-          <i className="bi bi-graph-down-arrow" style={{ marginLeft: "5px" }}></i>
-        </div>
-      </div>
-    </div>
-
-
-  return (
-    <div className='flex flex-col items-center pl-[100px] gap-4 h-full w-full mr-8'>
-      <div className="flex justify-between flex-wrap gap-4 w-full">
-        <Card data={cardData} />
-        <Card data={doctorData} />
-        <Card data={patientData} />
-        <Card data={revenueData} />
-        <Card data={appointmentData} />
-
-      </div>
-    </div>
-
-    <div className="col-md-3" style={{marginRight:"2rem" , width:"20%" }}>
-      <div className="card p-3 shadow d-flex align-items-center justify-content-between" style={{ backgroundColor: "#fff6e0", borderRadius: "15px" }}>
-        <div className="d-flex align-items-center">
-          <MonetizationOnIcon style={{ fontSize: 40, color: "#f6c23e" }} />
-          <div className="ms-3">
-            <h3>$70K</h3>
-            <p>Total Earnings</p>
-          </div>
-        </div>
-        <div className="mt-2 text-danger">
-          <strong>-10%</strong>
-          <i className="bi bi-graph-down-arrow" style={{ marginLeft: "5px" }}></i>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-      {/* Charts Row */}
-      <div className="row mb-4">
-        {/* Patient Overview */}
-        <div className="col-md-6 mb-4">
-          <div className="card p-3 shadow">
-            <h4>Patient Overview</h4>
-            <BarChart width={500} height={300} data={patientOverviewData}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="month" />
-              <YAxis />
-              <Tooltip />
-              <Legend />
-              <Bar dataKey="Hospitalized" fill="#8884d8" />
-              <Bar dataKey="Recovered" fill="#82ca9d" />
-            </BarChart>
-          </div>
-        </div>
-
-        {/* Top Departments */}
-        <div className="col-md-6 mb-4">
-          <div className="card p-3 shadow">
-            <h4>Top Departments</h4>
-            <PieChart width={400} height={300}>
-              <Pie dataKey="value" isAnimationActive={false} data={topDepartmentsData} cx={200} cy={150} outerRadius={80} fill="#8884d8" label />
-              <Tooltip />
-            </PieChart>
-          </div>
+        <div className="bg-white shadow-md rounded-lg p-4 h-96">
+          <AppointmentSuccessRateChart data={appointmentData} />
         </div>
       </div>
 
-      {/* Earnings Row */}
-      <div className="row">
-        <div className="col-md-6 mb-4">
-          <div className="card p-3 shadow">
-            <h4>Earnings</h4>
-            <BarChart width={500} height={300} data={earningsData}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="day" />
-              <YAxis />
-              <Tooltip />
-              <Legend />
-              <Bar dataKey="Income" fill="#8884d8" />
-              <Bar dataKey="Expense" fill="#82ca9d" />
-            </BarChart>
-          </div>
+      {/* Pie Charts */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 w-full mb-8">
+        <div className="bg-white shadow-md rounded-lg p-4 h-80">
+          <DoctorsSpecializationPieChart data={specializationData} />
         </div>
+        <div className="bg-white shadow-md rounded-lg p-4 h-80">
+          <GenderDistributionPieChart data={genderData} />
+        </div>
+        <div className="bg-white shadow-md rounded-lg p-4 h-80">
+          <FeedbackPieChart data={feedbackData} />
+        </div>
+      </div>
 
-        {/* Top Doctors */}
-        <div className="col-md-6 mb-4">
-          <div className="card p-3 shadow">
-            <h4>Top Doctors</h4>
-            <ul className="list-group">
-              {topDoctors.map((doctor, index) => (
-                <li key={index} className="list-group-item d-flex justify-content-between align-items-center">
-                  <div>
-                    <strong>#{index + 1}</strong> {doctor.name} - {doctor.department}
-                  </div>
-                  <span className="badge bg-primary">{doctor.reviews} Reviews</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
+      {/* Top Doctors */}
+      <div className="w-full ">
+        <TopDoctors doctors={doctors} />
       </div>
     </div>
   );
