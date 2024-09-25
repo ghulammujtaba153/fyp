@@ -10,15 +10,16 @@ import {X} from 'lucide-react'
 import loading from './../app/nurse/tests/loading';
 import Spinner from './Spinner';
 
-const AppointmentModal = ({ doctorId, onClose, doctorAvailability }) => {
+const AppointmentModal = ({ doctorId, amount, onClose, doctorAvailability }) => {
   const [appointmentDate, setAppointmentDate] = useState('');
   const [timeSlots, setTimeSlots] = useState([]);
   const [selectedTimeSlot, setSelectedTimeSlot] = useState('');
   const [status, setStatus] = useState('new');
   const { user } = useContext(UserContext);
   const router = useRouter();
-  console.log("doctorId",doctorId);
-  const [loadingState, setLoadingState] = useState(true);
+  console.log("doctorId modal", doctorId, amount);
+  const [loadingState, setLoadingState] = useState(false);
+
 
   const socket = useRef();
 
@@ -92,7 +93,7 @@ const AppointmentModal = ({ doctorId, onClose, doctorAvailability }) => {
       const pay=await axios.post(`${API_BASE_URL}/payments/create`, {
         doctorId,
         patientId: user._id, 
-        amount: 100,
+        amount: amount,
       });
       console.log(pay.data);
       console.log(notRes.data);

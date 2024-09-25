@@ -60,7 +60,7 @@ const DoctorDetail = ({ params: { id } }) => {
   if (!doctor) {
     return (
       <div className="flex justify-center items-center h-screen">
-        <div className="w-16 h-16 border-4 border-dashed rounded-full animate-spin border-blue-500"></div>
+        <div className="w-16 h-16 border-4 border-dashed rounded-full animate-spin border-blue-500">no doctor</div>
       </div>
     );
   }
@@ -118,7 +118,7 @@ const DoctorDetail = ({ params: { id } }) => {
               onClick={() => setShowModal(true)}
               className="px-6 py-3 bg-blue-500 text-white rounded-lg shadow-lg hover:bg-blue-600 transition-all"
             >
-              Book Appointment
+              Book Appointment!
             </button>
           </div>
         </div>
@@ -146,6 +146,7 @@ const DoctorDetail = ({ params: { id } }) => {
       {showModal && (
         <AppointmentModal
           doctorId={userId}
+          amount={doctor.fee}
           onClose={() => setShowModal(false)}
           doctorAvailability={doctor.availability}
         />
