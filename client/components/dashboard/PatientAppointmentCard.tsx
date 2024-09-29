@@ -8,6 +8,7 @@ import axios from "axios";
 import { UserContext } from "@/context/UserContext";
 import moment from "moment";
 import { Pencil } from "lucide-react";
+import toast from "react-hot-toast";
 
 export function PatientAppointmentCard({ cardData }) {
   const { user } = useContext(UserContext);
@@ -29,13 +30,29 @@ export function PatientAppointmentCard({ cardData }) {
     formattedTiming = moment(cardData.timing, "YYYY-MM-DDThh:mm A").format("YYYY-MM-DD hh:mm A");
   }
 
+  const handleCancel = async () => {
+    const now = moment();
+    const appointmentTime = moment(cardData.timing);
+
+    // Check if the current time is the same as the appointment time (or very close)
+    if (now.isSame(appointmentTime, 'minute')) {
+      toast.error("You cannot cancel the appointment at this time.");
+      return;
+    }
+
+    try{
+      const statusRes = await axios.put(`${API_BASE_URL}/appointments/${cardData._id}/status`, { status: 'canceled' });
+      console.log(statusRes.data);
+      toast.success("Appointment canceled successfully.");
+    }catch{
+      console.log("Error updating appointment status");
+      toast.error("Error updating appointment status.");
+    }
+  };
+
   return (
     <CardContainer className="inter-var w-[90%]">
       <CardBody className="flex flex-col justify-center relative group/card hover:shadow-2xl hover:shadow-emerald-500/[0.1] text-white dark:bg-black dark:border-white/[0.2] border-black/[0.1] h-auto rounded-xl gap-3 pt-6 pb-6 pr-6 pl-6 border">
-        <button className="absolute top-4 right-4 hover:text-gray-200 cursor-pointer p-1 ">
-          <Pencil />
-        </button>
-        
         
         <div className="flex items-center gap-4">
           <div className="w-[60px] h-[60px]">
@@ -60,20 +77,42 @@ export function PatientAppointmentCard({ cardData }) {
         </div>
 
         <div className="mt-4">
-        <p className="px-2 bg-green-400 inline-block rounded-full">{cardData?.status}</p>
+        <p className={`${cardData?.status === "new" ? "bg-green-400" : "bg-red-400"} px-2 inline-block rounded-full`}>
+          {cardData?.status}
+        </p>
+
           <p className="font-bold text-neutral-600 text-white">
             Appointment Timing: <span className=" text-gray-300">{formattedTiming || "Invalid Date"}</span>
           </p>
         </div>
 
-        <div className="flex justify-center mt-6">
+        {
+          cardData?.status =="completed" &&
+
+          <div className="flex justify-center mt-6">
+            <button 
+              onClick={handleCardClick} 
+              className="p-2 bg-white text-sm text-black-default rounded-md"
+            >
+              View Prescription
+            </button>
+          </div>
+        }
+
+        
+
+        {cardData?.status =="new" && 
+          <div className="flex justify-center mt-6">
           <button 
-            onClick={handleCardClick} 
-            className="p-2 bg-white text-sm text-black-default rounded-md"
+            onClick={handleCancel} 
+            className="p-2 text-sm bg-red-500 text-white rounded-md"
           >
-            View Prescription
+            Cancel
           </button>
         </div>
+        }
+
+        
       </CardBody>
     </CardContainer>
   );

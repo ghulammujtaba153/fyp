@@ -3,14 +3,32 @@
 import StatCard from '@/components/dashboard/admin/StatCard';
 import UserGrowthChart from '@/components/dashboard/admin/UserGrowthChart';
 import AppointmentSuccessRateChart from '@/components/dashboard/admin/AppointmentRateChart';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { FaUsers, FaUserMd, FaCalendarCheck, FaFlask } from 'react-icons/fa';
 import DoctorsSpecializationPieChart from '@/components/dashboard/admin/DoctorsSpecializationPieChart';
 import GenderDistributionPieChart from '@/components/dashboard/admin/GenderDistributionPieChart';
 import FeedbackPieChart from '@/components/dashboard/admin/FeedbackPieChart';
 import TopDoctors from '@/components/dashboard/admin/TopDoctors';
+import axios from 'axios';
+import API_BASE_URL from '@/utils/apiConfig';
 
 const Page = () => {
+
+  const [stats, setStats]=useState({});
+
+  useEffect(() => {
+    const fetchStats = async () => {
+      try {
+        const res = await axios.get(`${API_BASE_URL}/admin/stats`);
+        console.log(res.data);
+        setStats(res.data);
+      } catch (error) {
+        console.error('Error fetching stats:', error);
+      }
+    };
+    fetchStats();
+  }, []);
+
   const userGrowthData = [
     { month: 'Jan', Doctors: 20, Patients: 50, LabOperators: 5 },
     { month: 'Feb', Doctors: 40, Patients: 80, LabOperators: 10 },
@@ -58,25 +76,24 @@ const Page = () => {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen pb-4 pt-4 pr-4">
       <h1 className="text-3xl font-bold mb-6 text-white">Dashboard Overview</h1>
-      
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
         <StatCard
           icon={<FaUsers />}
           iconBg="#e0eafc"
-          title="800K"
+          title= {stats.totalPatients}
           subtitle="Total Patients"
         />
         <StatCard
           icon={<FaUserMd />}
           iconBg="#e0f4f1"
-          title="160"
+          title={stats.totalDoctors}
           subtitle="Total Doctors"
         />
         <StatCard
           icon={<FaCalendarCheck />}
           iconBg="#fcf4dd"
-          title="600K"
+          title={stats.totalAppointments}
           subtitle="Total Appointments"
         />
         <StatCard

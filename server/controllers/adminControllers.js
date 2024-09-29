@@ -17,7 +17,7 @@ export const homeStats=async (req,res)=>{
     try{
         const totalUsers = await User.countDocuments({});
 
-        const totalDoctors = await Doctor.countDocuments({ });
+        const totalDoctors = await User.countDocuments({ role: 'doctor' });
 
         const totalPatients = await User.countDocuments({ role: 'patient' });
 
