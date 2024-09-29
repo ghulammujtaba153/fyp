@@ -38,7 +38,7 @@ const PatientsPage = () => {
   }
 
   return (
-    <div className="container mx-auto bg-gray-100 h-screen pl-[100px] p-2">
+    <div className="container mx-auto bg-gray-100 h-screen p-2">
       <input
         type="text"
         placeholder="Search by name"

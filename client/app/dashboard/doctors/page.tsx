@@ -11,6 +11,7 @@ const Doctor = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [searchTerm, setSearchTerm] = useState<string>(''); // State for search term
   const [feeRange, setFeeRange] = useState<number>(2000); // State for fee range, default 2000
+  const [specialization, setSpecialization] = useState<string>(""); // State for specialization
 
   useEffect(() => {
     const fetchDoctors = async () => {
@@ -35,13 +36,23 @@ const Doctor = () => {
     setFeeRange(Number(event.target.value));
   };
 
-  // Filter doctors based on search term (by first and last name) and fee range
-  const filteredDoctors = doctors.filter((doctor: any) =>
-    `${doctor.userId.firstName} ${doctor.userId.lastName}`
+  const handleSpecializationChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setSpecialization(event.target.value);
+  };
+
+  // Filter doctors based on search term (by first and last name), fee range, and specialization
+  const filteredDoctors = doctors.filter((doctor: any) => {
+    const nameMatches = `${doctor.userId.firstName} ${doctor.userId.lastName}`
       .toLowerCase()
-      .includes(searchTerm.toLowerCase()) &&
-    doctor.fee <= feeRange
-  );
+      .includes(searchTerm.toLowerCase());
+
+    const feeMatches = doctor.fee <= feeRange;
+
+    const specializationMatches =
+      specialization === '' || doctor.specialization === specialization;
+
+    return nameMatches && feeMatches && specializationMatches;
+  });
 
   if (loading) {
     return (
@@ -53,8 +64,8 @@ const Doctor = () => {
 
   return (
     <>
-      <div className="bg-black-100 py-[40px] text-white flex items-center flex-col pl-[80px] h-[100%]">
-        <div className="w-full mx-auto mr-10 flex items-center justify-around">
+      <div className="bg-black-100 py-[40px] text-white flex items-center flex-col h-[100%]">
+        <div className="w-full mx-auto mr-10 flex items-center justify-around lg:flex-row flex-col gap-2 ">
           {/* Fee Range Filter */}
           <div className="flex items-center space-x-4">
             <label htmlFor="feeRange" className="text-white">Fee Range: {feeRange}</label>
@@ -67,6 +78,24 @@ const Doctor = () => {
               onChange={handleFeeRangeChange}
               className="slider cursor-pointer"
             />
+          </div>
+
+          {/* Specialization Filter */}
+          <div className="flex items-center justify-between gap-2">
+            <label className="flex text-white">Specialization</label>
+            <select
+              id="specialization"
+              className="bg-white border rounded p-2 mb-4 text-black"
+              value={specialization}
+              onChange={handleSpecializationChange}
+            >
+              <option value="">Select Specialization</option> 
+              <option value="Cardiology">Cardiology</option>
+              <option value="Hematology">Hematology</option>
+              <option value="Radiology">Radiology</option>
+              <option value="Dermatology">Dermatology</option>
+              <option value="Ophthalmology">Ophthalmology</option>
+            </select>
           </div>
 
           {/* Search Input */}

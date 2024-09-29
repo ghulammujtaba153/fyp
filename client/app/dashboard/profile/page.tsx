@@ -86,7 +86,7 @@ const Profile = () => {
 
   return (
     <>
-      <div className='flex flex-col items-center justify-center gap-6 pl-[100px]'>
+      <div className='flex flex-col items-center justify-center gap-6'>
         <div className='flex flex-col items-center justify-center gap-6'>
           <div className='flex items-center justify-center mb-4 bg-black-default border rounded-full w-[100px] h-[100px] relative'>
             <img src={profilePicPreview} alt="Profile" className='w-full h-full object-cover rounded-full' />

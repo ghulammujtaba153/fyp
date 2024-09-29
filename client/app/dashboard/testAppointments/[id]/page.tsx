@@ -44,9 +44,11 @@ const Page: React.FC<PageProps> = ({ params }) => {
     const { id } = params;
     const [report, setReport] = useState<ECGReport | null>(null);
     const [cbcReport, setCBCReport] = useState<CBCReport | null>(null);
+    const [loading, setLoading] =useState(false);
 
     useEffect(() => {
         const fetchReport = async () => {
+            setLoading(true);
             try {
                 const res = await axios.get(`${API_BASE_URL}/testReports/test/${id}`);
                 setReport(res.data[0]); // Assuming the API returns an array with one object
@@ -55,12 +57,13 @@ const Page: React.FC<PageProps> = ({ params }) => {
             } catch (error) {
                 console.error('Error fetching the report:', error);
             }
+            setLoading(false);
         };
 
         fetchReport();
     }, [id]);
 
-    if (!report && !cbcReport) {
+    if (loading) {
         return <div className="pl-[100px] flex items-center justify-center h-screen text-white">
             <Spinner />
         </div>;
@@ -102,7 +105,7 @@ const Page: React.FC<PageProps> = ({ params }) => {
             )}
 
             {!report && !cbcReport && (
-                <div className="pl-[100px] h-[100%] text-white">
+                <div className="pl-[100px] h-[100%] text-white h-screen">
                     <h1 className="text-3xl font-bold mb-4">Report is not uploaded by Nurse</h1>
                 </div>
             )}

@@ -42,8 +42,7 @@ export default function DoctorsTable({ doctors }) {
     const doctorId = doctor._id;
 
     try {
-      const res = await axios.delete(`${API_BASE_URL}/doctors/delete/${userId}/${doctorId}`);
-      console.log(res.data);
+      await axios.delete(`${API_BASE_URL}/doctors/delete/${userId}/${doctorId}`);
       handleDoctorUpdated();
     } catch (error) {
       console.error('Error deleting doctor:', error);
@@ -55,16 +54,17 @@ export default function DoctorsTable({ doctors }) {
   };
 
   return (
-    <Paper sx={{ width: '100%', overflow: 'hidden' }} className="shadow-lg rounded-md">
+    <Paper className="shadow-lg rounded-md">
       <TableContainer className="overflow-x-auto">
-        <Table stickyHeader aria-label="sticky table" sx={{ minWidth: 750 }}>
+        {/* Add a responsive container */}
+        <Table aria-label="doctors table" className="min-w-[150px] md:min-w-[750px]">
           <TableHead>
             <TableRow>
               {columns.map((column) => (
                 <TableCell
                   key={column.id}
                   align={column.align}
-                  style={{ minWidth: column.minWidth, fontWeight: 'bold' }}
+                  style={{ minWidth: column.minWidth }}
                   className="bg-gray-200 text-gray-700"
                 >
                   {column.label}

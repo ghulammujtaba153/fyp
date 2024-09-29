@@ -13,6 +13,7 @@ import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 import { UserContext } from "@/context/UserContext";
 import { signIn } from "next-auth/react";
+import { CircularProgress } from "@mui/material";
 
 
 export default function Login() {
@@ -21,9 +22,11 @@ export default function Login() {
   const [error, setError] = useState("");
   const router=useRouter();
   const { setUser } = useContext(UserContext);
+  const [loading, setLoading] =useState(false)
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setLoading(true)
 
     try {
       const response = await axios.post("http://localhost:5000/api/login", {
@@ -39,18 +42,24 @@ export default function Login() {
       setUser(user)
       if(user.role === "doctor"){
         router.push("/doctordashboard");
+        setLoading(false)
       }else if(user.role === "patient"){
         router.push("/dashboard");
+        setLoading(false)
       }else if(user.role === "admin"){
         router.push("/admin");
+        setLoading(false)
       }else if(user.role === "nurse"){
         router.push("/nurse");
+        setLoading(false)
       }
+      
       
 
     } catch (error) {
       console.error("Error logging in:", error.response?.data?.message || error.message);
       setError(error.response?.data?.message || "An error occurred. Please try again.");
+      setLoading(false)
     }
   };
 
@@ -94,7 +103,7 @@ export default function Login() {
             className="bg-gradient-to-br relative group/btn from-black dark:from-zinc-900 dark:to-zinc-900 to-neutral-600 block dark:bg-zinc-800 w-full text-white rounded-md h-10 font-medium shadow-[0px_1px_0px_0px_#ffffff40_inset,0px_-1px_0px_0px_#ffffff40_inset] dark:shadow-[0px_1px_0px_0px_var(--zinc-800)_inset,0px_-1px_0px_0px_var(--zinc-800)_inset]"
             type="submit"
           >
-             Login 
+             {loading? <CircularProgress size={10} /> :"Login"}
             <BottomGradient />
           </button>
 

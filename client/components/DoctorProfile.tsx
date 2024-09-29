@@ -60,7 +60,7 @@ export default function DoctorProfile() {
     ],
     availability: { startTime: "", endTime: "" },
     experience: "",
-    fee: 0,
+    fee: 200,
   });
 
   const [profilePic, setProfilePic] = useState<File | null>(null);
@@ -288,13 +288,18 @@ export default function DoctorProfile() {
             {errors.permanentAddress && <p className="text-red-500 text-sm">{errors.permanentAddress}</p>}
           </LabelInputContainer>
 
-          {/* Specialization Field */}
-          <LabelInputContainer className="mb-4">
-            <Label htmlFor="specialization" style={{ color: 'black' }}>
-              Specialization
-            </Label>
-            <Input id="specialization" placeholder="Psychiatrist" type="text" value={formData.specialization} onChange={handleChange} />
-            {errors.specialization && <p className="text-red-500 text-sm">{errors.specialization}</p>}
+
+          <LabelInputContainer>
+            <Label htmlFor="specialization" style={{ color: 'black' }}>Specialization</Label>
+            <select id="specialization" value={formData.specialization} onChange={handleChange} className="bg-white border rounded p-2 mb-4">
+              <option value="">Select Specialization</option>
+              <option value="Cardiology">Cardiology</option>
+              <option value="Hematology">Hematology</option>
+              <option value="Radiology">Radiology</option>
+              <option value="Dermatology">Dermatology</option>
+              <option value="Ophthalmology">Ophthalmology</option>
+            </select>
+            {errors.gender && <p className="text-red-500 text-sm">{errors.gender}</p>}
           </LabelInputContainer>
 
           <LabelInputContainer className="mb-4">
@@ -305,7 +310,7 @@ export default function DoctorProfile() {
 
           <LabelInputContainer className="mb-4">
             <Label htmlFor="fee" style={{ color: 'black' }}>Consultation Fee</Label>
-            <Input id="fee" placeholder="500" type="number" value={formData.fee} onChange={handleChange} />
+            <Input id="fee" placeholder="500" type="number" min={200} max={2000} value={formData.fee} onChange={handleChange} />
             {errors.fee && <p className="text-red-500 text-sm">{errors.fee}</p>}
           </LabelInputContainer>
 

@@ -9,9 +9,10 @@ import AppointmentsTable from "@/components/dashboard/AppointmentsTable";
 
 function Assignments() {
   const [appointments, setAppointments] = useState([]);
-  const [filteredAppointments, setFilteredAppointments] = useState([]); // State for filtered results
-  const [searchQuery, setSearchQuery] = useState(''); // State for the search query
-  const [searchDate, setSearchDate] = useState(''); // State for the search date
+  const [filteredAppointments, setFilteredAppointments] = useState([]);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [searchDate, setSearchDate] = useState('');
+  const [selectedStatus, setSelectedStatus] = useState('all'); // New state for status
   const [loading, setLoading] = useState(true);
   const { user } = useContext(UserContext);
   const router = useRouter();
@@ -23,7 +24,7 @@ function Assignments() {
       try {
         const userRes = await axios.get(`${API_BASE_URL}/doctors/${user._id}`);
         const res = await axios.get(`${API_BASE_URL}/appointments/all/doctor/${userRes.data._id}`);
-        
+
         // Convert custom date format and sort appointments
         const appointmentsWithParsedDates = res.data.map((appointment) => ({
           ...appointment,
@@ -44,24 +45,31 @@ function Assignments() {
   useEffect(() => {
     const filtered = appointments.filter(appointment => {
       const fullName = `${appointment.patientId.firstName} ${appointment.patientId.lastName}`.toLowerCase();
-      const appointmentDate = new Date(appointment.parsedTiming).setHours(0, 0, 0, 0); // Set time to 00:00:00 for accurate date comparison
-      const selectedDate = searchDate ? new Date(searchDate).setHours(0, 0, 0, 0) : null; // Set time to 00:00:00 for accurate date comparison
+      const appointmentDate = new Date(appointment.parsedTiming).setHours(0, 0, 0, 0);
+      const selectedDate = searchDate ? new Date(searchDate).setHours(0, 0, 0, 0) : null;
 
       const nameMatch = fullName.includes(searchQuery.toLowerCase());
-      const dateMatch = searchDate ? appointmentDate >= selectedDate : true; // Include appointments on or after the selected date
+      const dateMatch = searchDate ? appointmentDate >= selectedDate : true;
 
-      return nameMatch && dateMatch;
+      // Status filter: Only include appointments that match the selected status (or 'all' for all statuses)
+      const statusMatch = selectedStatus === 'all' || appointment.status === selectedStatus;
+
+      return nameMatch && dateMatch && statusMatch;
     });
 
     setFilteredAppointments(filtered);
-  }, [searchQuery, searchDate, appointments]); // Re-run the search whenever `searchQuery`, `searchDate`, or `appointments` change
+  }, [searchQuery, searchDate, selectedStatus, appointments]);
 
   const handleInputChange = (e) => {
-    setSearchQuery(e.target.value); // Update search query
+    setSearchQuery(e.target.value);
   };
 
   const handleDateChange = (e) => {
-    setSearchDate(e.target.value); // Update search date
+    setSearchDate(e.target.value);
+  };
+
+  const handleStatusChange = (e) => {
+    setSelectedStatus(e.target.value); // Update status filter
   };
 
   // Function to parse the custom date format
@@ -90,19 +98,33 @@ function Assignments() {
   }
 
   return (
-    <div className="flex flex-col gap-4 h-screen w-full pl-[80px] pr-[30px]">
-      <div className="flex items-center justify-between">
+    <div className="flex flex-col gap-4 h-screen w-full pr-[30px]">
+      <div className="flex md:items-center justify-between gap-2 md:flex-row flex-col">
         <input 
           type="text" 
           placeholder="Search by patient's name" 
           value={searchQuery}
-          onChange={handleInputChange} // Trigger search on input change
+          onChange={handleInputChange}
           className="p-2 border rounded-md"
         />
+
+        {/* Status Filter */}
+        <select
+          name="status"
+          value={selectedStatus}
+          onChange={handleStatusChange} // Trigger status filtering on change
+          className="p-2 border rounded-md cursor-pointer"
+        >
+          <option value="all">All</option>
+          <option value="new">New</option>
+          <option value="completed">Completed</option>
+          <option value="cancelled">Cancelled</option>
+        </select>
+
         <input 
           type="date"
           value={searchDate}
-          onChange={handleDateChange} // Trigger date search on date change
+          onChange={handleDateChange}
           className="p-2 border rounded-md"
         />
       </div>

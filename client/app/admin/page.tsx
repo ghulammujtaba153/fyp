@@ -56,8 +56,8 @@ const Page = () => {
   ];
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 pl-[80px] pb-4 pt-4 pr-4">
-      <h1 className="text-3xl font-bold mb-6">Dashboard Overview</h1>
+    <div className="flex flex-col items-center justify-center min-h-screen pb-4 pt-4 pr-4">
+      <h1 className="text-3xl font-bold mb-6 text-white">Dashboard Overview</h1>
       
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">

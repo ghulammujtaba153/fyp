@@ -89,7 +89,7 @@ const Dashboard = () => {
   ];
 
   return (
-    <div className="flex flex-col items-center gap-4 pl-[100px] h-screen p-5">
+    <div className="flex flex-col items-center gap-4 h-screen p-5">
       <p className="text-white flex-left">Welcome! Doctor </p>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
         {cardData.map((data, index) => (

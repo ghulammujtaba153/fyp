@@ -1,54 +1,62 @@
 "use client";
 
-import Sidebar from '@/components/dashboard/Sidebar';
+import Sidebar, { SidebarContext } from '@/components/dashboard/Sidebar';  // Import SidebarContext
 import { SidebarItem } from '@/components/dashboard/SidebarItem';
-import { BellIcon, Home, LogOut, LucideLogOut, MessageCircleMore, MessagesSquare, Settings, Star, TestTubeDiagonal } from 'lucide-react';
-import React, { useEffect, useState, useContext } from 'react';
+import { Home, LucideLogOut, MessagesSquare, NotebookText } from 'lucide-react';
+import React, { useContext, useEffect, useState } from 'react';
 import { HiUser } from 'react-icons/hi';
-import { useRouter } from 'next/navigation';
-import { usePathname } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import { UserContext } from "@/context/UserContext";
 import DashNavBar from '@/components/dashboard/DashNavBar';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUserMd, faBedPulse } from '@fortawesome/free-solid-svg-icons';
-import { faHospitalUser } from '@fortawesome/free-solid-svg-icons';
+import { faUserMd, faBedPulse, faHospitalUser } from '@fortawesome/free-solid-svg-icons';
 
-const layout = ({ children }) => {
+const Layout = ({ children }) => {
   const [activeItem, setActiveItem] = useState('Dashboard');
+  const [expanded, setExpanded] = useState(false); // State to track sidebar expansion
+  const [isSubMenuVisible, setIsSubMenuVisible] = useState(false);  // To handle submenu visibility
   const router = useRouter();
   const pathname = usePathname();
   const { user, logout } = useContext(UserContext);
 
+  // Set active menu item based on the current pathname
   useEffect(() => {
     const pathSegments = pathname.split('/');
-    console.log(pathSegments);
     if (pathSegments.length > 3) {
-      console.log(pathSegments[2])
       const lastSegment = pathSegments[2] || 'admin';
-      console.log(lastSegment)
       setActiveItem(lastSegment.charAt(0).toUpperCase() + lastSegment.slice(1));
-    }else{
+    } else {
       const lastSegment = pathSegments.pop() || 'admin';
-      console.log(lastSegment);
-      console.log(lastSegment.charAt(0).toUpperCase() + lastSegment.slice(1));
-      if (lastSegment.charAt(0).toUpperCase() + lastSegment.slice(1) == "Admin"){
-        setActiveItem("Home");
-      }else{
+      if (lastSegment === 'admin') {
+        setActiveItem('Home');
+      } else {
         setActiveItem(lastSegment.charAt(0).toUpperCase() + lastSegment.slice(1));
       }
-      // setActiveItem(lastSegment.charAt(0).toUpperCase() + lastSegment.slice(1));
-
     }
-    
   }, [pathname]);
 
-  const handleItemClick = (item: String) => {
+  // Handle sidebar item clicks
+  const handleItemClick = (item) => {
     setActiveItem(item);
-    console.log(item)
-    if (item=="Home"){
+
+    if (item === "Appointments") {
+      setIsSubMenuVisible(!isSubMenuVisible);  // Toggle sub-menu visibility
+    } else {
+      setIsSubMenuVisible(false);  // Hide submenu if another item is clicked
+      if (item === "Home") {
         router.push(`/admin`);
-    }else{
+      } else {
         router.push(`/admin/${item.toLowerCase()}`);
+      }
+    }
+  };
+
+  // Handle submenu item clicks
+  const handleSubItemClick = (subItem) => {
+    if (subItem === 'Doctor') {
+      router.push(`/admin/appointments`);
+    } else if (subItem === 'Lab') {
+      router.push(`/admin/testAppointments`);
     }
   };
 
@@ -58,76 +66,94 @@ const layout = ({ children }) => {
   };
 
   return (
-    <div className='flex bg-gray-100 text-black-default'>
-      <div className='flex'>
-        <Sidebar>
-          <SidebarItem
-            icon={<Home />}
-            text="Home"
-            href="/admin"
-            active={activeItem === 'Home'}
-            onClick={() => handleItemClick('Home')}
-          />
-          <SidebarItem
-            icon={<FontAwesomeIcon icon={faHospitalUser} />}
-            text="Users"
-            href="/admin/users"
-            active={activeItem === 'Users'}
-            onClick={() => handleItemClick('Users')}
-          />
+    <SidebarContext.Provider value={{ expanded, setExpanded }}>
+      <div className='flex bg-black-100 text-black-default'>
+        {/* Sidebar Section */}
+        <div className={`transition-all duration-300 ${expanded ? 'w-64' : 'w-16'}`}>
+          <Sidebar>
+            <SidebarItem
+              icon={<Home />}
+              text="Home"
+              href="/admin"
+              active={activeItem === 'Home'}
+              onClick={() => handleItemClick('Home')}
+            />
+            <SidebarItem
+              icon={<FontAwesomeIcon icon={faHospitalUser} />}
+              text="Users"
+              href="/admin/users"
+              active={activeItem === 'Users'}
+              onClick={() => handleItemClick('Users')}
+            />
+            <SidebarItem
+              icon={<FontAwesomeIcon icon={faUserMd} />}
+              text="Doctors"
+              href="/admin/doctors"
+              active={activeItem === 'Doctors'}
+              onClick={() => handleItemClick('Doctors')}
+            />
+            <SidebarItem
+              icon={<FontAwesomeIcon icon={faBedPulse} />}
+              text="Patients"
+              href="/admin/patients"
+              active={activeItem === 'Patients'}
+              onClick={() => handleItemClick('Patients')}
+            />
+            <SidebarItem
+              icon={<NotebookText size={24}/>}
+              text="Appointments"
+              href="/admin/appointments"
+              active={activeItem === 'Appointments'}
+              onClick={() => handleItemClick('Appointments')}
+            />
+            
+            {/* Submenu for Appointments */}
+            {isSubMenuVisible && (
+              <div className="ml-6">
+                <SidebarItem
+                  icon={<FontAwesomeIcon icon={faUserMd} size="lg" />}
+                  text="Doctor"
+                  href="/admin/appointments"
+                  active={pathname.includes('/appointments')}
+                  onClick={() => handleSubItemClick('Doctor')}
+                />
+                <SidebarItem
+                  icon={<FontAwesomeIcon icon={faBedPulse} />}
+                  text="Lab"
+                  href="/admin/testAppointments"
+                  active={pathname.includes('/testAppointments')}
+                  onClick={() => handleSubItemClick('Lab')}
+                />
+              </div>
+            )}
 
-          <SidebarItem
-            icon={<FontAwesomeIcon icon={faUserMd} />}
-            text="Doctors"
-            href="/admin/doctors"
-            active={activeItem === 'Doctors'}
-            onClick={() => handleItemClick('Doctors')}
-          />
+            <SidebarItem
+              icon={<MessagesSquare />}
+              text="Feedback"
+              href="/admin/feedback"
+              active={activeItem === 'Feedback'}
+              onClick={() => handleItemClick('Feedback')}
+            />
+            <SidebarItem
+              icon={<LucideLogOut />}
+              text="Logout"
+              href="/"
+              active={activeItem === 'Logout'}
+              onClick={handleLogout}
+            />
+          </Sidebar>
+        </div>
 
-          <SidebarItem
-            icon={<FontAwesomeIcon icon={faBedPulse} />}
-            text="Patients"
-            href="/admin/patients"
-            active={activeItem === 'Patients'}
-            onClick={() => handleItemClick('Patients')}
-          />
-
-          <SidebarItem
-            icon={<FontAwesomeIcon icon={faBedPulse} />}
-            text="Appointments"
-            href="/admin/appointments"
-            active={activeItem === 'Appointments'}
-            onClick={() => handleItemClick('Appointments')}
-          />
-
-          <SidebarItem
-            icon={<MessagesSquare />}
-            text="Feedback"
-            href="/admin/feedback"
-            active={activeItem === 'Feedback'}
-            onClick={() => handleItemClick('Feedback')}
-          />
-
-        <SidebarItem
-            icon={<LucideLogOut />}
-            text="Logout"
-            href="/"
-            active={activeItem === 'Logout'}
-            onClick={() => handleLogout()}
-          />
-          
-          
-        </Sidebar>
+        {/* Main Content Section */}
+        <div className={`transition-all duration-300 flex-1 ${expanded ? 'ml-11' : 'ml-2'}`}>
+          <DashNavBar />
+          <div className="p-4">
+            {children}
+          </div>
+        </div>
       </div>
-      
-      <div className='flex flex-col  w-full gap-6 items-center'>
-      <div className='w-full flex flex-end'>
-      <DashNavBar/>
-      </div>
-        {children}
-      </div>
-    </div>
+    </SidebarContext.Provider>
   );
 };
 
-export default layout;
+export default Layout;

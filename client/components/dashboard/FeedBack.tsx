@@ -39,8 +39,9 @@ const FeedBack: React.FC = () => {
   };
 
   return (
-    <div className="min-w-[300px] mx-auto p-6 bg-white shadow-md rounded-lg">
-
+    <div className="min-w-[600px] mx-auto p-6 bg-white shadow-md rounded-lg">
+      
+      {/* Rating Section */}
       <div className="mb-4 flex items-center gap-4">
         <p className="font-medium text-gray-700 mb-2">Give Stars</p>
         <Rating
@@ -54,8 +55,9 @@ const FeedBack: React.FC = () => {
         />
       </div>
 
-      <div className="mb-4 flex items-center gap-4">
-        <label htmlFor="liked" className="font-medium text-gray-700">
+      {/* What You Liked Section */}
+      <div className="mb-4 flex flex-col md:flex-row md:items-center gap-4">
+        <label htmlFor="liked" className="font-medium text-gray-700 md:w-1/4">
           What you liked
         </label>
         <input
@@ -68,8 +70,9 @@ const FeedBack: React.FC = () => {
         />
       </div>
 
-      <div className="mb-4 flex items-center gap-4">
-        <label htmlFor="disliked" className="font-medium text-gray-700">
+      {/* What You Disliked Section */}
+      <div className="mb-4 flex flex-col md:flex-row md:items-center gap-4">
+        <label htmlFor="disliked" className="font-medium text-gray-700 md:w-1/4">
           What you disliked
         </label>
         <input
@@ -82,8 +85,9 @@ const FeedBack: React.FC = () => {
         />
       </div>
 
-      <div className="mb-4 flex items-center gap-4">
-        <label htmlFor="suggestion" className="font-medium text-gray-700">
+      {/* Suggestion Section */}
+      <div className="mb-4 flex flex-col md:flex-row md:items-start gap-4">
+        <label htmlFor="suggestion" className="font-medium text-gray-700 md:w-1/4">
           Any suggestion?
         </label>
         <textarea
@@ -96,6 +100,7 @@ const FeedBack: React.FC = () => {
         />
       </div>
 
+      {/* Submit Button */}
       <button
         onClick={handleSubmit}
         className="w-full bg-indigo-600 text-white py-2 px-4 rounded-md shadow hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"

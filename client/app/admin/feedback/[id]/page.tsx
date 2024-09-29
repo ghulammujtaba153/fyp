@@ -41,7 +41,7 @@ const Page = ({ params }: Props) => {
 
   return (
     <div className="flex flex-col h-screen pl-[100px]">
-      <h1 className="text-bold mb-4">Feedback Details</h1>
+      <h1 className="text-bold mb-4 text-xl">Feedback Details</h1>
       <div className="flex items-center justify-center gap-2">
         <img
           src={data.userId?.profile} 

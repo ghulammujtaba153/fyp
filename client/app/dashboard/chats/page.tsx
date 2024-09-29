@@ -11,7 +11,7 @@ const ChatPage = () => {
     
 
     return (
-        <div className="pl-[100px] pr-[100px] w-full h-screen">
+        <div className="pr-[100px] w-full h-screen">
             <ChatComponent/>
         </div>
     );

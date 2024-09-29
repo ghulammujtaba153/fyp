@@ -28,8 +28,8 @@ const DoctorsPage = () => {
   );
 
   return (
-    <div className="container mx-auto bg-gray-100 h-screen pl-[100px] p-2">
-      <div className="max-w-full overflow-x-auto">
+    <div className="container mx-auto h-screen p-4">
+      <div className="w-full overflow-x-auto">
         <input
           type="text"
           placeholder="Search by name"
