@@ -7,12 +7,14 @@ import API_BASE_URL from "@/utils/apiConfig";
 import axios from "axios";
 import { UserContext } from "@/context/UserContext";
 import moment from "moment";
-import { Pencil } from "lucide-react";
 import toast from "react-hot-toast";
+import { updateAppointmentStatus } from "@/redux/slices/appointmentSlice";
+import { useDispatch } from "react-redux";
 
 export function PatientAppointmentCard({ cardData }) {
   const { user } = useContext(UserContext);
   const router = useRouter();
+  const dispatch = useDispatch();
 
   const handleCardClick = () => {
     router.push(`/dashboard/appointments/${cardData._id}`);
@@ -41,8 +43,7 @@ export function PatientAppointmentCard({ cardData }) {
     }
 
     try{
-      const statusRes = await axios.put(`${API_BASE_URL}/appointments/${cardData._id}/status`, { status: 'canceled' });
-      console.log(statusRes.data);
+      dispatch(updateAppointmentStatus({ id: cardData._id, status: 'canceled' }));
       toast.success("Appointment canceled successfully.");
     }catch{
       console.log("Error updating appointment status");

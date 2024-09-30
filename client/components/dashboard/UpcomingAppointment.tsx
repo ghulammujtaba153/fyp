@@ -69,6 +69,7 @@ const UpcomingAppointment = () => {
 
         // Sort upcoming appointments by time (nearest first)
         upcomingAppointments.sort((a, b) => parseCustomDateFormat(a.timing) - parseCustomDateFormat(b.timing));
+        upcomingAppointments.filter((appointment) =>  appointment.status.toLowerCase() != 'canceled');
 
         // Log sorted upcoming appointments
         console.log('Sorted Upcoming Appointments:', upcomingAppointments);

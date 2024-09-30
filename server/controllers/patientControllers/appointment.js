@@ -82,6 +82,7 @@ export const updateAppointmentStatus = async (req, res) => {
   
       const appointments = await Appointment.find({
         patientId,
+        status: 'new',
         timing: { $gt: currentDate },
       }).populate('doctorId').sort({ timing: 1 });
       console.log(appointments);
@@ -108,6 +109,7 @@ export const updateAppointmentStatus = async (req, res) => {
   
       const appointments = await Appointment.find({
         doctorId: doctorId,
+        status: 'new',
         timing: { $gt: currentDate },
       }).populate('patientId').sort({ timing: 1 });
       console.log(appointments);

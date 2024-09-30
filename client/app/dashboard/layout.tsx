@@ -80,7 +80,7 @@ const Layout = ({ children }) => {
               onClick={() => handleItemClick('Profile')}
             />
             <SidebarItem
-              icon={<FontAwesomeIcon icon={faUserMd} size="lg" />}
+              icon={<FontAwesomeIcon icon={faUserMd} size={24} />}
               text="Doctors"
               href="/dashboard/doctors"
               active={activeItem === 'Doctors'}
@@ -125,6 +125,7 @@ const Layout = ({ children }) => {
               active={activeItem === 'Labtests'}
               onClick={() => handleItemClick('Labtests')}
             />
+            
             <SidebarItem
               icon={<MessagesSquare size={24}/>}
               text="Feedback"
@@ -132,6 +133,7 @@ const Layout = ({ children }) => {
               active={activeItem === 'Feedback'}
               onClick={() => handleItemClick('Feedback')}
             />
+            
             <SidebarItem
               icon={<LogOut size={24}/>}
               text="Logout"
