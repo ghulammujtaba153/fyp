@@ -2,19 +2,17 @@
 
 import React, { useEffect, useState } from 'react';
 import DoctorsTable from '@/components/dashboard/admin/DoctorsTable';
-import API_BASE_URL from '@/utils/apiConfig';
-import axios from 'axios';
+import { fetchDoctors } from '@/redux/slices/doctorsSlice';
+import Spinner from '@/components/Spinner';
+import { useDispatch, useSelector } from 'react-redux';
 
 const DoctorsPage = () => {
-  const [doctors, setDoctors] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
+  const dispatch = useDispatch();
+  const { doctors, loading, error } = useSelector((state: RootState) => state.doctors);
 
   useEffect(() => {
-    const fetchDoctors = async () => {
-      const res = await axios.get(`${API_BASE_URL}/doctors`);
-      setDoctors(res.data);
-    };
-    fetchDoctors();
+      dispatch(fetchDoctors());
   }, []);
 
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -22,10 +20,18 @@ const DoctorsPage = () => {
   };
 
   const filteredDoctors = doctors.filter((doctor) =>
-    `${doctor.userId.firstName} ${doctor.userId.lastName}`
+    `${doctor?.userId?.firstName} ${doctor?.userId?.lastName}`
       .toLowerCase()
       .includes(searchTerm.toLowerCase())
   );
+
+  if (loading) {
+    return (
+      <div className="flex h-screen items-center justify-center">
+        <Spinner />
+      </div>
+    );
+  }
 
   return (
     <div className="container mx-auto h-screen p-4">

@@ -12,6 +12,9 @@ import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import axios from 'axios';
 import API_BASE_URL from '@/utils/apiConfig';
+import { X } from 'lucide-react';
+import { useDispatch } from 'react-redux';
+import { editDoctor } from '@/redux/slices/doctorsSlice';
 
 const modalStyle = {
     position: 'absolute' as 'absolute',
@@ -20,22 +23,23 @@ const modalStyle = {
     transform: 'translate(-50%, -50%)',
     width: 600,
     bgcolor: 'white',
-    border: '2px solid #000',
     boxShadow: 24,
-    p: 4,
+    p: 8,
     overflowY: 'auto', // Enable vertical scrolling
     maxHeight: '80vh', // Limit the height of the modal
   };
 
-const EditDoctorModal = ({ doctorId, onDoctorUpdated }) => {
+const EditDoctorModal = ({ doctorId }) => {
   const [open, setOpen] = useState(false);
-  console.log(doctorId);
   const [profilePic, setProfilePic] = useState(null);
   const [profilePicPreview, setProfilePicPreview] = useState("");
+  const dispatch = useDispatch();
+
   const [formData, setFormData] = useState({
     _id: "",
     firstName: "",
     lastName: "",
+    gender: '',
     email: "",
     password: "",
     role: "doctor",
@@ -45,6 +49,8 @@ const EditDoctorModal = ({ doctorId, onDoctorUpdated }) => {
     permanentAddress: "",
     doctorId: "",
     specialization: "",
+    experience: '',
+    fee: 0,
     doctor_qualification: [
       { qualificationName: "", startYear: "", endYear: "" },
       { qualificationName: "", startYear: "", endYear: "" }
@@ -61,6 +67,7 @@ const EditDoctorModal = ({ doctorId, onDoctorUpdated }) => {
         profile: doctorId.userId.profile,
         firstName: doctorId.userId.firstName,
         lastName: doctorId.userId.lastName,
+        gender: doctorId.userId.gender,
         email: doctorId.userId.email,
         dateOfBirth: doctorId.userId.dateOfBirth.substring(0, 10),
         contactNumber: doctorId.userId.contactNumber,
@@ -68,6 +75,8 @@ const EditDoctorModal = ({ doctorId, onDoctorUpdated }) => {
         permanentAddress: doctorId.userId.permanentAddress,
         specialization: doctorId.specialization,
         doctor_qualification: doctorId.doctor_qualification,
+        experience: doctorId.experience,
+        fee: doctorId.fee,
       };
       if (doctorId.userId.profile) {
         setProfilePicPreview(doctorId.userId.profile);
@@ -133,9 +142,10 @@ const EditDoctorModal = ({ doctorId, onDoctorUpdated }) => {
 
     try {
       const updatedData = { ...formData, profile: profilePicUrl };
-      const res = await axios.put(`${API_BASE_URL}/doctors/profiles/${doctorId.userId._id}`, updatedData);
-      console.log('Updated doctor data:', res.data);
-      onDoctorUpdated(res.data);
+      dispatch(editDoctor({ doctorId: doctorId.userId._id, updatedData }));
+      // const res = await axios.put(`${API_BASE_URL}/doctors/profiles/${doctorId.userId._id}`, updatedData);
+      // console.log('Updated doctor data:', res.data);
+      
 
       toast.success('Profile updated successfully');
     //   router.push('/'); // Redirect after successful update
@@ -162,6 +172,14 @@ const EditDoctorModal = ({ doctorId, onDoctorUpdated }) => {
         // className='overflow-scroll h-[90%] w-[200px] bg-white'
       >
         <form style={modalStyle} className="bg-white p-2" onSubmit={handleSubmit}>
+
+          <Button
+              onClick={handleClose}
+              style={{ position: 'absolute', top: 16, right: 16 }}
+            >
+              <X />
+            </Button>
+          
             <div className="flex items-center justify-center mb-4 bg-black-default border rounded-full w-[100px] h-[100px] align-middle relative">
               {profilePicPreview ? (
                 <img src={profilePicPreview} alt="Profile" className='w-full h-full object-cover rounded-full' />
@@ -179,6 +197,7 @@ const EditDoctorModal = ({ doctorId, onDoctorUpdated }) => {
             </div>
 
             <div className="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-2 mb-4">
+
               <div>
                 <Label htmlFor="firstName">First name</Label>
                 <Input 
@@ -201,6 +220,19 @@ const EditDoctorModal = ({ doctorId, onDoctorUpdated }) => {
                   onChange={handleChange} 
                 />
               </div>
+            </div>
+            <div className="mb-4">
+              <Label htmlFor="gender">Gender</Label>
+              <Label htmlFor="gender">Gender</Label>
+              <select
+                id="gender"
+                value={formData.gender}
+                onChange={handleChange}
+                className="border rounded-md p-2 w-full outline-none cursor-pointer bg-white-100"
+              >
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+              </select>
             </div>
             <div className="mb-4">
               <Label htmlFor="email">Email Address</Label>
@@ -268,6 +300,30 @@ const EditDoctorModal = ({ doctorId, onDoctorUpdated }) => {
                 onChange={handleChange} 
               />
             </div>
+            
+            <div>
+              <Label htmlFor="experience">Experience</Label>
+              <Input 
+                id="experience" 
+                name="experience" 
+                placeholder="3 years" 
+                type="text" 
+                value={formData.experience}  
+                onChange={handleChange} 
+              />
+            </div>
+            <div>
+              <Label htmlFor="fee">Fee</Label>
+              <Input 
+                id="fee" 
+                name="fee" 
+                placeholder="100" 
+                type="text" 
+                value={formData.fee}  
+                onChange={handleChange} 
+              />
+            </div>
+
             <div className="mb-4">
               <Label htmlFor="specialization">Specialization</Label>
               <Input 
@@ -353,3 +409,4 @@ const EditDoctorModal = ({ doctorId, onDoctorUpdated }) => {
 };
 
 export default EditDoctorModal;
+

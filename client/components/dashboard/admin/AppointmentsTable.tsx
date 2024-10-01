@@ -51,13 +51,13 @@ export default function AppointmentsTable({ appointments }: { appointments: any[
                 return (
                   <TableRow hover role="checkbox" tabIndex={-1} key={appointment._id}>
                     <TableCell>
-                      {appointment.patientId.firstName} {appointment.patientId.lastName}
+                      {appointment?.patientId?.firstName} {appointment?.patientId?.lastName}
                     </TableCell>
                     <TableCell>
-                      {appointment.doctorId.firstName} {appointment.doctorId.lastName}
+                      {appointment?.doctorId?.firstName} {appointment?.doctorId?.lastName}
                     </TableCell>
-                    <TableCell>{appointment.timing}</TableCell>
-                    <TableCell>{appointment.status}</TableCell>
+                    <TableCell>{appointment?.timing}</TableCell>
+                    <TableCell>{appointment?.status}</TableCell>
                   </TableRow>
                 );
               })}

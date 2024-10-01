@@ -45,8 +45,8 @@ function Assignments() {
   );
 
   return (
-    <>
-      <div className="grid grid-cols-1 gap-4 w-full">
+    <div className="h-screen">
+      <div className="grid grid-cols-1 gap-4 w-full ">
         {currentTests.map((card) => (
           <TestsCard key={card._id} cardData={card} />
         ))}
@@ -117,7 +117,7 @@ function Assignments() {
           </svg>
         </button>
       </div>
-    </>
+    </div>
   );
 }
 

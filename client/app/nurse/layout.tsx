@@ -45,7 +45,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <SidebarContext.Provider value={{ expanded, setExpanded }}> 
-      <div className='flex bg-gray-100 min-h-screen'>
+      <div className='flex bg-black-100 min-h-screen'>
         {/* Sidebar */}
         <div className={`transition-all duration-300 ${expanded ? 'w-64' : 'w-16'}`}>
           <Sidebar>

@@ -71,7 +71,7 @@ const Page = () => {
 
   return (
     <div className="container mx-auto pl-[100px] pr-[100px] py-10 h-screen">
-      <h1 className="text-3xl font-bold mb-6 text-center">Appointments</h1>
+      <h1 className="text-3xl font-bold mb-6 text-center text-white">Appointments</h1>
       
       <div className="flex flex-col md:flex-row items-center justify-between gap-4 mb-6">
         <input

@@ -50,7 +50,7 @@ const Dashboard = () => {
   const { total: totalTestAppointments, upcoming: upcomingTestAppointments } = countAppointments(testAppointments);
 
   return (
-    <div className='flex flex-col justify-center items-center gap-5 m-5'>
+    <div className='flex flex-col items-center gap-5 m-5 min-h-screen'>
       <p className="text-white">Welcome back! {user?.firstName} {user?.lastName}</p>
 
       {/* Stat Cards */}

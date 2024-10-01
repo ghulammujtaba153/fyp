@@ -63,7 +63,7 @@ export default function ECGuploadModal({ id }: ECGuploadModalProps) {
       formData.append("file", selectedFile);
 
       const response = await axios.post(
-        "http://127.0.0.1:8000/process_ecg",
+        "http://127.0.0.1:8002/process_ecg",
         formData,
         {
           headers: {

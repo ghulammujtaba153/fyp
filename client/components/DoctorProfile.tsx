@@ -234,7 +234,7 @@ export default function DoctorProfile() {
           {/* Gender Field */}
           <LabelInputContainer>
             <Label htmlFor="gender" style={{ color: 'black' }}>Gender</Label>
-            <select id="gender" value={formData.gender} onChange={handleChange} className="bg-white border rounded p-2 mb-4">
+            <select id="gender" value={formData.gender} onChange={handleChange} className="bg-white-100 border rounded p-2 mb-4">
               <option value="">Select Gender</option>
               <option value="Male">Male</option>
               <option value="Female">Female</option>
@@ -291,7 +291,7 @@ export default function DoctorProfile() {
 
           <LabelInputContainer>
             <Label htmlFor="specialization" style={{ color: 'black' }}>Specialization</Label>
-            <select id="specialization" value={formData.specialization} onChange={handleChange} className="bg-white border rounded p-2 mb-4">
+            <select id="specialization" value={formData.specialization} onChange={handleChange} className="bg-white-100 border rounded p-2 mb-4">
               <option value="">Select Specialization</option>
               <option value="Cardiology">Cardiology</option>
               <option value="Hematology">Hematology</option>

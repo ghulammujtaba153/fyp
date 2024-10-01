@@ -15,7 +15,7 @@ export const getPatients=async (req,res)=>{
 
 export const homeStats=async (req,res)=>{
     try{
-        const totalUsers = await User.countDocuments({});
+        const totalNurses = await User.countDocuments({ role: 'nurse' });
 
         const totalDoctors = await User.countDocuments({ role: 'doctor' });
 
@@ -23,9 +23,10 @@ export const homeStats=async (req,res)=>{
 
         const totalAppointments = await Appointment.countDocuments({ });
 
+
         // Send the counts as response
         res.status(200).json({
-        totalUsers,
+        totalNurses,
         totalDoctors,
         totalPatients,
         totalAppointments

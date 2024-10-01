@@ -99,8 +99,7 @@ const AppointmentModal = ({ doctorId, amount, onClose, doctorAvailability }) => 
       console.log(notRes.data);
       console.log(res.data);
       handleBookAppointment(res.data._id);
-      onClose();
-      alert('Appointment booked successfully!');
+      
     } catch (error) {
       console.error('Error booking appointment:', error);
       alert('Failed to book appointment.');
@@ -132,17 +131,16 @@ const AppointmentModal = ({ doctorId, amount, onClose, doctorAvailability }) => 
         const newConversationData = newConversationRes.data;
         router.push(`/dashboard/chats/conversations/${newConversationData._id}`);
       }
+
     } catch (error) {
       console.error('Error handling booking appointment:', error);
     }
+    onClose();
+    alert('Appointment booked successfully!');
     setLoadingState(false);
   };
   
-  if(loadingState){
-    return <div className="flex items-center justify-center h-screen">
-      <Spinner/>
-    </div>
-  }
+  
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 bg-[#1F1E30]">
@@ -183,12 +181,21 @@ const AppointmentModal = ({ doctorId, amount, onClose, doctorAvailability }) => 
             </select>
           </label>
 
+          {loadingState ? 
           <button
-            type="submit"
-            className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-md"
-          >
-            Book
-          </button>
+          className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-md"
+        >
+          <Spinner />
+        </button> :
+          <button
+          type="submit"
+          className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-md"
+        >
+          Book
+        </button>
+          }
+
+          
           
         </form>
       </div>

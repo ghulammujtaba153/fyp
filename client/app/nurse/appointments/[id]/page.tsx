@@ -61,7 +61,7 @@ const TestAppointmentDetails: React.FC<TestAppointmentDetailsProps> = ({ params:
   }
 
   return (
-    <div className="flex flex-col h-screen pl-[100px]">
+    <div className="flex flex-col h-screen pl-[100px] text-white">
       <h1 className="text-4xl font-bold text-center mb-4">Appointment Details</h1>
       <div className="flex items-center mb-4">
         <img

@@ -34,8 +34,11 @@ const Medicine = () => {
   }
 
   if (!data) {
-    return;
-    // return <div className="flex flex-col justify-center bg-white rounded-md w-full items-center p-4">No prescriptions found.</div>;
+    return (
+      <div className="flex flex-col justify-center bg-white rounded-md w-full items-center p-4">
+        <p className="font-bold text-lg">No medication</p>
+      </div>
+    )
   }
 
   return (

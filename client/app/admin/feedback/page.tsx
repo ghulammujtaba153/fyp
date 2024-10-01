@@ -33,7 +33,7 @@ const page = () => {
   }
 
   return (
-    <div>
+    <div className="flex items-center flex-col h-screen gap-4">
       <h1 className="text-white pl-[80px] text-xl font-bold">Feedback</h1>
       <FeedbackTable feedbackData={data}/>
     </div>

@@ -38,7 +38,7 @@ const ClassificationBot = () => {
     setPredictedMedicine(null);
 
     try {
-      const response = await fetch("http://localhost:8000/predict", {
+      const response = await fetch("http://localhost:8001/predict", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

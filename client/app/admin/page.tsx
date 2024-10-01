@@ -99,7 +99,7 @@ const Page = () => {
         <StatCard
           icon={<FaFlask />}
           iconBg="#fff4e5"
-          title="120"
+          title={stats.totalNurses}
           subtitle="Total Laboratory Operators"
         />
       </div>

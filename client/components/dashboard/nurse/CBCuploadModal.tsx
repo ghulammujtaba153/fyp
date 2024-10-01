@@ -78,7 +78,7 @@ export default function CBCuploadModal({id}) {
     setError(null);
     try {
       const response = await axios.post<CBCResult>(
-        "http://127.0.0.1:8000/classify",
+        "http://127.0.0.1:8003/classify",
         parsedData
       );
       setLoading(false);

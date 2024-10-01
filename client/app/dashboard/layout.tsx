@@ -2,7 +2,7 @@
 
 import Sidebar, { SidebarContext } from '@/components/dashboard/Sidebar';  // Import SidebarContext
 import { SidebarItem } from '@/components/dashboard/SidebarItem';
-import { BellIcon, Home, LogOut, MessageCircleMore, MessagesSquare, NotebookText, Settings, Star, TestTubeDiagonal } from 'lucide-react';
+import { BellIcon, Bot, Home, LogOut, MessageCircleMore, MessagesSquare, NotebookText, Settings, Star, TestTubeDiagonal } from 'lucide-react';
 import React, { useContext, useEffect, useState } from 'react';
 import { HiUser } from 'react-icons/hi';
 import { useRouter, usePathname } from 'next/navigation';
@@ -125,6 +125,14 @@ const Layout = ({ children }) => {
               active={activeItem === 'Labtests'}
               onClick={() => handleItemClick('Labtests')}
             />
+
+            <SidebarItem
+              icon={<Bot size={24}/>}
+              text="Bot"
+              href="/dashboard/bot"
+              active={activeItem === 'Bot'}
+              onClick={() => handleItemClick('Bot')}
+            />
             
             <SidebarItem
               icon={<MessagesSquare size={24}/>}
@@ -133,6 +141,8 @@ const Layout = ({ children }) => {
               active={activeItem === 'Feedback'}
               onClick={() => handleItemClick('Feedback')}
             />
+
+            
             
             <SidebarItem
               icon={<LogOut size={24}/>}

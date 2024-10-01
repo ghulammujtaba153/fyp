@@ -13,6 +13,8 @@ import Button from '@mui/material/Button';
 import EditDoctorModal from './EditDoctorModal';
 import API_BASE_URL from '@/utils/apiConfig';
 import axios from 'axios';
+import { useDispatch } from 'react-redux';
+import { deleteDoctor } from '@/redux/slices/doctorsSlice';
 
 const columns = [
   { id: 'profile', label: 'Profile', minWidth: 50 },
@@ -27,6 +29,7 @@ const columns = [
 export default function DoctorsTable({ doctors }) {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const dispatch=useDispatch();
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
@@ -42,16 +45,13 @@ export default function DoctorsTable({ doctors }) {
     const doctorId = doctor._id;
 
     try {
-      await axios.delete(`${API_BASE_URL}/doctors/delete/${userId}/${doctorId}`);
-      handleDoctorUpdated();
+      // await axios.delete(`${API_BASE_URL}/doctors/delete/${userId}/${doctorId}`);
+      await dispatch(deleteDoctor({ userId, doctorId })).unwrap();
     } catch (error) {
       console.error('Error deleting doctor:', error);
     }
   };
 
-  const handleDoctorUpdated = () => {
-    // Logic to refresh the doctor list after editing
-  };
 
   return (
     <Paper className="shadow-lg rounded-md">
@@ -76,24 +76,24 @@ export default function DoctorsTable({ doctors }) {
             {doctors
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((doctor) => (
-                <TableRow hover role="checkbox" tabIndex={-1} key={doctor.userId._id}>
+                <TableRow hover role="checkbox" tabIndex={-1} key={doctor?.userId?._id}>
                   <TableCell>
                     <img
-                      src={doctor.userId.profile}
+                      src={doctor?.userId?.profile}
                       alt="Profile"
                       className="w-12 h-12 rounded-full object-cover"
                     />
                   </TableCell>
-                  <TableCell>{doctor.userId.firstName} {doctor.userId.lastName}</TableCell>
-                  <TableCell>{doctor.userId.email}</TableCell>
-                  <TableCell>{doctor.userId.contactNumber}</TableCell>
-                  <TableCell>{doctor.availability?.startTime} - {doctor.availability?.endTime}</TableCell>
-                  <TableCell>{doctor.specialization}</TableCell>
+                  <TableCell>{doctor?.userId?.firstName} {doctor?.userId?.lastName}</TableCell>
+                  <TableCell>{doctor?.userId?.email}</TableCell>
+                  <TableCell>{doctor?.userId?.contactNumber}</TableCell>
+                  <TableCell>{doctor?.availability?.startTime} - {doctor?.availability?.endTime}</TableCell>
+                  <TableCell>{doctor?.specialization}</TableCell>
                   <TableCell align="right">
                     <div className="flex gap-2 justify-end">
                       <EditDoctorModal
                         doctorId={doctor}
-                        onDoctorUpdated={handleDoctorUpdated}
+                        
                       />
                       <Button
                         onClick={() => handleDelete(doctor)}
