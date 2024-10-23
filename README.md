@@ -50,7 +50,7 @@ The platform supports four types of users, each with distinct functionalities:
 ## Technology Stack
 
 - **Backend**: FastAPI, Python, nodejs
-- **Frontend**: React.js (or your choice of frontend framework)
+- **Frontend**: Next.js (or your choice of frontend framework)
 - **Database**: MongoDB (or any preferred database for storing user data and medical records)
 - **Real-Time Communication**: 
   - Chat: Integrated chat functionality
