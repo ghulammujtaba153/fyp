@@ -58,6 +58,6 @@ The platform supports four types of users, each with distinct functionalities:
   - Notifications: `Socket.IO` for real-time notifications
 - **Machine Learning**: Custom AI model for ECG classification
 - **Authentication**: JWT (JSON Web Tokens) for user authentication
-- **Deployment**: Cloud-based deployment (AWS, Azure, or your preferred platform)
+
 
 
